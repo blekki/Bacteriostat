@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://duuaegris31ou"]
+
+[ext_resource type="Script" uid="uid://yywy0uwb6gro" path="res://src/map/map.gd" id="1_vfn15"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vfn15"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1a5qu"]
+
+[node name="Map" type="Node2D" unique_id=1084301518]
+script = ExtResource("1_vfn15")
+metadata/_edit_group_ = true
+
+[node name="Texture" type="Sprite2D" parent="." unique_id=134081408]
+visible = false
+position = Vector2(600, 400)
+rotation = 1.5707964
+scale = Vector2(0.5, 0.5)
+
+[node name="Collision" type="StaticBody2D" parent="." unique_id=1983517934]
+disable_mode = 1
+
+[node name="UpSide" type="CollisionShape2D" parent="Collision" unique_id=1520773689]
+shape = SubResource("RectangleShape2D_vfn15")
+
+[node name="BottomSide" type="CollisionShape2D" parent="Collision" unique_id=675132371]
+shape = SubResource("RectangleShape2D_vfn15")
+
+[node name="LeftSide" type="CollisionShape2D" parent="Collision" unique_id=193935691]
+shape = SubResource("RectangleShape2D_1a5qu")
+
+[node name="RightSide" type="CollisionShape2D" parent="Collision" unique_id=1742481543]
+shape = SubResource("RectangleShape2D_1a5qu")
