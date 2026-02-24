@@ -3,14 +3,13 @@ extends Node2D
 
 const MAP_WIDTH = 1080		# in pixels
 const MAP_HEIGHT = 720
-
 const bacteria_instance = preload("res://src/bacteria/bacteria.tscn")
 const BACTERIAS_COUNT = 1
 
 var collision_borders: Array[CollisionShape2D] = []
 var bacterias: Array[Bacteria] = []
 
-func _ready() -> void:
+func _ready():
 	_init_collision_walls()
 	
 	# generate bacterias
@@ -19,11 +18,13 @@ func _ready() -> void:
 		unit.set_navigation_field(Vector2(MAP_WIDTH, MAP_HEIGHT))	# need for correct positionate
 		bacterias.push_back(unit)
 		add_child(bacterias.back())
+		
+	_start_day()
 
-func _process(delta: float) -> void:
+func _process(delta: float):
 	pass
 
-func _init_collision_walls():
+func _init_collision_walls():	# fast way make dynamic walls
 	const UPSCALE = 1000
 	const NO_SCALE = 1
 	
@@ -43,3 +44,22 @@ func _init_collision_walls():
 	var right_border = $Collision/RightSide
 	right_border.position = Vector2(MAP_WIDTH, MAP_HEIGHT / 2)
 	right_border.scale = Vector2(NO_SCALE, UPSCALE)
+
+# time season configuration
+func _start_day():
+	$Night.stop()
+	print("night finished")
+	Singlton.time_season = Enums.TimeSeasons.Day
+	$Day.start()
+
+func _start_night():
+	$Day.stop()
+	print("day finished")
+	Singlton.time_season = Enums.TimeSeasons.Night
+	$Night.start()
+
+func _on_day_timeout():
+	_start_night()
+
+func _on_night_timeout():
+	_start_day()

@@ -16,12 +16,6 @@ agent_radius = 33.0
 script = ExtResource("1_vfn15")
 metadata/_edit_group_ = true
 
-[node name="Texture" type="Sprite2D" parent="." unique_id=134081408]
-visible = false
-position = Vector2(600, 400)
-rotation = 1.5707964
-scale = Vector2(0.5, 0.5)
-
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=706864556]
 navigation_polygon = SubResource("NavigationPolygon_5o7fj")
 
@@ -39,3 +33,14 @@ shape = SubResource("RectangleShape2D_1a5qu")
 
 [node name="RightSide" type="CollisionShape2D" parent="Collision" unique_id=1742481543]
 shape = SubResource("RectangleShape2D_1a5qu")
+
+[node name="Day" type="Timer" parent="." unique_id=816259507]
+wait_time = 5.0
+one_shot = true
+
+[node name="Night" type="Timer" parent="." unique_id=700263351]
+wait_time = 2.0
+one_shot = true
+
+[connection signal="timeout" from="Day" to="." method="_on_day_timeout"]
+[connection signal="timeout" from="Night" to="." method="_on_night_timeout"]

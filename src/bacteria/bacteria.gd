@@ -1,19 +1,23 @@
-class_name Bacteria
+class_name Bacteria		# todo: rename to "Bacterium"
 extends CharacterBody2D
 
 # Paramenters
 # > speed - pixel/sec
 # > rotation - radian/sec
-const ACCELERATION: float = 10.0	# todo: rename to "acceleration" 
+const ACCELERATION: float = 10.0
 const MAX_SPEED: float = 200.0
 const DECELERATION_MOD: float = 0.5
 const COLLISION_DEFLECTION: float = 20.0
-const FOV: float = PI / 4
+const FOV: float = PI / 3
 const ROTATION_WEIGHT: float = 0.03
+const ENERGY_LIMIT = 100
 
 # object parameters
 var type: Enums.BacteriaType
+var energy: int = 0
 var view_direction_angle: float = 0.0
+
+var behavior_state: RefCounted
 
 # techical
 var nav_field: Vector2	# area from (xy = 0) to (xy = nav_field.xy) pixels
@@ -21,7 +25,7 @@ var random = RandomNumberGenerator.new()
 
 # <> Methods section <>
 func _ready():
-	random.randomize()		# todo: add correct random generation
+	random.randomize()
 	_set_random_type()
 	position = _generate_smart_point()
 
@@ -29,6 +33,9 @@ func _process(delta: float):
 	$ViewDirection.rotate(view_direction_angle - $ViewDirection.rotation)
 	
 func _physics_process(delta: float):
+	behavior_state.update(self)		# errors: fix state changer
+	behavior_state.do_task(self)
+	
 	_deceleration()
 	_find_target()
 	_rotate_and_force()
@@ -42,12 +49,17 @@ func _physics_process(delta: float):
 # <> "set" methods <>
 func _set_random_type():
 	const BACTERIAS_ORIGIN_TYPES = 3	# todo: add special file with all prop constants
-	var _type = Enums.BacteriaType
-	match randi_range(0, BACTERIAS_ORIGIN_TYPES):
-		0: type = _type.Green;  modulate = Color.LAWN_GREEN
-		1: type = _type.Purple; modulate = Color.MEDIUM_PURPLE
-		2: type = _type.Orange; modulate = Color.DARK_ORANGE
-		_: type = _type.Default
+	match 0:	# todo: add real generation "randi_range(0, BACTERIAS_ORIGIN_TYPES)"
+		0:
+			type = Enums.BacteriaType.Green
+			modulate = Color.LAWN_GREEN
+			behavior_state = StateMachine.get_start_green_bacterium_state()	# todo: add behavior for every bacteria types
+		1: 
+			type = Enums.BacteriaType.Purple
+			modulate = Color.MEDIUM_PURPLE
+		2: 
+			type = Enums.BacteriaType.Orange
+			modulate = Color.DARK_ORANGE
 
 func set_navigation_field(field: Vector2):
 	nav_field = field
@@ -76,7 +88,7 @@ func _rotate_and_force():
 	# add acceleration if the target inside the FOV area
 	if view_target.angle_to(target) < (FOV / 2):
 		velocity += Vector2.RIGHT.rotated(view_direction_angle) * ACCELERATION
-	# rotate a face to the target
+	# turn to face to the target
 	view_direction_angle = lerp_angle(view_direction_angle, view_target.angle(), ROTATION_WEIGHT)
 
 func _deceleration():
@@ -90,3 +102,13 @@ func collision_fluence():
 	if collision:
 		var collider = collision.get_collider()		# todo: fix unsync fluence
 		velocity += collision.get_normal() * (COLLISION_DEFLECTION)
+
+func photosynthesing():
+	if energy + 1 <= ENERGY_LIMIT:
+		energy += 1
+	print("energy: ", energy)
+
+func recycle_energy():
+	if energy - 5 >= 0:
+		energy -= 5
+	print("energy: ", energy)

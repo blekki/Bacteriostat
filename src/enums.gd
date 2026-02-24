@@ -8,3 +8,8 @@ enum BacteriaType {
 	Orange,
 	Default = Green,
 }
+
+enum TimeSeasons {
+	Day,
+	Night,
+}
