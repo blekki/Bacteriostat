@@ -2,6 +2,12 @@
 
 [ext_resource type="Script" uid="uid://yywy0uwb6gro" path="res://src/map/map.gd" id="1_vfn15"]
 
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_5o7fj"]
+vertices = PackedVector2Array(1040, 680, 40, 680, 40, 40, 1040, 40)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, 0, 1080, 0, 1080, 720, 0, 720)])
+agent_radius = 33.0
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vfn15"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1a5qu"]
@@ -15,6 +21,9 @@ visible = false
 position = Vector2(600, 400)
 rotation = 1.5707964
 scale = Vector2(0.5, 0.5)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=706864556]
+navigation_polygon = SubResource("NavigationPolygon_5o7fj")
 
 [node name="Collision" type="StaticBody2D" parent="." unique_id=1983517934]
 disable_mode = 1
