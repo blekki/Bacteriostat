@@ -1,28 +1,29 @@
 class_name Bacteria
 extends CharacterBody2D
 
-# speed-up paramenters (pixel/sec)
-const SPEED_UP_MOD: float = 10.0	# todo: rename to "acceleration" 
-const COLLISION_DEFLECTION: float = 20.0
-const DECELERATION_MOD: float = 0.5
+# Paramenters
+# > speed - pixel/sec
+# > rotation - radian/sec
+const ACCELERATION: float = 10.0	# todo: rename to "acceleration" 
 const MAX_SPEED: float = 200.0
-const SLOW_DOWN_RADIUS: float = 100.0	# use deceleration if the object to close to the target
-
+const DECELERATION_MOD: float = 0.5
+const COLLISION_DEFLECTION: float = 20.0
 const FOV: float = PI / 4
 const ROTATION_WEIGHT: float = 0.03
 
-var random = RandomNumberGenerator.new()
-
+# object parameters
 var type: Enums.BacteriaType
-var nav_field: Vector2	# area from (xy = 0) to (xy = nav_field.xy) pixels
-
 var view_direction_angle: float = 0.0
+
+# techical
+var nav_field: Vector2	# area from (xy = 0) to (xy = nav_field.xy) pixels
+var random = RandomNumberGenerator.new()
 
 # <> Methods section <>
 func _ready():
 	random.randomize()		# todo: add correct random generation
 	_set_random_type()
-	position = generate_smart_point()
+	position = _generate_smart_point()
 
 func _process(delta: float):
 	$ViewDirection.rotate(view_direction_angle - $ViewDirection.rotation)
@@ -52,7 +53,7 @@ func set_navigation_field(field: Vector2):
 	nav_field = field
 
 # <> Other methods <>
-func generate_smart_point() -> Vector2:	# generate point inside navigation area
+func _generate_smart_point() -> Vector2:	# generate point inside navigation area
 	#generate random point inside nav_polygon
 	var point = Vector2(
 		random.randf_range(0, nav_field.x),
@@ -66,7 +67,7 @@ func generate_smart_point() -> Vector2:	# generate point inside navigation area
 func _find_target():
 	var nav_agent = $NavigationAgent
 	if nav_agent.is_navigation_finished():
-		nav_agent.target_position = generate_smart_point()
+		nav_agent.target_position = _generate_smart_point()
 
 func _rotate_and_force():
 	var target = ($NavigationAgent.target_position - position)
@@ -74,29 +75,9 @@ func _rotate_and_force():
 	
 	# add acceleration if the target inside the FOV area
 	if view_target.angle_to(target) < (FOV / 2):
-		velocity += Vector2.RIGHT.rotated(view_direction_angle) * SPEED_UP_MOD
+		velocity += Vector2.RIGHT.rotated(view_direction_angle) * ACCELERATION
 	# rotate a face to the target
 	view_direction_angle = lerp_angle(view_direction_angle, view_target.angle(), ROTATION_WEIGHT)
-	
-
-func _speed_up():	# old method
-	velocity += Vector2.RIGHT.rotated(view_direction_angle) * SPEED_UP_MOD
-
-func _rotate_to_target(target_angle: float): # old method
-	view_direction_angle = lerp_angle(view_direction_angle, target_angle, 0.1)
-
-
-#func set_interception_course():
-	#var target = $NavigationAgent.target_position
-	#
-	#var angle = velocity.angle_to(target)
-	#var intercept = Vector2.ZERO
-	#if angle > 0:
-		#intercept = velocity.rotated(angle * -2)
-	#if angle < 0:
-		#intercept = velocity.rotated(angle * 2)
-
-
 
 func _deceleration():
 	if velocity.length() > DECELERATION_MOD:
@@ -109,20 +90,3 @@ func collision_fluence():
 	if collision:
 		var collider = collision.get_collider()		# todo: fix unsync fluence
 		velocity += collision.get_normal() * (COLLISION_DEFLECTION)
-
-#func navigation_movement():
-	#
-	#var nav_agent = $NavigationAgent
-	#if nav_agent.is_navigation_finished():
-		#$NavigationAgent.target_position = generate_smart_point()
-	#else:
-		## calculate velocity
-		#var next_pos = nav_agent.get_next_path_position()
-		#var direction = global_position.direction_to(next_pos)
-		
-		#velocity += direction.normalized() * SPEED_UP_MOD
-		
-		#var adjustment = Vector2.ZERO
-		#var angle = velocity.angle_to(direction)
-		#if angle > 0:
-			#adjustment = velocity.normalized() * (-2 * angle) * SPEED_UP_MOD
