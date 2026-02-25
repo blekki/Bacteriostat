@@ -2,20 +2,16 @@ class_name Bacterium		# todo: rename to "Bacterium"
 extends CharacterBody2D
 
 signal energy_shed(global_position: Vector2, energy: int)
-	
-# Paramenters
-# > speed - pixel/sec
-# > rotation - radian/sec
-const ACCELERATION: float = 10.0
-const MAX_SPEED: float = 200.0
-const DECELERATION_MOD: float = 0.5			# todo: replace to method
-const COLLISION_DEFLECTION: float = 20.0	# todo: replace to method
-const FOV: float = PI / 3
-const ROTATION_WEIGHT: float = 0.03		# todo: replace to method
-const ENERGY_LIMIT = 100
-const OVERAGE_ENERGY_LIMIT = 100
 
 # object parameters
+# > speed - pixel/sec
+const ACCELERATION: float = 10.0
+const MAX_SPEED: float = 200.0
+const FOV: float = PI / 3
+const HIGTER_ENERGY_LIMIT = 100
+const OVERAGE_ENERGY_LIMIT = 90
+
+# changeable object parameters
 var type: Enums.BacteriaTypes
 var energy: int = 0
 var view_direction_angle: float = 0.0
@@ -93,27 +89,31 @@ func _rotate_and_force():
 	if view_target.angle_to(target) < (FOV / 2):
 		velocity += Vector2.RIGHT.rotated(view_direction_angle) * ACCELERATION
 	# turn to face to the target
+	const ROTATION_WEIGHT: float = 0.03
 	view_direction_angle = lerp_angle(view_direction_angle, view_target.angle(), ROTATION_WEIGHT)
 
 func _deceleration():
+	const DECELERATION_MOD: float = 0.5
 	if velocity.length() > DECELERATION_MOD:
 		velocity -= velocity.normalized() * DECELERATION_MOD
 	else:
 		velocity = Vector2.ZERO
 
 func _collision_fluence():
+	const COLLISION_DEFLECTION: float = 20.0
 	var collision = get_slide_collision(0)
 	if collision:
 		var collider = collision.get_collider()		# todo: fix unsync fluence
 		velocity += collision.get_normal() * (COLLISION_DEFLECTION)
 
 func photosynthesing():
-	if energy + 1 <= ENERGY_LIMIT:
+	if energy + 1 <= HIGTER_ENERGY_LIMIT:
 		energy += 1
 	print("energy: ", energy)
 
 func recycle_energy():
-	if energy - 5 >= 0:
+	const LOWER_ENERGY_LIMIT: int = 0
+	if energy - 5 >= LOWER_ENERGY_LIMIT:
 		energy -= 5
 	print("energy: ", energy)
 
