@@ -17,7 +17,9 @@ func _deceleration():
 
 func _collision_fluence():
 	const COLLISION_DEFLECTION: float = 5.0
-	var collision = get_slide_collision(0)
+	var collision
+	if get_slide_collision_count() > 0:
+		collision = get_slide_collision(0)
 	if collision:
 		var collider = collision.get_collider()		# todo: fix unsync fluence
 		velocity += collision.get_normal() * (COLLISION_DEFLECTION)
