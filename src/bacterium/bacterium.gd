@@ -1,16 +1,19 @@
 class_name Bacterium		# todo: rename to "Bacterium"
 extends CharacterBody2D
 
+signal energy_shed(global_position: Vector2, energy: int)
+	
 # Paramenters
 # > speed - pixel/sec
 # > rotation - radian/sec
 const ACCELERATION: float = 10.0
 const MAX_SPEED: float = 200.0
-const DECELERATION_MOD: float = 0.5
-const COLLISION_DEFLECTION: float = 20.0
+const DECELERATION_MOD: float = 0.5			# todo: replace to method
+const COLLISION_DEFLECTION: float = 20.0	# todo: replace to method
 const FOV: float = PI / 3
-const ROTATION_WEIGHT: float = 0.03
+const ROTATION_WEIGHT: float = 0.03		# todo: replace to method
 const ENERGY_LIMIT = 100
+const OVERAGE_ENERGY_LIMIT = 100
 
 # object parameters
 var type: Enums.BacteriaTypes
@@ -36,9 +39,10 @@ func _physics_process(delta: float):
 	behavior_state.update(self)		# errors: fix state changer
 	behavior_state.do_task(self)
 	
-	_deceleration()
-	_find_target()
-	_rotate_and_force()
+	# todo: replace the next block into state
+	#_deceleration()
+	#_find_target()
+	#_rotate_and_force()
 	
 	# speed limit
 	if velocity.length() > MAX_SPEED:
@@ -97,7 +101,7 @@ func _deceleration():
 	else:
 		velocity = Vector2.ZERO
 
-func collision_fluence():
+func _collision_fluence():
 	var collision = get_slide_collision(0)
 	if collision:
 		var collider = collision.get_collider()		# todo: fix unsync fluence
@@ -112,3 +116,8 @@ func recycle_energy():
 	if energy - 5 >= 0:
 		energy -= 5
 	print("energy: ", energy)
+
+func shedding():
+	const cell_energy: int = 30
+	self.energy -= cell_energy
+	energy_shed.emit(global_position, cell_energy)

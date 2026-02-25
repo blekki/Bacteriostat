@@ -1,9 +1,9 @@
 class_name EnergyRecycleState
 extends RefCounted
 
-func update(bacteria: Bacterium):
+func update(bacterium: Bacterium):
 	if Singlton.time_season == Enums.TimeSeasons.Day:
-		bacteria.behavior_state = StateMachine.photosynthesis
+		bacterium.behavior_state = StateMachine.photosynthesis
 
-func do_task(bacteria: Bacterium):
-	bacteria.recycle_energy()
+func do_task(bacterium: Bacterium):
+	bacterium.recycle_energy()

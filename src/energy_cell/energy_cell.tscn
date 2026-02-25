@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://cteyw57kmgrqf"]
+
+[ext_resource type="Texture2D" uid="uid://dx5eawmxmsgpv" path="res://assets/Ellipse 1.svg" id="1_351sm"]
+[ext_resource type="Script" uid="uid://brk38vor22qpq" path="res://src/energy_cell/energy_cell.gd" id="1_mqjxt"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_v5jjv"]
+radius = 32.0
+
+[node name="EnergyCell" type="CharacterBody2D" unique_id=1553382449]
+scale = Vector2(0.3, 0.3)
+collision_mask = 3
+script = ExtResource("1_mqjxt")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=418749873]
+color = Color(0, 0.7904955, 0.5559541, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasModulate" unique_id=314057492]
+texture = ExtResource("1_351sm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=299581857]
+visible = false
+shape = SubResource("CircleShape2D_v5jjv")
