@@ -26,6 +26,7 @@ var random = RandomNumberGenerator.new()
 func _ready():
 	random.randomize()
 	_set_random_type()
+	await NavigationServer2D.map_changed
 	position = _generate_smart_point()
 
 func _process(delta: float):
