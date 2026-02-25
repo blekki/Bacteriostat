@@ -1,4 +1,4 @@
-class_name Bacteria		# todo: rename to "Bacterium"
+class_name Bacterium		# todo: rename to "Bacterium"
 extends CharacterBody2D
 
 # Paramenters
@@ -13,7 +13,7 @@ const ROTATION_WEIGHT: float = 0.03
 const ENERGY_LIMIT = 100
 
 # object parameters
-var type: Enums.BacteriaType
+var type: Enums.BacteriaTypes
 var energy: int = 0
 var view_direction_angle: float = 0.0
 
@@ -48,17 +48,17 @@ func _physics_process(delta: float):
 
 # <> "set" methods <>
 func _set_random_type():
-	const BACTERIAS_ORIGIN_TYPES = 3	# todo: add special file with all prop constants
-	match 0:	# todo: add real generation "randi_range(0, BACTERIAS_ORIGIN_TYPES)"
+	const BACTERIA_ORIGIN_TYPES = 3	# todo: add special file with all prop constants
+	match 0:	# todo: add real generation "randi_range(0, BACTERIA_ORIGIN_TYPES)"
 		0:
-			type = Enums.BacteriaType.Green
+			type = Enums.BacteriaTypes.Green
 			modulate = Color.LAWN_GREEN
 			behavior_state = StateMachine.get_start_green_bacterium_state()	# todo: add behavior for every bacteria types
 		1: 
-			type = Enums.BacteriaType.Purple
+			type = Enums.BacteriaTypes.Purple
 			modulate = Color.MEDIUM_PURPLE
 		2: 
-			type = Enums.BacteriaType.Orange
+			type = Enums.BacteriaTypes.Orange
 			modulate = Color.DARK_ORANGE
 
 func set_navigation_field(field: Vector2):

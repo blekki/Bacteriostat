@@ -1,18 +1,18 @@
 [gd_scene format=3 uid="uid://bly18pxg1woup"]
 
-[ext_resource type="Texture2D" uid="uid://dx5eawmxmsgpv" path="res://assets/Ellipse 1.svg" id="1_aisuk"]
-[ext_resource type="Script" uid="uid://bmkg44guyuskg" path="res://src/bacteria/bacteria.gd" id="1_dd0jb"]
+[ext_resource type="Script" uid="uid://bmkg44guyuskg" path="res://src/bacterium/bacterium.gd" id="1_t66ox"]
+[ext_resource type="Texture2D" uid="uid://dx5eawmxmsgpv" path="res://assets/Ellipse 1.svg" id="2_12tcg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dd0jb"]
 radius = 32.0
 
 [node name="Bacteria" type="CharacterBody2D" unique_id=2063867343]
 scale = Vector2(0.5, 0.5)
-script = ExtResource("1_dd0jb")
+script = ExtResource("1_t66ox")
 metadata/_edit_group_ = true
 
 [node name="Texture" type="Sprite2D" parent="." unique_id=1775110423]
-texture = ExtResource("1_aisuk")
+texture = ExtResource("2_12tcg")
 
 [node name="Collision" type="CollisionShape2D" parent="." unique_id=434981839]
 visible = false

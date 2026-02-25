@@ -1,7 +1,7 @@
 class_name Enums
 extends RefCounted
 
-enum BacteriaType {
+enum BacteriaTypes {
 	None,
 	Green,
 	Purple,

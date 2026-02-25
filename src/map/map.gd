@@ -3,18 +3,18 @@ extends Node2D
 
 const MAP_WIDTH = 1080		# in pixels
 const MAP_HEIGHT = 720
-const bacteria_instance = preload("res://src/bacteria/bacteria.tscn")
+const bacteria_instance = preload("res://src/bacterium/bacterium.tscn")
 const BACTERIAS_COUNT = 1
 
 var collision_borders: Array[CollisionShape2D] = []
-var bacterias: Array[Bacteria] = []
+var bacterias: Array[Bacterium] = []
 
 func _ready():
 	_init_collision_walls()
 	
 	# generate bacterias
 	for i in range(BACTERIAS_COUNT):
-		var unit: Bacteria = bacteria_instance.instantiate()
+		var unit: Bacterium = bacteria_instance.instantiate()
 		unit.set_navigation_field(Vector2(MAP_WIDTH, MAP_HEIGHT))	# need for correct positionate
 		bacterias.push_back(unit)
 		add_child(bacterias.back())
