@@ -12,7 +12,7 @@ const HIGTER_ENERGY_LIMIT = 100
 const OVERAGE_ENERGY_LIMIT = 90
 
 # changeable object parameters
-var type: Enums.BacteriaTypes
+var type: Enums.BacteriumTypes
 var energy: int = 0
 var view_direction_angle: float = 0.0
 
@@ -51,14 +51,14 @@ func _set_random_type():
 	const BACTERIA_ORIGIN_TYPES = 3	# todo: add special file with all prop constants
 	match 0:	# todo: add real generation "randi_range(0, BACTERIA_ORIGIN_TYPES)"
 		0:
-			type = Enums.BacteriaTypes.GREEN
+			type = Enums.BacteriumTypes.GREEN
 			modulate = Color.LAWN_GREEN
 			behavior_state = StateMachine.get_start_green_bacterium_state()	# todo: add behavior for every bacteria types
 		1: 
-			type = Enums.BacteriaTypes.PURPLE
+			type = Enums.BacteriumTypes.PURPLE
 			modulate = Color.MEDIUM_PURPLE
 		2: 
-			type = Enums.BacteriaTypes.ORANGE
+			type = Enums.BacteriumTypes.ORANGE
 			modulate = Color.DARK_ORANGE
 
 func set_navigation_field(field: Vector2):
