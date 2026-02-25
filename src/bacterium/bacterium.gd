@@ -51,14 +51,14 @@ func _set_random_type():
 	const BACTERIA_ORIGIN_TYPES = 3	# todo: add special file with all prop constants
 	match 0:	# todo: add real generation "randi_range(0, BACTERIA_ORIGIN_TYPES)"
 		0:
-			type = Enums.BacteriaTypes.Green
+			type = Enums.BacteriaTypes.GREEN
 			modulate = Color.LAWN_GREEN
 			behavior_state = StateMachine.get_start_green_bacterium_state()	# todo: add behavior for every bacteria types
 		1: 
-			type = Enums.BacteriaTypes.Purple
+			type = Enums.BacteriaTypes.PURPLE
 			modulate = Color.MEDIUM_PURPLE
 		2: 
-			type = Enums.BacteriaTypes.Orange
+			type = Enums.BacteriaTypes.ORANGE
 			modulate = Color.DARK_ORANGE
 
 func set_navigation_field(field: Vector2):
