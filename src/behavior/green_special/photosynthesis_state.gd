@@ -2,6 +2,8 @@ class_name PhotosynthesisState
 extends RefCounted
 
 func update(bacterium: Bacterium):
+static var name: String = "Photosynthesis"
+
 	#if Singlton.time_season == Enums.TimeSeasons.Night:
 		#bacterium.behavior_state = StateMachine.energy_recycle
 	
