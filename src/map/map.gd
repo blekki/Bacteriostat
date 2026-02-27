@@ -12,6 +12,7 @@ var bacteria: Array[Bacterium] = []
 var energy_cells: Array[EnergyCell] = []
 
 func _ready():
+	await NavigationServer2D.map_changed
 	_init_collision_walls()
 	
 	# generate bacterias
