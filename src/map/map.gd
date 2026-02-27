@@ -21,11 +21,8 @@ func _ready():
 		unit.energy_shed.connect(_on_bacterium_energy_shed)
 		bacteria.push_back(unit)
 		add_child(bacteria.back())
-		
+	
 	_start_day()
-
-func _process(delta: float):
-	pass
 
 func _init_collision_walls():	# fast way make dynamic walls
 	const UPSCALE = 1000
@@ -50,6 +47,8 @@ func _init_collision_walls():	# fast way make dynamic walls
 
 func _on_bacterium_energy_shed(global_position: Vector2, energy: int):	# create energy_cell
 	var cell: EnergyCell = energy_cell_instance.instantiate()
+	cell.cell_name = "Grass Cell"
+	cell.type = Enums.EnergyCellTypes.GRASS
 	cell.energy_equivalent = energy
 	
 	# create random impuls in random direction

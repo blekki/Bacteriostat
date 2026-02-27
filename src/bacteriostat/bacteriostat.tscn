@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dvyoqx2e1p7ls"]
+
+[ext_resource type="PackedScene" uid="uid://duuaegris31ou" path="res://src/map/map.tscn" id="1_6010b"]
+[ext_resource type="PackedScene" uid="uid://bx6lul282ajbx" path="res://src/hud/hud.tscn" id="2_ysxdb"]
+
+[node name="Bacteriostat" type="Node2D" unique_id=1557573466]
+
+[node name="HUD" parent="." unique_id=758395760 instance=ExtResource("2_ysxdb")]
+
+[node name="Map" parent="." unique_id=1084301518 instance=ExtResource("1_6010b")]

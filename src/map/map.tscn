@@ -17,12 +17,13 @@ script = ExtResource("1_vfn15")
 metadata/_edit_group_ = true
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=706864556]
+visible = false
 navigation_polygon = SubResource("NavigationPolygon_5o7fj")
 
 [node name="Collision" type="StaticBody2D" parent="." unique_id=1983517934]
 disable_mode = 1
 collision_layer = 255
-collision_mask = 255
+collision_mask = 0
 
 [node name="UpSide" type="CollisionShape2D" parent="Collision" unique_id=1520773689]
 shape = SubResource("RectangleShape2D_vfn15")
@@ -37,11 +38,11 @@ shape = SubResource("RectangleShape2D_1a5qu")
 shape = SubResource("RectangleShape2D_1a5qu")
 
 [node name="Day" type="Timer" parent="." unique_id=816259507]
-wait_time = 5.0
+wait_time = 3.0
 one_shot = true
 
 [node name="Night" type="Timer" parent="." unique_id=700263351]
-wait_time = 2.0
+wait_time = 10.0
 one_shot = true
 
 [connection signal="timeout" from="Day" to="." method="_on_day_timeout"]

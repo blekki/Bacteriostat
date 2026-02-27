@@ -1,4 +1,4 @@
-class_name Bacterium		# todo: rename to "Bacterium"
+class_name Bacterium
 extends CharacterBody2D
 
 signal energy_shed(global_position: Vector2, energy: int)
@@ -12,10 +12,10 @@ const HIGTER_ENERGY_LIMIT = 100
 const OVERAGE_ENERGY_LIMIT = 90
 
 # changeable object parameters
+var bacterium_name: String = "Unknown"
 var type: Enums.BacteriumTypes
 var energy: int = 0
 var view_direction_angle: float = 0.0
-
 var behavior_state: RefCounted
 
 # techical
@@ -31,7 +31,7 @@ func _ready():
 
 func _process(delta: float):
 	$ViewDirection.rotate(view_direction_angle - $ViewDirection.rotation)
-	
+
 func _physics_process(delta: float):
 	behavior_state.update(self)		# errors: fix state changer
 	behavior_state.do_task(self)
@@ -52,6 +52,7 @@ func _set_random_type():
 	const BACTERIA_ORIGIN_TYPES = 3	# todo: add special file with all prop constants
 	match 0:	# todo: add real generation "randi_range(0, BACTERIA_ORIGIN_TYPES)"
 		0:
+			bacterium_name = "Green Bacterium"
 			type = Enums.BacteriumTypes.GREEN
 			modulate = Color.LAWN_GREEN
 			behavior_state = StateMachine.get_start_green_bacterium_state()	# todo: add behavior for every bacteria types
@@ -112,15 +113,18 @@ func _collision_fluence():
 func photosynthesing():
 	if energy + 1 <= HIGTER_ENERGY_LIMIT:
 		energy += 1
-	print("energy: ", energy)
 
 func recycle_energy():
 	const LOWER_ENERGY_LIMIT: int = 0
 	if energy - 5 >= LOWER_ENERGY_LIMIT:
 		energy -= 5
-	print("energy: ", energy)
 
 func shedding():
 	const cell_energy: int = 30
 	self.energy -= cell_energy
 	energy_shed.emit(global_position, cell_energy)
+
+# <> other <>
+func _on_clickable_area_input_event(viewport: Node, event: InputEvent, shape_idx: int):
+	if event is InputEventMouseButton and event.pressed:
+		Singlton.bacterium_clicked.emit(self)

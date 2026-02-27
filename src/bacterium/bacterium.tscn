@@ -20,6 +20,14 @@ texture = ExtResource("2_12tcg")
 visible = false
 shape = SubResource("CircleShape2D_dd0jb")
 
+[node name="ClickableArea" type="Area2D" parent="." unique_id=1062292309]
+collision_layer = 256
+collision_mask = 256
+
+[node name="ClickableCollision" type="CollisionShape2D" parent="ClickableArea" unique_id=1395860773]
+visible = false
+shape = SubResource("CircleShape2D_dd0jb")
+
 [node name="NavigationAgent" type="NavigationAgent2D" parent="." unique_id=268425799]
 path_desired_distance = 30.0
 debug_enabled = true
@@ -30,3 +38,5 @@ width = 4.0
 default_color = Color(0, 1, 0, 1)
 begin_cap_mode = 2
 end_cap_mode = 2
+
+[connection signal="input_event" from="ClickableArea" to="." method="_on_clickable_area_input_event"]

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Bacteriostat"
-run/main_scene="uid://duuaegris31ou"
+run/main_scene="uid://dvyoqx2e1p7ls"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 

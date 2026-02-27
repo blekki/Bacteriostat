@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://bx6lul282ajbx"]
+
+[ext_resource type="FontFile" uid="uid://d17h73ff4yptg" path="res://assets/font/MotionControl-Bold.otf" id="1_3phq6"]
+[ext_resource type="Script" uid="uid://d22pe2btl3reo" path="res://src/hud/hud.gd" id="1_t0re6"]
+[ext_resource type="Texture2D" uid="uid://dx5eawmxmsgpv" path="res://assets/Ellipse 1.svg" id="3_ony6l"]
+
+[sub_resource type="Theme" id="Theme_ony6l"]
+default_font = ExtResource("1_3phq6")
+default_font_size = 20
+
+[node name="HUD" type="Control" unique_id=758395760]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -64.0
+offset_right = -64.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = SubResource("Theme_ony6l")
+script = ExtResource("1_t0re6")
+
+[node name="Panel" type="Panel" parent="." unique_id=514441669]
+clip_contents = true
+layout_mode = 1
+offset_left = 888.0
+offset_right = 1144.0
+offset_bottom = 328.0
+metadata/_edit_group_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=342176252]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=835924133]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="CloseButton" type="Button" parent="Panel/MarginContainer/VBox" unique_id=770498460]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_horizontal = 8
+text = "X"
+
+[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBox" unique_id=480120384]
+layout_mode = 2
+
+[node name="ObjName" type="Label" parent="Panel/MarginContainer/VBox" unique_id=822319965]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "object_name"
+autowrap_mode = 3
+clip_text = true
+text_overrun_behavior = 5
+uppercase = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBox" unique_id=1724593388]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ObjTexture" type="TextureRect" parent="Panel/MarginContainer/VBox/MarginContainer" unique_id=1031743290]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("3_ony6l")
+
+[node name="ObjParameters" type="Label" parent="Panel/MarginContainer/VBox" unique_id=1453492340]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+text = "energy = 0/max
+current_state = state
+previously state = state"
+autowrap_mode = 3
+clip_text = true
+text_overrun_behavior = 5
+uppercase = true
+
+[connection signal="pressed" from="Panel/MarginContainer/VBox/CloseButton" to="." method="_on_close_button_pressed"]
