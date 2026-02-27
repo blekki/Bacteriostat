@@ -121,7 +121,9 @@ func recycle_energy():
 		energy -= 5
 
 func shedding():
-	const cell_energy: int = 30
+	const MIN_ENERGY: int = 25
+	const MAX_ENERGY: int = 35
+	var cell_energy: int = _random.randf_range(25, 35)		# todo: add value rage (like 25..35)
 	self.energy -= cell_energy
 	energy_shed.emit(global_position, cell_energy)
 
