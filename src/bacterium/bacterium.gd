@@ -19,12 +19,12 @@ var view_direction_angle: float = 0.0
 var behavior_state: RefCounted
 
 # techical
-var nav_field: Vector2	# area from (xy = 0) to (xy = nav_field.xy) pixels
-var random = RandomNumberGenerator.new()
+var _nav_field: Vector2	# area from (xy = 0) to (xy = nav_field.xy) pixels
+var _random: RandomNumberGenerator = RandomNumberGenerator.new()
 
 # <> Methods section <>
 func _ready():
-	random.randomize()
+	_random.randomize()
 	_set_random_type()
 	await NavigationServer2D.map_changed
 	position = _generate_smart_point()
@@ -64,14 +64,15 @@ func _set_random_type():
 			modulate = Color.DARK_ORANGE
 
 func set_navigation_field(field: Vector2):
-	nav_field = field
+	_nav_field = field
+
 
 # <> Other methods <>
 func _generate_smart_point() -> Vector2:	# generate point inside navigation area
 	#generate random point inside nav_polygon
 	var point = Vector2(
-		random.randf_range(0, nav_field.x),
-		random.randf_range(0, nav_field.y)
+		_random.randf_range(0, _nav_field.x),
+		_random.randf_range(0, _nav_field.y)
 	)
 	# get target pos inside navigation area
 	var area = get_world_2d().get_navigation_map()
@@ -103,12 +104,12 @@ func _deceleration():
 
 func _collision_fluence():
 	const COLLISION_DEFLECTION: float = 20.0
-	var collision
+	var collider
 	if get_slide_collision_count() > 0:
-		collision = get_slide_collision(0)
-	if collision:
-		var collider = collision.get_collider()		# todo: fix unsync fluence
-		velocity += collision.get_normal() * (COLLISION_DEFLECTION)
+		collider = get_slide_collision(0)
+	if collider:
+		velocity += collider.get_normal() * (COLLISION_DEFLECTION)
+
 
 func photosynthesing():
 	if energy + 1 <= HIGTER_ENERGY_LIMIT:
