@@ -21,6 +21,7 @@ var behavior_state: RefCounted
 # techical
 var _nav_field: Vector2	# area from (xy = 0) to (xy = nav_field.xy) pixels
 var _random: RandomNumberGenerator = RandomNumberGenerator.new()
+var _selected_with_mouse: bool = false
 
 # <> Methods section <>
 func _ready():
@@ -35,6 +36,10 @@ func _process(delta: float):
 func _physics_process(delta: float):
 	behavior_state.update(self)		# errors: fix state changer
 	behavior_state.do_task(self)
+	
+	if _selected_with_mouse == true:
+		velocity = Vector2.ZERO
+		global_position = lerp(global_position, get_global_mouse_position(), 10 * delta)
 	
 	# todo: replace the next block into state
 	#_deceleration()
@@ -129,5 +134,12 @@ func shedding():
 
 # <> other <>
 func _on_clickable_area_input_event(viewport: Node, event: InputEvent, shape_idx: int):
-	if event is InputEventMouseButton and event.pressed:
-		Singlton.bacterium_clicked.emit(self)
+	if event is InputEventMouseButton:
+		# print info about the obj
+		if event.pressed:
+			Singlton.bacterium_clicked.emit(self)
+		
+		# move the obj
+		if Input.is_action_pressed("move_object"):
+			_selected_with_mouse = true
+		else: _selected_with_mouse = false
