@@ -71,15 +71,15 @@ func _on_bacterium_energy_shed(global_position: Vector2, energy: int):	# create 
 # time season configuration
 func _start_day():
 	$Night.stop()
-	print("night finished")
 	Singlton.time_season = Enums.TimeSeasons.DAY
 	$Day.start()
+	print("day started")
 
 func _start_night():
 	$Day.stop()
-	print("day finished")
 	Singlton.time_season = Enums.TimeSeasons.NIGHT
 	$Night.start()
+	print("night started")
 
 func _on_day_timeout():
 	_start_night()
