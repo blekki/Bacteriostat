@@ -22,6 +22,7 @@ var behavior_state: RefCounted
 var _nav_field: Vector2	# area from (xy = 0) to (xy = nav_field.xy) pixels
 var _random: RandomNumberGenerator = RandomNumberGenerator.new()
 var _selected_with_mouse: bool = false
+var _debug_layer: int
 
 # <> Methods section <>
 func _ready():
@@ -115,6 +116,9 @@ func _collision_fluence():
 	if collider:
 		velocity += collider.get_normal() * (COLLISION_DEFLECTION)
 
+
+func clear_layers():	# use as preperation before next behavier state
+	Debug.remove_layer(_debug_layer)
 
 func photosynthesing():
 	if energy + 1 <= HIGTER_ENERGY_LIMIT:

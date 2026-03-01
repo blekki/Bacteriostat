@@ -1,0 +1,31 @@
+# Singlton "Debug"
+extends Node2D
+
+const LINE_WIDTH: float = 2.0
+
+var last_id: int = 0;
+var layers: Dictionary[int, Array] = {}
+
+# <> methods <>
+func _process(delta: float):
+	queue_redraw()
+
+func _draw():
+	for id in layers:
+		for line in layers.get(id):
+			draw_line(line.start, line.end, line.color, LINE_WIDTH)
+
+func get_new_layer() -> int:
+	last_id += 1
+	var lines: Array[Line] = []
+	layers[last_id] = lines
+	return last_id
+
+func add_line(layer_id: int, start: Vector2, end: Vector2, color: Color):
+	layers.get(last_id).append(
+		Line.new(start, end, color)
+	)
+
+func remove_layer(id: int):
+	if layers.has(id):
+		layers.erase(id)
