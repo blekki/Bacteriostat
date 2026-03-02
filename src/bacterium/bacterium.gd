@@ -22,6 +22,7 @@ var debug_layer: int
 # technical
 var _nav_field: Vector2	# area from (xy = 0) to (xy = nav_field.xy) pixels
 var _random: RandomNumberGenerator = RandomNumberGenerator.new()
+var _physics_frame: int = 0
 var _selected_with_mouse: bool = false
 
 # <> Methods section <>
@@ -37,6 +38,11 @@ func _process(delta: float):
 func _physics_process(delta: float):
 	behavior_state.update(self)		# errors: fix state changer
 	behavior_state.do_task(self)
+	_physics_frame += 1
+	
+	const UPDATE_INTERVAL = 2
+	if _physics_frame % UPDATE_INTERVAL == 0:
+		behavior_state.apply(self)
 	
 	if _selected_with_mouse == true:
 		velocity = Vector2.ZERO
