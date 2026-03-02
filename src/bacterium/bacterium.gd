@@ -5,8 +5,8 @@ signal energy_shed(global_position: Vector2, energy: int)
 
 # object parameters
 # > speed - pixel/sec
-const ACCELERATION: float = 10.0
-const MAX_SPEED: float = 200.0
+const ACCELERATION: float = 30.0
+const MAX_SPEED: float = 400.0
 const FOV: float = PI / 3
 const HIGTER_ENERGY_LIMIT = 100
 const OVERAGE_ENERGY_LIMIT = 90
@@ -43,7 +43,7 @@ func _physics_process(delta: float):
 		global_position = lerp(global_position, get_global_mouse_position(), 10 * delta)
 	
 	# todo: replace the next block into state
-	#_deceleration()
+	_deceleration()
 	#_find_target()
 	#_rotate_and_force()
 	
@@ -102,7 +102,7 @@ func _rotate_and_force():
 	view_direction_angle = lerp_angle(view_direction_angle, view_target.angle(), ROTATION_WEIGHT)
 
 func _deceleration():
-	const DECELERATION_MOD: float = 0.5
+	const DECELERATION_MOD: float = 6.0
 	if velocity.length() > DECELERATION_MOD:
 		velocity -= velocity.normalized() * DECELERATION_MOD
 	else:
