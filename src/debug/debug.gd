@@ -1,6 +1,7 @@
-# Singlton "Debug"
+# Singlton "Debug" for... debug features :/
 extends Node2D
 
+const IS_DEBUG_MODE_ON = true
 const LINE_WIDTH: float = 2.0
 
 var last_id: int = 0;
@@ -8,7 +9,10 @@ var layers: Dictionary[int, Array] = {}
 
 # <> methods <>
 func _process(delta: float):
-	queue_redraw()
+	if IS_DEBUG_MODE_ON == true:
+		queue_redraw()
+	else:
+		layers.clear()
 
 func _draw():
 	for id in layers:

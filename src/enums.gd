@@ -30,3 +30,13 @@ enum ObjectTypes {
 	NEUTRAL,
 	ENEMY,
 }
+
+# dictionary
+const DEBUG_OBJECT_COLORS = {
+	ObjectTypes.NONE: Color.DIM_GRAY,
+	ObjectTypes.INEDIBLE: Color.GRAY,
+	ObjectTypes.EDIBLE: Color.MEDIUM_SPRING_GREEN,
+	ObjectTypes.PRAY: Color.YELLOW,
+	ObjectTypes.NEUTRAL: Color.GREEN,
+	ObjectTypes.ENEMY: Color.RED,
+}
