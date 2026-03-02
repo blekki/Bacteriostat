@@ -1,7 +1,7 @@
-class_name PhotosynthesisState
+class_name PhotosynthesizingState
 extends RefCounted
 
-static var name: String = "Photosynthesis"
+static var name: String = "Photosynthesizing"
 
 static func apply(bacterium: Bacterium):
 	_photosynthesing(bacterium)

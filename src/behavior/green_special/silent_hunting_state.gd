@@ -80,4 +80,4 @@ func _try_change_state(bacterium: Bacterium):
 	# change the behavior to peaceful if a day has come
 	if Singlton.time_season == Enums.TimeSeasons.DAY:
 		Debug.remove_layer(bacterium.debug_layer)
-		bacterium.behavior_state = StateMachine.photosynthesis
+		bacterium.behavior_state = StateMachine.photosynthesizing

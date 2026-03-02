@@ -14,4 +14,4 @@ static func _shedding(bacterium: Bacterium):
 	bacterium.shedding(impulse)
 
 static func _change_state(bacterium: Bacterium):
-	bacterium.behavior_state = StateMachine.photosynthesis
+	bacterium.behavior_state = StateMachine.photosynthesizing
