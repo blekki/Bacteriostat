@@ -46,19 +46,16 @@ func _init_collision_walls():	# fast way make dynamic walls
 	right_border.position = Vector2(MAP_WIDTH, MAP_HEIGHT / 2)
 	right_border.scale = Vector2(NO_SCALE, UPSCALE)
 
-func _on_bacterium_energy_shed(global_position: Vector2, energy: int):	# create energy_cell
+func _on_bacterium_energy_shed(global_position: Vector2, impulse: float, energy: int):	# create energy_cell
 	var cell: EnergyCell = energy_cell_instance.instantiate()
 	cell.cell_name = "Grass Cell"
 	cell.type = Enums.EnergyCellTypes.GRASS
 	cell.energy_equivalent = energy
 	
-	# create random impuls in random direction
-	const MIN_IMPULSE: int = 40
-	const MAX_IMPULSE: int = 80
-	var power = randf_range(MIN_IMPULSE, MAX_IMPULSE)
+	# add impulse to the cell
 	var direction = Vector2.RIGHT.rotated(randf_range(0, PI * 2))
-	var impulse = direction * power
-	cell.velocity = impulse
+	var new_velocity = direction * impulse
+	cell.velocity = new_velocity
 	
 	# set start position
 	const OFFSET: int = 20

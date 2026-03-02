@@ -1,7 +1,7 @@
 class_name Bacterium
 extends CharacterBody2D
 
-signal energy_shed(global_position: Vector2, energy: int)
+signal energy_shed(global_position: Vector2, impulse: float, energy: int)
 
 # object parameters
 # > speed - pixel/sec
@@ -29,15 +29,12 @@ var _selected_with_mouse: bool = false
 func _ready():
 	_random.randomize()
 	_set_random_type()
-	await NavigationServer2D.map_changed
 	position = _generate_smart_point()
 
 func _process(delta: float):
 	$ViewDirection.rotate(view_direction_angle - $ViewDirection.rotation)
 
 func _physics_process(delta: float):
-	behavior_state.update(self)		# errors: fix state changer
-	behavior_state.do_task(self)
 	_physics_frame += 1
 	
 	const UPDATE_INTERVAL = 2
@@ -78,8 +75,21 @@ func _set_random_type():
 func set_navigation_field(field: Vector2):
 	_nav_field = field
 
+# <> need for identification "get" methods <>
+func get_bacterium_type() -> Enums.BacteriumTypes:
+	return type
+
+func get_pos() -> Vector2:
+	return position
 
 # <> Other methods <>
+func adjust_energy(energy: int) -> int:
+	const MAX_ENERGY: int = 100
+	const MIN_ENERGY: int = 0
+	energy = clamp(self.energy, MIN_ENERGY, MAX_ENERGY)
+	self.energy = energy
+	return energy	# return how much was added or removed
+
 func _generate_smart_point() -> Vector2:	# generate point inside navigation area
 	#generate random point inside nav_polygon
 	var point = Vector2(
@@ -91,11 +101,41 @@ func _generate_smart_point() -> Vector2:	# generate point inside navigation area
 	var nearest_point = NavigationServer2D.map_get_closest_point(area, point)
 	return point
 
+## NOT RELEVANT
 func _find_target():
 	var nav_agent = $NavigationAgent
 	if nav_agent.is_navigation_finished():
 		nav_agent.target_position = _generate_smart_point()
 
+func _rotate_to_target(target_local_pos: Vector2):
+	$NavigationAgent.target_position = target_local_pos	# save target
+	var to_target = $NavigationAgent.target_position * 100 # multiply is need to make dash harder
+	var view_target = to_target - velocity # how to need rotate for come to the target with the fastest way
+	
+	const ROTATION_WEIGHT: float = 0.1
+	view_direction_angle = lerp_angle(view_direction_angle, view_target.angle(), ROTATION_WEIGHT)
+
+## [pray] parameter must be [Bacterium] or [EnergyCell]
+func try_rotate_to_pray(own_dash_power: float, pray: Variant) -> bool:
+	var target: Vector2 = pray.position - position
+	var target_in_future = target.normalized() * own_dash_power + pray.velocity # how to need rotate to dash to the target with the fastest way
+	_rotate_to_target(target_in_future)
+	
+	var view_direction = Vector2.RIGHT.rotated(view_direction_angle)
+	if abs(view_direction.angle_to(target_in_future)) < (FOV / 8):
+		return true
+	return false
+
+func dash(dash_power: float):
+	velocity += Vector2.RIGHT.rotated(view_direction_angle) * dash_power
+
+## [object] can be Bacterium or EnergyCell
+func smart_dash(dash_power: float, pray: Variant):
+	var is_rotated: bool = try_rotate_to_pray(dash_power, pray)
+	if is_rotated == true:
+		dash(dash_power)
+
+## NOT RELEVAT
 func _rotate_and_force():
 	var target = ($NavigationAgent.target_position - position)
 	var view_target = target - velocity # how to need rotate for come to the target with the fastest way
@@ -122,22 +162,66 @@ func _collision_fluence():
 	if collider:
 		velocity += collider.get_normal() * (COLLISION_DEFLECTION)
 
+func nearby_objects(area_radius: float) -> Array:
+	const RAYS_COUNT: int = 32
+	var objects_in_area: Array = []
+	var space_state = get_world_2d().direct_space_state
+	
+	# use raycast to findind nearby objects
+	Debug.remove_layer(debug_layer)
+	debug_layer = Debug.get_new_layer()
+	for i in range(0, RAYS_COUNT):
+		var ray_rotation = (PI * 2) / RAYS_COUNT * i
+		var target = global_position + Vector2.RIGHT.rotated(ray_rotation) * area_radius
+		
+		var query = PhysicsRayQueryParameters2D.create(global_position, target)
+		query.collision_mask = 6 # 2 and 3
+		query.exclude = [get_rid()]
+		
+		var result = space_state.intersect_ray(query)
+		if result:
+			var collider = result.collider
+			if collider is CharacterBody2D:
+				objects_in_area.push_back(collider)
+				#print("Find: ", collider.name)
+		
+		Debug.add_line(
+			debug_layer,
+			global_position,
+			target,
+			Enums.DEBUG_OBJECT_COLORS[Enums.ObjectTypes.NONE]
+		)
+	
+	return objects_in_area
 
 func photosynthesing():
 	if energy + 1 <= HIGTER_ENERGY_LIMIT:
 		energy += 1
 
-func recycle_energy():
-	const LOWER_ENERGY_LIMIT: int = 0
-	if energy - 5 >= LOWER_ENERGY_LIMIT:
-		energy -= 5
-
-func shedding():
+func shedding(impulse: float):
 	const MIN_ENERGY: int = 25
 	const MAX_ENERGY: int = 35
-	var cell_energy: int = _random.randf_range(25, 35)		# todo: add value rage (like 25..35)
-	self.energy -= cell_energy
-	energy_shed.emit(global_position, cell_energy)
+	var cell_energy: int = _random.randi_range(MIN_ENERGY, MAX_ENERGY) * -1
+	var can_be_used_energy = self.adjust_energy(cell_energy)
+	energy_shed.emit(global_position, impulse, can_be_used_energy)
+
+func vampirism(pray: Variant):
+	const VAMPIRISM_RADIUS: int = 40
+	const VAMPIRISM_POWER: int = 1 	# per behavior tick
+	const LERP_WEIGHT: float = 0.1
+	
+	var distance: Vector2 = pray.global_position - global_position
+	if distance.length() > VAMPIRISM_RADIUS:
+		global_position = global_position.lerp(pray.global_position, LERP_WEIGHT)
+	else:
+		var can_be_consumed = pray.adjust_energy(-VAMPIRISM_POWER)
+		self.adjust_energy(can_be_consumed)
+
+## If no lure is nearby, throw one
+func try_throw_lure(impulse: float, nearby_objects: Array[InfoPack]):
+	var cell_pack: InfoPack = InfoUtils.get_nearest_energy_cell(nearby_objects)
+	if cell_pack.object_type == Enums.ObjectTypes.NONE:
+		shedding(impulse)
 
 # <> other <>
 func _on_clickable_area_input_event(viewport: Node, event: InputEvent, shape_idx: int):
