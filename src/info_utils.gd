@@ -2,11 +2,15 @@
 class_name InfoUtils
 extends RefCounted
 
+const RESULT_NONE: int = -1
+
 ## Find nearest pray but if no one is, return [Enums.ObjectTypes.NONE]
-## Attention: Be careful this method works only if (array.size() > 0)
 static func get_nearest_pray(array: Array[InfoPack]) -> InfoPack:
+	if array.size() == 0:
+		return InfoPack.get_empty_pack()
+
 	var nearest: float = INF
-	var index: int = -1
+	var index: int = RESULT_NONE
 	
 	# find nearest pray
 	for i in range(0, array.size()):
@@ -15,14 +19,18 @@ static func get_nearest_pray(array: Array[InfoPack]) -> InfoPack:
 				index = i
 	
 	# return result
-	if index != -1:
-		return array[index]	# nearest pray
+	if index == RESULT_NONE:
+		return InfoPack.get_empty_pack()	# literaly means "nothing"
 	else:
-		return InfoPack.new(Vector2.ZERO, Enums.ObjectTypes.NONE)	# literaly means "nothing"
+		return array[index]	# nearest pray
 
-static func get_nearest_energy_cell(array: Array[InfoPack]) -> InfoPack:
+## Find nearest pray but if no one is, return [Enums.ObjectTypes.NONE]
+static func get_nearest_energy_cell(array: Array[InfoPack]) -> InfoPack: # todo: separate "nearest_cell" into "nearest_grass" and "nearest_meat"
+	if array.size() == 0:
+		return InfoPack.get_empty_pack()
+	
 	var nearest: float = INF
-	var index: int = -1
+	var index: int = RESULT_NONE
 	
 	# find nearest energy cell
 	for i in range(0, array.size()):
@@ -33,7 +41,7 @@ static func get_nearest_energy_cell(array: Array[InfoPack]) -> InfoPack:
 				index = i
 	
 	# return result
-	if index != -1:
-		return array[index]	# nearest pray
+	if index == RESULT_NONE:
+		return InfoPack.get_empty_pack()
 	else:
-		return InfoPack.new(Vector2.ZERO, Enums.ObjectTypes.NONE)	# literaly means "nothing"
+		return array[index]	# nearest pray
