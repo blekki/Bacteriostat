@@ -5,6 +5,8 @@ signal energy_shed(global_position: Vector2, impulse: float, energy: int)
 
 # object parameters
 # > speed - pixel/sec
+const MAX_ENERGY: int = 100
+const MIN_ENERGY: int = 0
 const ACCELERATION: float = 30.0
 const MAX_SPEED: float = 400.0
 const FOV: float = PI / 3
@@ -27,6 +29,7 @@ var _selected_with_mouse: bool = false
 
 # <> Methods section <>
 func _ready():
+	energy = 40
 	_random.randomize()
 	_set_random_type()
 	position = _generate_smart_point()
@@ -83,15 +86,22 @@ func get_pos() -> Vector2:
 	return position
 
 # <> Other methods <>
-func adjust_energy(energy: int) -> int:
-	const MAX_ENERGY: int = 100
-	const MIN_ENERGY: int = 0
-	energy = clamp(self.energy, MIN_ENERGY, MAX_ENERGY)
-	self.energy = energy
-	return energy	# return how much was added or removed
+## Change energy value
+func consume_energy(delta_energy: int):
+	var new_energy = clampi(energy + delta_energy, MIN_ENERGY, MAX_ENERGY)
+	self.energy = new_energy
+	if energy <= MIN_ENERGY:
+		death()
 
-func _generate_smart_point() -> Vector2:	# generate point inside navigation area
-	#generate random point inside nav_polygon
+## Return how much energy a bacteria can consume
+func can_consume_energy(delta_energy: int) -> int:
+	var can_be_used_energy = clampi(delta_energy, -1 * energy, MAX_ENERGY - energy)
+	return can_be_used_energy
+
+func death():
+	Debug.remove_layer(debug_layer)
+	modulate = Color.DIM_GRAY	# todo: change texture
+
 	var point = Vector2(
 		_random.randf_range(0, _nav_field.x),
 		_random.randf_range(0, _nav_field.y)
