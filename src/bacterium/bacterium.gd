@@ -7,8 +7,9 @@ signal energy_shed(global_position: Vector2, impulse: float, energy: int)
 # > speed - pixel/sec
 const MAX_ENERGY: int = 100
 const MIN_ENERGY: int = 0
-const ACCELERATION: float = 30.0
-const MAX_SPEED: float = 400.0
+const ACCELERATION: float = 10.0	# todo: rewrite ACCEELRATION into variable
+const PASSIVE_DECELERATION: float = 2.0
+const MAX_SPEED: float = 300.00
 const FOV: float = PI / 3
 const HIGTER_ENERGY_LIMIT = 100
 const OVERAGE_ENERGY_LIMIT = 90
@@ -17,7 +18,6 @@ const OVERAGE_ENERGY_LIMIT = 90
 var bacterium_name: String = "Unknown"
 var type: Enums.BacteriumTypes
 var energy: int = 0
-var view_direction_angle: float = 0.0
 var behavior_state: RefCounted
 var debug_layer: int
 
@@ -31,18 +31,21 @@ var _selected_with_mouse: bool = false
 func _ready():
 	energy = 40
 	_random.randomize()
-	_set_random_type()
+	#_set_random_type()
 	position = _generate_smart_point()
 
 func _process(delta: float):
-	$ViewDirection.rotate(view_direction_angle - $ViewDirection.rotation)
+	pass
 
 func _physics_process(delta: float):
 	_physics_frame += 1
 	
+	# todo: separate "state_updat" and "state_do_task"
+	behavior_state.apply(self)
 	const UPDATE_INTERVAL = 2
 	if _physics_frame % UPDATE_INTERVAL == 0:
-		behavior_state.apply(self)
+		#behavior_state.apply(self)
+		pass
 	
 	if _selected_with_mouse == true:
 		velocity = Vector2.ZERO
@@ -50,7 +53,6 @@ func _physics_process(delta: float):
 	
 	# todo: replace the next block into state
 	_deceleration()
-	#_find_target()
 	#_rotate_and_force()
 	
 	# speed limit
@@ -82,8 +84,8 @@ func set_navigation_field(field: Vector2):
 func get_bacterium_type() -> Enums.BacteriumTypes:
 	return type
 
-func get_pos() -> Vector2:
-	return position
+#func get_pos() -> Vector2:
+	#return position
 
 # <> Other methods <>
 ## Change energy value
@@ -102,13 +104,11 @@ func death():
 	Debug.remove_layer(debug_layer)
 	modulate = Color.DIM_GRAY	# todo: change texture
 
+	# generate random point
 	var point = Vector2(
 		_random.randf_range(0, _nav_field.x),
 		_random.randf_range(0, _nav_field.y)
 	)
-	# get target pos inside navigation area
-	var area = get_world_2d().get_navigation_map()
-	var nearest_point = NavigationServer2D.map_get_closest_point(area, point)
 	return point
 
 ## NOT RELEVANT
@@ -117,45 +117,57 @@ func _find_target():
 	if nav_agent.is_navigation_finished():
 		nav_agent.target_position = _generate_smart_point()
 
-func _rotate_to_target(target_local_pos: Vector2):
-	$NavigationAgent.target_position = target_local_pos	# save target
-	var to_target = $NavigationAgent.target_position * 100 # multiply is need to make dash harder
-	var view_target = to_target - velocity # how to need rotate for come to the target with the fastest way
+# <> for movement <>
+func is_target_reached() -> bool:
+	return $NavigationAgent.is_navigation_finished()
+
+func set_nav_target(target_pos: Vector2):	# todo: rename into "_set_nav_target"
+	$NavigationAgent.target_position = target_pos
+
+func get_nav_target() -> Vector2:
+	return $NavigationAgent.target_position
 	
-	const ROTATION_WEIGHT: float = 0.1
-	view_direction_angle = lerp_angle(view_direction_angle, view_target.angle(), ROTATION_WEIGHT)
+func _dash(impulse: float):
+	velocity += Vector2.RIGHT.rotated(rotation) * impulse
 
-## [pray] parameter must be [Bacterium] or [EnergyCell]
-func try_rotate_to_pray(own_dash_power: float, pray: Variant) -> bool:
-	var target: Vector2 = pray.position - position
-	var target_in_future = target.normalized() * own_dash_power + pray.velocity # how to need rotate to dash to the target with the fastest way
-	_rotate_to_target(target_in_future)
+func try_rotate_to(target_pos: Vector2) -> bool:
+	var target_rotation = (target_pos - position).angle()
+	const ROTATION_WEIGHT: float = 0.075
+	rotation = lerp_angle(rotation, target_rotation, ROTATION_WEIGHT)
 	
-	var view_direction = Vector2.RIGHT.rotated(view_direction_angle)
-	if abs(view_direction.angle_to(target_in_future)) < (FOV / 8):
-		return true
-	return false
+	var field_of_dash = (FOV / 6)
+	if abs(angle_difference(rotation, target_rotation)) < field_of_dash:
+		return true	# rotation finished
+	return false	# need to continue rotate
 
-func dash(dash_power: float):
-	velocity += Vector2.RIGHT.rotated(view_direction_angle) * dash_power
-
-## [object] can be Bacterium or EnergyCell
-func smart_dash(dash_power: float, pray: Variant):
-	var is_rotated: bool = try_rotate_to_pray(dash_power, pray)
+func dash_to(target_pos: Vector2):
+	var is_rotated: bool = try_rotate_to(target_pos)
 	if is_rotated == true:
-		dash(dash_power)
+		_dash(ACCELERATION)
 
-## NOT RELEVAT
-func _rotate_and_force():
-	var target = ($NavigationAgent.target_position - position)
-	var view_target = target - velocity # how to need rotate for come to the target with the fastest way
+## Use to "delicate" reaching a target. An object comes to and stops on a target. Need to simple patrol or the same.
+func reach_target(target_pos: Vector2):
+	# todo: save target_pos into NavigationAgent
 	
-	# add acceleration if the target inside the FOV area
-	if view_target.angle_to(target) < (FOV / 2):
-		velocity += Vector2.RIGHT.rotated(view_direction_angle) * ACCELERATION
-	# turn to face to the target
-	const ROTATION_WEIGHT: float = 0.03
-	view_direction_angle = lerp_angle(view_direction_angle, view_target.angle(), ROTATION_WEIGHT)
+	# deceleretion leveling (algorithm requirement)
+	if velocity.length() > 0:
+		velocity += velocity.normalized() * PASSIVE_DECELERATION
+	
+	var anchor_point = target_pos - velocity
+	dash_to(anchor_point)
+
+## Use to "rough" reaching a target. An object comes across a target. Can be used to attack somebody or run away.
+func intercept_target(target_pos: Vector2, target_velocity: Vector2):
+	# todo: save target_pos into NavigationAgent
+	var to_target = target_pos - self.position + target_velocity
+	var dash_direction = abs(velocity.angle_to(to_target))
+	
+	var anchor_point = Vector2.ZERO
+	if (dash_direction < PI / 36.0) or (velocity.length() < 10):
+		anchor_point = self.position + to_target.normalized()	# dash to a target
+	else:
+		anchor_point = target_pos - (velocity * 2)	# change trajectory
+	dash_to(anchor_point)
 
 func _deceleration():
 	const DECELERATION_MOD: float = 6.0

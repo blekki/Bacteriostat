@@ -29,7 +29,7 @@ visible = false
 shape = SubResource("CircleShape2D_dd0jb")
 
 [node name="NavigationAgent" type="NavigationAgent2D" parent="." unique_id=268425799]
-path_desired_distance = 30.0
+target_desired_distance = 20.0
 debug_enabled = true
 
 [node name="ViewDirection" type="Line2D" parent="." unique_id=1988832001]
