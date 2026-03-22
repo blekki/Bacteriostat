@@ -170,9 +170,8 @@ func intercept_target(target_pos: Vector2, target_velocity: Vector2):
 	dash_to(anchor_point)
 
 func _deceleration():
-	const DECELERATION_MOD: float = 6.0
-	if velocity.length() > DECELERATION_MOD:
-		velocity -= velocity.normalized() * DECELERATION_MOD
+	if velocity.length() > PASSIVE_DECELERATION:
+		velocity -= velocity.normalized() * PASSIVE_DECELERATION
 	else:
 		velocity = Vector2.ZERO
 
