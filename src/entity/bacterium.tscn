@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://m5iibvcvh23p"]
+
+[ext_resource type="PackedScene" uid="uid://bo1y1apxgdai4" path="res://src/entity/entity.tscn" id="1_do35s"]
+[ext_resource type="Script" uid="uid://ccwjhxdl3dfin" path="res://src/entity/bacterium.gd" id="2_wpy8d"]
+
+[node name="Bacterium" unique_id=1553382449 instance=ExtResource("1_do35s")]
+script = ExtResource("2_wpy8d")
+
+[node name="NavigationAgent" type="NavigationAgent2D" parent="." index="3" unique_id=2079435920]
+target_desired_distance = 20.0
+debug_enabled = true
+
+[node name="ViewDirection" type="Line2D" parent="." index="4" unique_id=1076540450]
+points = PackedVector2Array(0, 0, 100, 0)
+width = 4.0
+default_color = Color(0, 1, 0, 1)
+begin_cap_mode = 2
+end_cap_mode = 2

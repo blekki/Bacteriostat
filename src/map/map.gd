@@ -4,8 +4,10 @@ extends Node2D
 const MAP_WIDTH = 1080		# in pixels
 const MAP_HEIGHT = 720
 const BACTERIAS_COUNT = 1
-const bacteria_instance = preload("res://src/bacterium/bacterium.tscn")
-const energy_cell_instance = preload("res://src/energy_cell/energy_cell.tscn")
+#const bacteria_instance = preload("res://src/bacterium/bacterium.tscn")
+#const energy_cell_instance = preload("res://src/energy_cell/energy_cell.tscn")
+const bacteria_instance = preload("res://src/entity/bacterium.tscn")
+const energy_cell_instance = preload("res://src/entity/energy_cell.tscn")
 
 var collision_borders: Array[CollisionShape2D] = []
 var bacteria: Array[Bacterium] = []

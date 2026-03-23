@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://c47vlux1sva1s"]
+
+[ext_resource type="PackedScene" uid="uid://bo1y1apxgdai4" path="res://src/entity/entity.tscn" id="1_3a1qc"]
+[ext_resource type="Script" uid="uid://cbxsc2mprx64n" path="res://src/entity/energy_cell.gd" id="2_bjre1"]
+
+[node name="EnergyCell2" unique_id=1553382449 instance=ExtResource("1_3a1qc")]
+script = ExtResource("2_bjre1")

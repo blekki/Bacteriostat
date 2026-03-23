@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://cteyw57kmgrqf"]
+[gd_scene format=3 uid="uid://bo1y1apxgdai4"]
 
-[ext_resource type="Texture2D" uid="uid://dx5eawmxmsgpv" path="res://assets/Ellipse 1.svg" id="1_351sm"]
-[ext_resource type="Script" uid="uid://brk38vor22qpq" path="res://src/energy_cell/energy_cell.gd" id="1_mqjxt"]
+[ext_resource type="Script" uid="uid://brk38vor22qpq" path="res://src/energy_cell/energy_cell_old.gd" id="1_4sea2"]
+[ext_resource type="Texture2D" uid="uid://dx5eawmxmsgpv" path="res://assets/Ellipse 1.svg" id="2_jsgn5"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_v5jjv"]
 radius = 32.0
@@ -9,19 +9,19 @@ radius = 32.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_mqjxt"]
 radius = 32.0
 
-[node name="EnergyCell" type="CharacterBody2D" unique_id=1553382449]
+[node name="Entity" type="CharacterBody2D" unique_id=1553382449]
 z_index = -1
 scale = Vector2(0.3, 0.3)
 collision_layer = 4
 collision_mask = 5
-script = ExtResource("1_mqjxt")
+script = ExtResource("1_4sea2")
 metadata/_edit_group_ = true
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=314057492]
+[node name="Texture" type="Sprite2D" parent="." unique_id=314057492]
 modulate = Color(1, 0.635881, 0.6829141, 1)
-texture = ExtResource("1_351sm")
+texture = ExtResource("2_jsgn5")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=299581857]
+[node name="Collision" type="CollisionShape2D" parent="." unique_id=299581857]
 visible = false
 shape = SubResource("CircleShape2D_v5jjv")
 

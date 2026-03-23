@@ -1,5 +1,5 @@
 class_name Bacterium
-extends CharacterBody2D
+extends Entity
 
 signal energy_shed(global_position: Vector2, impulse: float, energy: int)
 
@@ -8,16 +8,14 @@ signal energy_shed(global_position: Vector2, impulse: float, energy: int)
 const MAX_ENERGY: int = 100
 const MIN_ENERGY: int = 0
 const ACCELERATION: float = 10.0	# todo: rewrite ACCEELRATION into variable
-const PASSIVE_DECELERATION: float = 2.0
-const MAX_SPEED: float = 300.00
+const MAX_SPEED: float = 600.00
 const FOV: float = PI / 3
 const HIGTER_ENERGY_LIMIT = 100
 const OVERAGE_ENERGY_LIMIT = 90
 
 # changeable object parameters
-var bacterium_name: String = "Unknown"
+var bacterium_name: String = "Unknown Bacterium"
 var type: Enums.BacteriumTypes
-var energy: int = 0
 var behavior_state: RefCounted
 var debug_layer: int
 
@@ -25,7 +23,6 @@ var debug_layer: int
 var _nav_field: Vector2	# area from (xy = 0) to (xy = nav_field.xy) pixels
 var _random: RandomNumberGenerator = RandomNumberGenerator.new()
 var _physics_frame: int = 0
-var _selected_with_mouse: bool = false
 
 # <> Methods section <>
 func _ready():
@@ -33,11 +30,8 @@ func _ready():
 	_random.randomize()
 	#_set_random_type()
 	position = _generate_smart_point()
-
-func _process(delta: float):
-	pass
-
-func _physics_process(delta: float):
+	
+func _physics_process(delta: float) -> void:
 	_physics_frame += 1
 	
 	# todo: separate "state_updat" and "state_do_task"
@@ -47,19 +41,20 @@ func _physics_process(delta: float):
 		#behavior_state.apply(self)
 		pass
 	
-	if _selected_with_mouse == true:
-		velocity = Vector2.ZERO
-		global_position = lerp(global_position, get_global_mouse_position(), 10 * delta)
-	
-	# todo: replace the next block into state
-	_deceleration()
-	#_rotate_and_force()
-	
-	# speed limit
+	_limit_speed()
+	super(delta)
+
+func _limit_speed():
 	if velocity.length() > MAX_SPEED:
 		velocity = velocity.normalized() * MAX_SPEED
-	
-	move_and_slide()
+
+func _generate_smart_point() -> Vector2:	# todo: generate point inside navigation area
+	# generate random point
+	var point = Vector2(
+		_random.randf_range(0, _nav_field.x),
+		_random.randf_range(0, _nav_field.y)
+	)
+	return point
 
 # <> "set" methods <>
 func _set_random_type():
@@ -77,17 +72,17 @@ func _set_random_type():
 			type = Enums.BacteriumTypes.ORANGE
 			modulate = Color.DARK_ORANGE
 
-func set_navigation_field(field: Vector2):
+func set_navigation_field(field: Vector2):	# todo: remove
 	_nav_field = field
 
-# <> need for identification "get" methods <>
-func get_bacterium_type() -> Enums.BacteriumTypes:
+# <> "get" methods
+func get_obj_name() -> String:
+	return bacterium_name
+
+func get_bacterium_type() -> Enums.BacteriumTypes:	# need for identification
 	return type
 
-#func get_pos() -> Vector2:
-	#return position
-
-# <> Other methods <>
+# <> Health methods <>
 ## Change energy value
 func consume_energy(delta_energy: int):
 	var new_energy = clampi(energy + delta_energy, MIN_ENERGY, MAX_ENERGY)
@@ -95,27 +90,22 @@ func consume_energy(delta_energy: int):
 	if energy <= MIN_ENERGY:
 		death()
 
-## Return how much energy a bacteria can consume
+func spend_energy(delta_energy: int):
+	consume_energy(-delta_energy)
+
+## Return how much energy bacterium can consume
 func can_consume_energy(delta_energy: int) -> int:
-	var can_be_used_energy = clampi(delta_energy, -1 * energy, MAX_ENERGY - energy)
-	return can_be_used_energy
+	var value = clampi(delta_energy, -1 * energy, MAX_ENERGY - energy)
+	return value
+
+## Return how much energy bacterium can spend
+func can_spend_energy(delta_energy: int) -> int:
+	return can_consume_energy(-delta_energy)
 
 func death():
 	Debug.remove_layer(debug_layer)
+	behavior_state = StateMachine.waiting_state
 	modulate = Color.DIM_GRAY	# todo: change texture
-
-	# generate random point
-	var point = Vector2(
-		_random.randf_range(0, _nav_field.x),
-		_random.randf_range(0, _nav_field.y)
-	)
-	return point
-
-## NOT RELEVANT
-func _find_target():
-	var nav_agent = $NavigationAgent
-	if nav_agent.is_navigation_finished():
-		nav_agent.target_position = _generate_smart_point()
 
 # <> for movement <>
 func is_target_reached() -> bool:
@@ -130,7 +120,7 @@ func get_nav_target() -> Vector2:
 func _dash(impulse: float):
 	velocity += Vector2.RIGHT.rotated(rotation) * impulse
 
-func try_rotate_to(target_pos: Vector2) -> bool:
+func _try_rotate_to(target_pos: Vector2) -> bool:
 	var target_rotation = (target_pos - position).angle()
 	const ROTATION_WEIGHT: float = 0.075
 	rotation = lerp_angle(rotation, target_rotation, ROTATION_WEIGHT)
@@ -141,10 +131,10 @@ func try_rotate_to(target_pos: Vector2) -> bool:
 	return false	# need to continue rotate
 
 func dash_to(target_pos: Vector2):
-	var is_rotated: bool = try_rotate_to(target_pos)
+	var is_rotated: bool = _try_rotate_to(target_pos)
 	if is_rotated == true:
 		_dash(ACCELERATION)
-
+	
 ## Use to "delicate" reaching a target. An object comes to and stops on a target. Need to simple patrol or the same.
 func reach_target(target_pos: Vector2):
 	# todo: save target_pos into NavigationAgent
@@ -168,22 +158,10 @@ func intercept_target(target_pos: Vector2, target_velocity: Vector2):
 	else:
 		anchor_point = target_pos - (velocity * 2)	# change trajectory
 	dash_to(anchor_point)
-
-func _deceleration():
-	if velocity.length() > PASSIVE_DECELERATION:
-		velocity -= velocity.normalized() * PASSIVE_DECELERATION
-	else:
-		velocity = Vector2.ZERO
-
-func _collision_fluence():
-	const COLLISION_DEFLECTION: float = 20.0
-	var collider
-	if get_slide_collision_count() > 0:
-		collider = get_slide_collision(0)
-	if collider:
-		velocity += collider.get_normal() * (COLLISION_DEFLECTION)
-
-func nearby_objects(area_radius: float) -> Array:
+	
+# <> states requirement <>
+## Result: Array[Variant] can contains Bacteria and EnergyCells
+func nearby_objects(area_radius: float) -> Array[Variant]:
 	const RAYS_COUNT: int = 32
 	var objects_in_area: Array = []
 	var space_state = get_world_2d().direct_space_state
@@ -204,8 +182,8 @@ func nearby_objects(area_radius: float) -> Array:
 			var collider = result.collider
 			if collider is CharacterBody2D:
 				objects_in_area.push_back(collider)
-				#print("Find: ", collider.name)
 		
+		# save line parameters to debug printing
 		Debug.add_line(
 			debug_layer,
 			global_position,
@@ -214,44 +192,41 @@ func nearby_objects(area_radius: float) -> Array:
 		)
 	
 	return objects_in_area
-
-func photosynthesing():
+	
+func photosynthesizing():
 	if energy + 1 <= HIGTER_ENERGY_LIMIT:
 		energy += 1
 
-func shedding(impulse: float):
-	const MIN_ENERGY: int = 25
-	const MAX_ENERGY: int = 35
-	var cell_energy: int = _random.randi_range(MIN_ENERGY, MAX_ENERGY) * -1
-	var can_be_used_energy = self.adjust_energy(cell_energy)
-	energy_shed.emit(global_position, impulse, can_be_used_energy)
+## Generate energy_cell with a fixed energy equivalent
+func shedding():
+	const MIN_CELL_ENERGY:  int = 80; const MAX_CELL_ENERGY:  int = 120
+	const MIN_IMPULSE: int = 40;      const MAX_IMPULSE: int = 60
+	var energy_value: int = _random.randi_range(MIN_CELL_ENERGY, MAX_CELL_ENERGY)
+	var impulse: float   = _random.randi_range(MIN_IMPULSE, MAX_IMPULSE)
+	var cell_energy: int = can_consume_energy(energy_value)
+	spend_energy(cell_energy)
+	energy_shed.emit(self.global_position, impulse, cell_energy)
 
 func vampirism(pray: Variant):
 	const VAMPIRISM_RADIUS: int = 40
 	const VAMPIRISM_POWER: int = 1 	# per behavior tick
-	const LERP_WEIGHT: float = 0.1
+	const LERP_WEIGHT: float = 0.01
 	
 	var distance: Vector2 = pray.global_position - global_position
 	if distance.length() > VAMPIRISM_RADIUS:
 		global_position = global_position.lerp(pray.global_position, LERP_WEIGHT)
 	else:
-		var can_be_consumed = pray.adjust_energy(-VAMPIRISM_POWER)
-		self.adjust_energy(can_be_consumed)
+		# consume_energy
+		var can_be_took     = pray.can_spend_energy(VAMPIRISM_POWER)
+		var can_be_consumed = self.can_consume_energy(can_be_took)
+		pray.spend_energy(can_be_consumed)
+		self.consume_energy(can_be_consumed)
 
 ## If no lure is nearby, throw one
-func try_throw_lure(impulse: float, nearby_objects: Array[InfoPack]):
-	var cell_pack: InfoPack = InfoUtils.get_nearest_energy_cell(nearby_objects)
-	if cell_pack.object_type == Enums.ObjectTypes.NONE:
-		shedding(impulse)
-
-# <> other <>
-func _on_clickable_area_input_event(viewport: Node, event: InputEvent, shape_idx: int):
-	if event is InputEventMouseButton:
-		# print info about the obj
-		if event.pressed:
-			Singlton.bacterium_clicked.emit(self)
-		
-		# move the obj
-		if Input.is_action_pressed("move_object"):
-			_selected_with_mouse = true
-		else: _selected_with_mouse = false
+func throw_lure(impulse: float):
+	const MIN_LURE_ENERGY:  int = 10;
+	const MAX_LURE_ENERGY:  int = 20;
+	var energy_value: int = _random.randi_range(MIN_LURE_ENERGY, MAX_LURE_ENERGY)
+	var cell_energy: int = self.can_consume_energy(energy_value)
+	self.spend_energy(cell_energy)
+	energy_shed.emit(self.global_position, impulse, cell_energy)
