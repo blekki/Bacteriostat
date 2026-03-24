@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://yywy0uwb6gro" path="res://src/map/map.gd" id="1_vfn15"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_5o7fj"]
-vertices = PackedVector2Array(1040, 680, 40, 680, 40, 40, 1040, 40)
+vertices = PackedVector2Array(1047, 687, 33, 687, 33, 33, 1047, 33)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
 outlines = Array[PackedVector2Array]([PackedVector2Array(0, 0, 1080, 0, 1080, 720, 0, 720)])
 agent_radius = 33.0
@@ -17,7 +17,6 @@ script = ExtResource("1_vfn15")
 metadata/_edit_group_ = true
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=706864556]
-visible = false
 navigation_polygon = SubResource("NavigationPolygon_5o7fj")
 
 [node name="Collision" type="StaticBody2D" parent="." unique_id=1983517934]

@@ -11,7 +11,7 @@ radius = 32.0
 
 [node name="Entity" type="CharacterBody2D" unique_id=1553382449]
 z_index = -1
-scale = Vector2(0.3, 0.3)
+scale = Vector2(0.5, 0.5)
 collision_layer = 4
 collision_mask = 5
 script = ExtResource("1_4sea2")
