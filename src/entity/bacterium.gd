@@ -5,19 +5,29 @@ signal energy_shed(global_position: Vector2, impulse: float, energy: int)
 
 # object parameters
 # > speed - pixel/sec
-const MAX_ENERGY: int = 100
-const MIN_ENERGY: int = 0
 const ACCELERATION: float = 10.0	# todo: rewrite ACCEELRATION into variable
 const MAX_SPEED: float = 600.00
 const FOV: float = PI / 3
 const HIGTER_ENERGY_LIMIT = 100
 const OVERAGE_ENERGY_LIMIT = 90
 
+enum EnergyLimit {
+	DEATH = 0,
+	LURING = 35,
+	FISSION = 90,
+	MAX = 100,
+}
+const MAX_ENERGY: int = 100	# todo: remove
+const MIN_ENERGY: int = 0	# todo: remove
+
 # changeable object parameters
 var bacterium_name: String = "Unknown Bacterium"
 var type: Enums.BacteriumTypes
 var behavior_state: RefCounted
 var debug_layer: int
+var state_remaining: int = 0
+var action_priming: int = 0
+var _is_priming_finished: bool = false
 
 # technical
 var _nav_field: Vector2	# area from (xy = 0) to (xy = nav_field.xy) pixels
@@ -32,17 +42,19 @@ func _ready():
 	position = _generate_smart_point()
 	
 func _physics_process(delta: float) -> void:
-	_physics_frame += 1
+	const STATE_UPDATE_INTERVAL = 2		# physic frames count
+	if _physics_frame >= STATE_UPDATE_INTERVAL:
+		_physics_frame = 0
+	else: _physics_frame += 1
 	
-	# todo: separate "state_updat" and "state_do_task"
-	behavior_state.apply(self)
-	const UPDATE_INTERVAL = 2
-	if _physics_frame % UPDATE_INTERVAL == 0:
-		#behavior_state.apply(self)
-		pass
+	_reduce_state_remaining()
+	
+	behavior_state.do_task(self)
+	if _physics_frame == STATE_UPDATE_INTERVAL:
+		behavior_state.try_update_behavior(self)
 	
 	_limit_speed()
-	super(delta)
+	super(delta)	# use also default physics parameters
 
 func _limit_speed():
 	if velocity.length() > MAX_SPEED:
@@ -120,7 +132,7 @@ func get_nav_target() -> Vector2:
 func _dash(impulse: float):
 	velocity += Vector2.RIGHT.rotated(rotation) * impulse
 
-func _try_rotate_to(target_pos: Vector2) -> bool:
+func try_rotate_to(target_pos: Vector2) -> bool:
 	var target_rotation = (target_pos - position).angle()
 	const ROTATION_WEIGHT: float = 0.075
 	rotation = lerp_angle(rotation, target_rotation, ROTATION_WEIGHT)
@@ -131,7 +143,7 @@ func _try_rotate_to(target_pos: Vector2) -> bool:
 	return false	# need to continue rotate
 
 func dash_to(target_pos: Vector2):
-	var is_rotated: bool = _try_rotate_to(target_pos)
+	var is_rotated: bool = try_rotate_to(target_pos)
 	if is_rotated == true:
 		_dash(ACCELERATION)
 	
@@ -192,13 +204,40 @@ func nearby_objects(area_radius: float) -> Array[Variant]:
 		)
 	
 	return objects_in_area
+
+func _reduce_state_remaining():
+	if state_remaining > 0:
+		state_remaining -= 1
+
+func _try_priming(physic_frames_count: int):
+	# is priming completed from the previous iteration
+	if _is_priming_finished == true:
+		action_priming = physic_frames_count
+		_is_priming_finished = false	# reset
+		return _is_priming_finished
 	
+	# reduce priming time
+	if action_priming == 0:
+		_is_priming_finished = true
+	else:
+		action_priming -= 1
+	return _is_priming_finished
+	
+
 func photosynthesizing():
+	_try_priming(5)
+	if _is_priming_finished == false:
+		return
+	
 	if energy + 1 <= HIGTER_ENERGY_LIMIT:
 		energy += 1
 
-## Generate energy_cell with a fixed energy equivalent
+## Generate [EnergyCell] with a fixed impulse
 func shedding():
+	_try_priming(120)
+	if _is_priming_finished == false:
+		return
+	
 	const MIN_CELL_ENERGY:  int = 80; const MAX_CELL_ENERGY:  int = 120
 	const MIN_IMPULSE: int = 40;      const MAX_IMPULSE: int = 60
 	var energy_value: int = _random.randi_range(MIN_CELL_ENERGY, MAX_CELL_ENERGY)
@@ -222,7 +261,7 @@ func vampirism(pray: Variant):
 		pray.spend_energy(can_be_consumed)
 		self.consume_energy(can_be_consumed)
 
-## If no lure is nearby, throw one
+## Generate lure [EnergyCell] with a custom impulse
 func throw_lure(impulse: float):
 	const MIN_LURE_ENERGY:  int = 10;
 	const MAX_LURE_ENERGY:  int = 20;
