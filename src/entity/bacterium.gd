@@ -96,25 +96,26 @@ func get_bacterium_type() -> Enums.BacteriumTypes:	# need for identification
 
 # <> Health methods <>
 ## Change energy value
-func consume_energy(delta_energy: int):
+func consume_energy(delta_energy: int):	# todo: replace into Entity
 	var new_energy = clampi(energy + delta_energy, MIN_ENERGY, MAX_ENERGY)
 	self.energy = new_energy
 	if energy <= MIN_ENERGY:
 		death()
 
-func spend_energy(delta_energy: int):
+func spend_energy(delta_energy: int):	# todo: replace into Entity
 	consume_energy(-delta_energy)
 
 ## Return how much energy bacterium can consume
-func can_consume_energy(delta_energy: int) -> int:
-	var value = clampi(delta_energy, -1 * energy, MAX_ENERGY - energy)
+func can_consume_energy(delta_energy: int) -> int:	# todo: replace into Entity
+	var value = mini(delta_energy, MAX_ENERGY - energy)
 	return value
 
 ## Return how much energy bacterium can spend
-func can_spend_energy(delta_energy: int) -> int:
-	return can_consume_energy(-delta_energy)
+func can_spend_energy(delta_energy: int) -> int:	# todo: replace into Entity
+	var value = mini(delta_energy, energy)
+	return value
 
-func death():
+func death():	# todo: replace into Entity
 	Debug.remove_layer(debug_layer)
 	behavior_state = StateMachine.waiting_state
 	modulate = Color.DIM_GRAY	# todo: change texture
