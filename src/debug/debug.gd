@@ -8,6 +8,9 @@ var last_id: int = 0;
 var layers: Dictionary[int, Array] = {}
 
 # <> methods <>
+func _ready() -> void:
+	z_index = -10
+
 func _process(delta: float):
 	if IS_DEBUG_MODE_ON == true:
 		queue_redraw()
