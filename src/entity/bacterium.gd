@@ -87,7 +87,7 @@ func _set_random_type():
 func set_navigation_field(field: Vector2):	# todo: remove
 	_nav_field = field
 
-# <> "get" methods
+# <> identification methods
 func get_obj_name() -> String:
 	return bacterium_name
 
@@ -174,7 +174,7 @@ func intercept_target(target_pos: Vector2, target_velocity: Vector2):
 	
 # <> states requirement <>
 ## Result: Array[Variant] can contains Bacteria and EnergyCells
-func nearby_objects(area_radius: float) -> Array[Variant]:
+func get_nearby_objects(area_radius: float) -> Array[Variant]:
 	const RAYS_COUNT: int = 32
 	var objects_in_area: Array = []
 	var space_state = get_world_2d().direct_space_state
@@ -201,7 +201,7 @@ func nearby_objects(area_radius: float) -> Array[Variant]:
 			debug_layer,
 			global_position,
 			target,
-			Enums.DEBUG_OBJECT_COLORS[Enums.ObjectTypes.NONE]
+			Enums.DEBUG_RELATIONSHIP_COLORS[Enums.RelationshipTypes.NONE]
 		)
 	
 	return objects_in_area
@@ -211,6 +211,8 @@ func _reduce_state_remaining():
 		state_remaining -= 1
 
 func _try_priming(physic_frames_count: int):
+	# error: priming remaining time is keeped after action changing
+	
 	# is priming completed from the previous iteration
 	if _is_priming_finished == true:
 		action_priming = physic_frames_count
@@ -223,7 +225,6 @@ func _try_priming(physic_frames_count: int):
 	else:
 		action_priming -= 1
 	return _is_priming_finished
-	
 
 func photosynthesizing():
 	_try_priming(5)
@@ -249,6 +250,10 @@ func shedding():
 	energy_shed.emit(self.global_position, impulse, cell_energy)
 
 func vampirism(pray: Variant):
+	_try_priming(20)
+	if _is_priming_finished == false:
+		return
+	
 	const VAMPIRISM_RADIUS: int = 40
 	const VAMPIRISM_POWER: int = 1 	# per behavior tick
 	const LERP_WEIGHT: float = 0.01
@@ -263,8 +268,16 @@ func vampirism(pray: Variant):
 		pray.spend_energy(can_be_consumed)
 		self.consume_energy(can_be_consumed)
 
+func is_ready_luring() -> bool:
+	var is_ready = energy >= EnergyLimit.LURING
+	return is_ready
+	
 ## Generate lure [EnergyCell] with a custom impulse
 func throw_lure(impulse: float):
+	_try_priming(100)
+	if _is_priming_finished == false:
+		return
+	
 	const MIN_LURE_ENERGY:  int = 10;
 	const MAX_LURE_ENERGY:  int = 20;
 	var energy_value: int = _random.randi_range(MIN_LURE_ENERGY, MAX_LURE_ENERGY)

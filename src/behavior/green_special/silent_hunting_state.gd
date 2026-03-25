@@ -2,82 +2,84 @@
 class_name SilentHuntingState
 extends RefCounted
 
-const HUNTING_RADIUS: int = 250	# in pixels
 const DASH_POWER: int = 100
-# between "HUNTING_AREA" and "LURE_RADIUS" contains zone "NO_ACTION"
-const LURE_RADIUS: int = 230
-const DASH_RADIUS: int = 180
-const VAMPIRISM_RADIUS: int = 50
+enum ActionRadii {	# in pixels
+	VAMPIRISM = 50,
+	ATTACK = 180,
+	LURING = 230,
+	HUNTING = 250,
+}
 
 var name: String = "Silent Hunting"
 
-# <> methods <>
-func apply(bacterium: Bacterium):
+# <> Methods <>
+static func do_task(bacterium: Bacterium):
 	_silent_hunting(bacterium)
-	_try_change_state(bacterium)
 
-func _silent_hunting(bacterium: Bacterium):
+static func try_update_behavior(bacterium: Bacterium):
+	return	# todo: remove
+	if Singlton.time_season == Enums.TimeSeasons.DAY:
+		Debug.remove_layer(bacterium.debug_layer)
+		bacterium.behavior_state = StateMachine.photosynthesizing
+
+# <> Algorithm requirements section <>
+static func _silent_hunting(bacterium: Bacterium):
 	# get the all nearby objects in the hunting area
 	var nearby_objects: Array[InfoPack] = []
-	nearby_objects = _environment_analyzer(bacterium)
+	nearby_objects = _get_nearby_objects(bacterium)
 	
 	# find a nearest prey
 	if nearby_objects.size() > 0:
-		var pray_info: InfoPack = InfoUtils.get_nearest_pray(nearby_objects)
-		if pray_info.object_type != Enums.ObjectTypes.NONE:
-			_choice_action(bacterium, nearby_objects, pray_info)
+		var pray_record: InfoPack = InfoUtils.get_nearest_pray(nearby_objects)
+		var is_nearby_lure: bool  = InfoUtils.is_lure_nearby(nearby_objects)
+		if pray_record.relationship != Enums.RelationshipTypes.NONE:
+			_choice_action(bacterium, pray_record, is_nearby_lure)
 
-func _environment_analyzer(observer: Bacterium) -> Array[InfoPack]:
-	var unknown_objects = observer.nearby_objects(HUNTING_RADIUS)	# can be EnergyCells or Bacteria
-	
+static func _get_nearby_objects(observer: Bacterium) -> Array[InfoPack]:
 	# init var's
+	var unknown_objects = observer.get_nearby_objects(ActionRadii.HUNTING)	# can be EnergyCells or Bacteria
 	var nearby_objects: Array[InfoPack] = []
-	var obj_type: Enums.ObjectTypes = Enums.ObjectTypes.NONE
+	var relationship: Enums.RelationshipTypes = Enums.RelationshipTypes.NONE
 	
 	# identification
-	for obj in unknown_objects:
-		if obj.has_method("get_bacterium_type"):
-			obj_type = _bacterium_analyzer(observer, obj.get_bacterium_type())
-		if obj.has_method("get_cell_type"):
-			obj_type = Enums.ObjectTypes.INEDIBLE	# green bacteria can't eat energy cells
+	for object in unknown_objects:
+		if object.has_method("get_bacterium_type"):
+			relationship = _bacterium_analyzer(observer, object.get_bacterium_type())
+		elif object.has_method("get_cell_type"):
+			relationship = Enums.RelationshipTypes.INEDIBLE	# green bacteria can't eat energy cells
 		
 		nearby_objects.push_back(
-			InfoPack.new(obj, obj_type)
+			InfoPack.new(object, relationship)
 		)
 		
-		# remove in release version
+		# DEBUG:
 		Debug.add_line(
 			observer.debug_layer,
 			observer.position,
-			obj.get_pos(),
-			Enums.DEBUG_OBJECT_COLORS[obj_type]
+			object.position,
+			Enums.DEBUG_RELATIONSHIP_COLORS[relationship]
 		)
 	
 	return nearby_objects
 
-func _bacterium_analyzer(bacterium: Bacterium, target: Enums.BacteriumTypes) -> Enums.ObjectTypes:
-	var relationship: Enums.ObjectTypes
+static func _bacterium_analyzer(bacterium: Bacterium, target: Enums.BacteriumTypes) -> Enums.RelationshipTypes:
+	var relationship: Enums.RelationshipTypes
 	
 	if target == Enums.BacteriumTypes.GREEN:
-		relationship = Enums.ObjectTypes.NEUTRAL
-	else: relationship = Enums.ObjectTypes.PRAY		# anyway other bacteria is the prays
+		relationship = Enums.RelationshipTypes.NEUTRAL
+	else: relationship = Enums.RelationshipTypes.PRAY		# anyway other bacteria is the prays
 	
 	return relationship
 
 ## Decide what kind action must be used if nearby environment full of objects.
-func _choice_action(bacterium: Bacterium, nearby_objects: Array[InfoPack], pray_info: InfoPack):
+static func _choice_action(bacterium: Bacterium, pray_info: InfoPack, is_nearby_lure: bool):
 	var distance: float = (pray_info.object.position - bacterium.position).length()
 	match distance:
-		var a when (a < VAMPIRISM_RADIUS):
-			bacterium.vampirism(pray_info.object)
-		var a when (a < DASH_RADIUS):
-			bacterium.smart_dash(DASH_POWER, pray_info.object)
-		var a when (a < LURE_RADIUS):
-			const lure_impulse: float = 100
-			bacterium.try_throw_lure(lure_impulse, nearby_objects)
-
-func _try_change_state(bacterium: Bacterium):
-	# change the behavior to peaceful if a day has come
-	if Singlton.time_season == Enums.TimeSeasons.DAY:
-		Debug.remove_layer(bacterium.debug_layer)
-		bacterium.behavior_state = StateMachine.photosynthesizing
+		var a when (a < ActionRadii.VAMPIRISM):
+			bacterium.vampirism(pray_info.object)	# todo: replace into anither state
+		var a when (a < ActionRadii.ATTACK):
+			bacterium.intercept_target(pray_info.object.position, pray_info.object.velocity)
+		var a when (a < ActionRadii.LURING):
+			if (is_nearby_lure != false) and (bacterium.is_ready_luring() == true):
+				const lure_impulse: float = 100
+				bacterium.throw_lure(lure_impulse)
