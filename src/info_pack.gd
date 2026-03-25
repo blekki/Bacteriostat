@@ -2,16 +2,16 @@
 class_name InfoPack
 extends RefCounted
 
-var object: Variant
-var object_type: Enums.ObjectTypes
+var object: Entity
+var relationship: Enums.RelationshipTypes
 
-func _init(object: Variant, object_type: Enums.ObjectTypes) -> void:
-	set_pack(object, object_type)
+func _init(object: Entity, relationship: Enums.RelationshipTypes) -> void:
+	set_pack(object, relationship)
 
-# can be used to fast way save parameters
-func set_pack(object: Variant, object_type: Enums.ObjectTypes):
+# can be used to a fast way save parameters
+func set_pack(object: Entity, relationship: Enums.RelationshipTypes):
 	self.object = object
-	self.object_type = object_type
+	self.relationship = relationship
 
 static func get_empty_pack() -> InfoPack:
-	return InfoPack.new(Vector2.ZERO, Enums.ObjectTypes.NONE)
+	return InfoPack.new(null, Enums.RelationshipTypes.NONE)
