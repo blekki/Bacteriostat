@@ -1,6 +1,11 @@
 class_name Enums
 extends RefCounted
 
+enum TimeSeasons {
+	DAY,
+	NIGHT,
+}
+
 enum BacteriumTypes {
 	NONE,
 	GREEN,
@@ -15,12 +20,7 @@ enum EnergyCellTypes {
 	MEAT,
 }
 
-enum TimeSeasons {
-	DAY,
-	NIGHT,
-}
-
-enum ObjectTypes {
+enum RelationshipTypes {
 	NONE,
 	# only cells
 	INEDIBLE,
@@ -32,11 +32,13 @@ enum ObjectTypes {
 }
 
 # dictionary
-const DEBUG_OBJECT_COLORS = {
-	ObjectTypes.NONE: Color.DIM_GRAY,
-	ObjectTypes.INEDIBLE: Color.GRAY,
-	ObjectTypes.EDIBLE: Color.MEDIUM_SPRING_GREEN,
-	ObjectTypes.PRAY: Color.YELLOW,
-	ObjectTypes.NEUTRAL: Color.GREEN,
-	ObjectTypes.ENEMY: Color.RED,
+const DEBUG_RELATIONSHIP_COLORS = {
+	RelationshipTypes.NONE: Color.DIM_GRAY,
+	RelationshipTypes.INEDIBLE: Color.GRAY,
+	RelationshipTypes.EDIBLE: Color.MEDIUM_SPRING_GREEN,
+	RelationshipTypes.PRAY: Color.YELLOW,
+	RelationshipTypes.NEUTRAL: Color.GREEN,
+	RelationshipTypes.ENEMY: Color.RED,
+}
+
 }
