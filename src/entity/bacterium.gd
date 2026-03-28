@@ -40,6 +40,7 @@ func _ready():
 	_random.randomize()
 	#_set_random_type()
 	position = _generate_smart_point()
+	debug_layer = Debug.get_new_layer()
 	
 func _physics_process(delta: float) -> void:
 	const STATE_UPDATE_INTERVAL = 2		# physic frames count
@@ -67,6 +68,10 @@ func _generate_smart_point() -> Vector2:	# todo: generate point inside navigatio
 		_random.randf_range(0, _nav_field.y)
 	)
 	return point
+
+func change_state_to(new_state: RefCounted):
+	Debug.clean_layer(debug_layer)
+	behavior_state = new_state
 
 # <> "set" methods <>
 func _set_random_type():
@@ -115,10 +120,8 @@ func can_spend_energy(delta_energy: int) -> int:	# todo: replace into Entity
 	var value = mini(delta_energy, energy)
 	return value
 
-func death():	# todo: replace into Entity
-	Debug.remove_layer(debug_layer)
-	behavior_state = StateMachine.waiting_state
-	modulate = Color.DIM_GRAY	# todo: change texture
+func death():
+	change_state_to(StateMachine.waiting_state)
 
 # <> for movement <>
 func is_target_reached() -> bool:
@@ -180,8 +183,7 @@ func get_nearby_objects(area_radius: float) -> Array[Variant]:
 	var space_state = get_world_2d().direct_space_state
 	
 	# use raycast to findind nearby objects
-	Debug.remove_layer(debug_layer)
-	debug_layer = Debug.get_new_layer()
+	Debug.clean_layer(debug_layer)
 	for i in range(0, RAYS_COUNT):
 		var ray_rotation = (PI * 2) / RAYS_COUNT * i
 		var target = global_position + Vector2.RIGHT.rotated(ray_rotation) * area_radius

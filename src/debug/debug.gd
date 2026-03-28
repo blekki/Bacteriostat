@@ -14,13 +14,12 @@ func _ready() -> void:
 func _process(delta: float):
 	if IS_DEBUG_MODE_ON == true:
 		queue_redraw()
-	else:
-		layers.clear()
 
 func _draw():
 	for id in layers:
 		for line in layers.get(id):
 			draw_line(line.start, line.end, line.color, LINE_WIDTH)
+		layers[id].clear()	# clean record after drawing
 
 func get_new_layer() -> int:
 	last_id += 1
@@ -32,6 +31,9 @@ func add_line(layer_id: int, start: Vector2, end: Vector2, color: Color):
 	layers.get(last_id).append(
 		Line.new(start, end, color)
 	)
+
+func clean_layer(id: int):
+	layers[id] = []
 
 func remove_layer(id: int):
 	if layers.has(id):

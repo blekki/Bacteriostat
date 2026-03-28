@@ -33,7 +33,8 @@ func _print_bacterium_info():
 	obj_parameters_label.text = ""
 	obj_parameters_label.text += "energy: %d\n" % checked_obj.energy
 	obj_parameters_label.text += "state: %s\n" % checked_obj.behavior_state.name
-	obj_parameters_label.text += "priming: %.2f\n" % (checked_obj.action_priming / 60.0)	# idk: remove
+	obj_parameters_label.text += "priming: %.2f\n" % (checked_obj.action_priming / 60.0)
+	obj_parameters_label.text += "debug layer: %d\n" % checked_obj.debug_layer
 
 func _print_energy_cell_info():
 	obj_name_label.text = checked_obj.cell_name	# header

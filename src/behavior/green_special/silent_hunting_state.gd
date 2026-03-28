@@ -14,12 +14,12 @@ var name: String = "Silent Hunting"
 
 # <> Methods <>
 static func do_task(bacterium: Bacterium):
+	Debug.clean_layer(bacterium.debug_layer)
 	_silent_hunting(bacterium)
 
 static func try_update_behavior(bacterium: Bacterium):
-	return	# todo: remove
+	# photosintesizing section
 	if Singlton.time_season == Enums.TimeSeasons.DAY:
-		Debug.remove_layer(bacterium.debug_layer)
 		bacterium.behavior_state = StateMachine.photosynthesizing
 
 # <> Algorithm requirements section <>
