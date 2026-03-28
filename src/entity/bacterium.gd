@@ -24,7 +24,6 @@ const MIN_ENERGY: int = 0	# todo: remove
 var bacterium_name: String = "Unknown Bacterium"
 var type: Enums.BacteriumTypes
 var behavior_state: RefCounted
-var debug_layer: int
 var state_remaining: int = 0
 var action_priming: int = 0
 var _is_priming_finished: bool = false
@@ -36,11 +35,11 @@ var _physics_frame: int = 0
 
 # <> Methods section <>
 func _ready():
+	super()	# set default parameters
 	energy = 40
 	_random.randomize()
 	#_set_random_type()
 	position = _generate_smart_point()
-	debug_layer = Debug.get_new_layer()
 	
 func _physics_process(delta: float) -> void:
 	const STATE_UPDATE_INTERVAL = 2		# physic frames count
@@ -122,6 +121,7 @@ func can_spend_energy(delta_energy: int) -> int:	# todo: replace into Entity
 
 func death():
 	change_state_to(StateMachine.waiting_state)
+	super()	# run algorith to remove object out the simulation
 
 # <> for movement <>
 func is_target_reached() -> bool:

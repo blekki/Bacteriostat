@@ -7,9 +7,13 @@ const COLLISION_DEFLECTION: float = 5.0
 
 var obj_name = "Raw Entity"
 var energy: int = 0		# equivalent to health
+var debug_layer: int = -1	# [-1] as "nothing" code
 var _is_selected_with_mouse: bool = false	# todo: replace logic into world
 
 # <> Methods section <>
+func _ready():
+	debug_layer = Debug.get_new_layer()
+
 func _physics_process(delta: float):
 	if _is_selected_with_mouse == true:
 		velocity = Vector2.ZERO
@@ -19,10 +23,6 @@ func _physics_process(delta: float):
 	_collision_fluence()
 	move_and_slide()
 
-func get_obj_name() -> String:
-	return obj_name
-
-# other methods
 func _deceleration():
 	if velocity.length() > PASSIVE_DECELERATION:
 		velocity -= velocity.normalized() * PASSIVE_DECELERATION
@@ -36,6 +36,14 @@ func _collision_fluence():
 	if collision:
 		var collider = collision.get_collider()		# todo: fix unsync fluence
 		velocity += collision.get_normal() * (COLLISION_DEFLECTION)
+
+func get_obj_name() -> String:
+	return obj_name
+	
+func death():
+	Debug.remove_layer(debug_layer)
+	modulate = Color.DIM_GRAY	# todo: change texture
+	# todo: add signal to map remove obj
 
 # <> other <>
 func _on_clickable_area_input_event(viewport: Node, event: InputEvent, shape_idx: int):
