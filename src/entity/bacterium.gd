@@ -237,15 +237,18 @@ func photosynthesizing():
 
 ## Generate [EnergyCell] with a fixed impulse
 func shedding():
+	if energy < EnergyLimit.SHADING:
+		return
+	
 	_try_priming(120)
 	if _is_priming_finished == false:
 		return
 	
-	const MIN_CELL_ENERGY: int = 80; const MAX_CELL_ENERGY:  int = 120
+	const MIN_CELL_ENERGY: int = 15; const MAX_CELL_ENERGY:  int = 20
 	const MIN_IMPULSE: int = 40;     const MAX_IMPULSE: int = 60
 	var energy_value: int = _random.randi_range(MIN_CELL_ENERGY, MAX_CELL_ENERGY)
 	var impulse: float    = _random.randi_range(MIN_IMPULSE, MAX_IMPULSE)
-	var cell_energy: int  = can_consume_energy(energy_value)
+	var cell_energy: int  = can_spend_energy(energy_value)
 	spend_energy(cell_energy)
 	Singlton.energy_shed.emit(self.global_position, impulse, cell_energy)
 

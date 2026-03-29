@@ -51,7 +51,7 @@ func _init_collision_walls():	# fast way make dynamic walls
 	right_border.position = Vector2(MAP_WIDTH, MAP_HEIGHT / 2)
 	right_border.scale = Vector2(NO_SCALE, UPSCALE)
 
-func _on_energy_shed(global_position: Vector2, impulse: float, energy: int):	# create energy_cell
+func _on_energy_shed(position: Vector2, impulse: float, energy: int):	# create energy_cell
 	var cell: EnergyCell = energy_cell_instance.instantiate()
 	cell.cell_name = "Simple Cell"
 	cell.type = Enums.EnergyCellTypes.GRASS
@@ -65,11 +65,11 @@ func _on_energy_shed(global_position: Vector2, impulse: float, energy: int):	# c
 	
 	# set start position
 	const OFFSET: int = 20
-	cell.global_position = global_position + direction * OFFSET	# tiny offset for solve collision problems
+	cell.position = position + direction * OFFSET	# tiny offset for solve collision problems
 	
 	# save energy_cell
 	energy_cells.push_back(cell)
-	add_child(energy_cells.back())
+	add_child(cell)
 
 func _on_remove_object(object: Entity):
 	object.queue_free()	# literally remove object
