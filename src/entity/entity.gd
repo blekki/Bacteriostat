@@ -51,7 +51,7 @@ func _on_clickable_area_input_event(viewport: Node, event: InputEvent, shape_idx
 	if event is InputEventMouseButton:
 		# print info about the obj
 		if event.pressed:
-			Singlton.object_clicked.emit(self)
+			Singlton.click_on_object.emit(self)
 		
 		# move the obj
 		if Input.is_action_pressed("move_object"):

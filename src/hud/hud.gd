@@ -2,18 +2,15 @@ class_name HUD
 extends Control
 
 # label pointers
-var obj_name_label			# todo: rename
-var obj_parameters_label	# todo: rename
+@onready var object_name: Label = $Panel/MarginContainer/VBox/ObjName
+@onready var object_parameters: Label = $Panel/MarginContainer/VBox/ObjParameters
 
 # parameters
-var checked_obj: Entity # can be bacterium or energy_cell
+var tracked_object: Entity = null
 
 # <> methods <>
 func _ready():
-	Singlton.object_clicked.connect(_on_object_clicked)
-	
-	obj_name_label = $Panel/MarginContainer/VBox/ObjName
-	obj_parameters_label = $Panel/MarginContainer/VBox/ObjParameters
+	Singlton.click_on_object.connect(_on_click_on_object)
 	$Panel.hide()
 
 func _process(delta: float):
@@ -22,30 +19,38 @@ func _process(delta: float):
 # <> text changing <>
 func _update_info():
 	if $Panel.visible == true:
-		if checked_obj is Bacterium:
+		if tracked_object == null:
+			_print_empty_page()
+		elif tracked_object is Bacterium:
 			_print_bacterium_info()
-		elif checked_obj is EnergyCell:
+		elif tracked_object is EnergyCell:
 			_print_energy_cell_info()
 
+func _print_empty_page():
+	object_name.text = "Object undefined"
+	object_parameters.text  = "energy: ?\n"
+	object_parameters.text += "state: ?\n"
+	object_parameters.text += "priming: ?\n"
+	object_parameters.text += "debug layer: ?\n"
+
 func _print_bacterium_info():
-	obj_name_label.text = checked_obj.bacterium_name	# header
+	object_name.text = tracked_object.bacterium_name	# header
 	# print parameters
-	obj_parameters_label.text = ""
-	obj_parameters_label.text += "energy: %d\n" % checked_obj.energy
-	obj_parameters_label.text += "state: %s\n" % checked_obj.behavior_state.name
-	obj_parameters_label.text += "priming: %.2f\n" % (checked_obj.action_priming / 60.0)
-	obj_parameters_label.text += "debug layer: %d\n" % checked_obj.debug_layer
+	object_parameters.text  = ""
+	object_parameters.text += "energy: %d\n" % tracked_object.energy
+	object_parameters.text += "state: %s\n" % tracked_object.behavior_state.name
+	object_parameters.text += "priming: %.2f\n" % (tracked_object.action_priming / 60.0)
+	object_parameters.text += "debug layer: %d\n" % tracked_object.debug_layer
 
 func _print_energy_cell_info():
-	obj_name_label.text = checked_obj.cell_name	# header
-	# print parameters
-	obj_parameters_label.text = "energy_equivalent: %d\n" % checked_obj.energy
+	object_name.text = tracked_object.cell_name	# header
+	object_parameters.text = "energy_equivalent: %d\n" % tracked_object.energy	# print parameters
 
 # <> signals <>
 func _on_close_button_pressed():
 	$Panel.hide()
 
-func _on_object_clicked(object: Entity):
-	checked_obj = object
+func _on_click_on_object(object: Entity):
+	tracked_object = object
 	_update_info()
 	$Panel.show()

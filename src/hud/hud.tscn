@@ -78,8 +78,7 @@ texture = ExtResource("3_ony6l")
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 text = "energy = 0/max
-current_state = state
-previously state = state"
+state = state"
 autowrap_mode = 3
 clip_text = true
 text_overrun_behavior = 5
