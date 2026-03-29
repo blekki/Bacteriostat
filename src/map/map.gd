@@ -94,6 +94,11 @@ func _on_fission(parent: Bacterium):
 	child.position = parent.global_position + direction * OFFSET
 
 func _on_remove_object(object: Entity):
+	if object is Bacterium:
+		bacteria.erase(object)
+	elif object is EnergyCell:
+		energy_cells.erase(object)
+	
 	object.queue_free()	# literally remove object
 
 # time season configuration
