@@ -41,7 +41,8 @@ func get_obj_name() -> String:
 	return obj_name
 	
 func death():
-	Debug.remove_layer(debug_layer)
+	#Debug.remove_layer(debug_layer)
+	Debug.clean_layer(debug_layer)	# todo: chnage to "remove_layer"
 	modulate = Color.DIM_GRAY	# todo: change texture
 	# todo: add signal to map remove obj
 
