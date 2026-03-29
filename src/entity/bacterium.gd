@@ -28,6 +28,9 @@ var state_remaining: int = 0
 var action_priming: int = 0
 var _is_priming_finished: bool = false
 
+var chained_to: Entity = null
+# todo: add nearby_objects var
+
 # technical
 var _nav_field: Vector2	# area from (xy = 0) to (xy = nav_field.xy) pixels
 var _random: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -251,24 +254,33 @@ func shedding():
 	spend_energy(cell_energy)
 	energy_shed.emit(self.global_position, impulse, cell_energy)
 
-func vampirism(pray: Variant):
-	_try_priming(20)
+func vampirism(pray: Entity):
+	if chained_to == null:
+		return
+	
+	# replace self closer to a pray
+	const LERP_WEIGHT: float = 0.5
+	var distance: Vector2 = pray.global_position - self.global_position
+	var lerp_to = global_position + distance - (distance.normalized() * 32)	# fix collision troubles
+	global_position = lerp(global_position, lerp_to, LERP_WEIGHT)
+	rotation = lerp_angle(rotation, distance.angle(), LERP_WEIGHT)
+	
+	# priming to vampirism
+	_try_priming(1)
 	if _is_priming_finished == false:
 		return
 	
-	const VAMPIRISM_RADIUS: int = 40
-	const VAMPIRISM_POWER: int = 1 	# per behavior tick
-	const LERP_WEIGHT: float = 0.01
-	
-	var distance: Vector2 = pray.global_position - global_position
-	if distance.length() > VAMPIRISM_RADIUS:
-		global_position = global_position.lerp(pray.global_position, LERP_WEIGHT)
-	else:
-		# consume_energy
+	const VAMPIRISM_RADIUS: int = 60	# todo: replace this area into enums
+	const VAMPIRISM_POWER: int = 1 	# per action tick
+	if distance.length() < VAMPIRISM_RADIUS:
 		var can_be_took     = pray.can_spend_energy(VAMPIRISM_POWER)
 		var can_be_consumed = self.can_consume_energy(can_be_took)
 		pray.spend_energy(can_be_consumed)
 		self.consume_energy(can_be_consumed)
+		
+		# check did the pray die
+		if pray.energy == 0:
+			chained_to = null
 
 func is_ready_luring() -> bool:
 	var is_ready = energy >= EnergyLimit.LURING

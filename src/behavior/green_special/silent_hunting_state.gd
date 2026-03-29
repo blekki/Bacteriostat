@@ -20,7 +20,17 @@ static func do_task(bacterium: Bacterium):
 static func try_update_behavior(bacterium: Bacterium):
 	# photosintesizing section
 	if Singlton.time_season == Enums.TimeSeasons.DAY:
-		bacterium.behavior_state = StateMachine.photosynthesizing
+		bacterium.change_state_to(StateMachine.photosynthesizing)
+	
+	# vampirist section
+	var nearby_objects: Array[InfoPack] = []
+	nearby_objects = _get_nearby_objects(bacterium)
+	var pray_record: InfoPack = InfoUtils.get_nearest_pray(nearby_objects)
+	if pray_record.object != null:
+		var distance_to_pray = (bacterium.position - pray_record.object.position).length()
+		if distance_to_pray < ActionRadii.VAMPIRISM:
+			bacterium.chained_to = pray_record.object
+			bacterium.change_state_to(StateMachine.vampirism)
 
 # <> Algorithm requirements section <>
 static func _silent_hunting(bacterium: Bacterium):
@@ -44,7 +54,7 @@ static func _get_nearby_objects(observer: Bacterium) -> Array[InfoPack]:
 	# identification
 	for object in unknown_objects:
 		if object.has_method("get_bacterium_type"):
-			relationship = _bacterium_analyzer(observer, object.get_bacterium_type())
+			relationship = _identify_relationship(object.get_bacterium_type())
 		elif object.has_method("get_cell_type"):
 			relationship = Enums.RelationshipTypes.INEDIBLE	# green bacteria can't eat energy cells
 		
@@ -62,7 +72,7 @@ static func _get_nearby_objects(observer: Bacterium) -> Array[InfoPack]:
 	
 	return nearby_objects
 
-static func _bacterium_analyzer(bacterium: Bacterium, target: Enums.BacteriumTypes) -> Enums.RelationshipTypes:
+static func _identify_relationship(target: Enums.BacteriumTypes) -> Enums.RelationshipTypes:
 	var relationship: Enums.RelationshipTypes
 	
 	if target == Enums.BacteriumTypes.GREEN:
@@ -75,8 +85,6 @@ static func _bacterium_analyzer(bacterium: Bacterium, target: Enums.BacteriumTyp
 static func _choice_action(bacterium: Bacterium, pray_info: InfoPack, is_nearby_lure: bool):
 	var distance: float = (pray_info.object.position - bacterium.position).length()
 	match distance:
-		var a when (a < ActionRadii.VAMPIRISM):
-			bacterium.vampirism(pray_info.object)	# todo: replace into anither state
 		var a when (a < ActionRadii.ATTACK):
 			bacterium.intercept_target(pray_info.object.position, pray_info.object.velocity)
 		var a when (a < ActionRadii.LURING):
