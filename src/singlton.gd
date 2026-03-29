@@ -4,3 +4,5 @@ extends Node
 var time_season = Enums.TimeSeasons.DAY
 
 signal click_on_object(entity: Entity)
+signal energy_shed(global_position: Vector2, impulse: float, energy: int)
+signal remove_object(entity: Entity)

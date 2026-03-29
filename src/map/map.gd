@@ -14,6 +14,9 @@ var bacteria: Array[Bacterium] = []
 var energy_cells: Array[EnergyCell] = []
 
 func _ready():
+	Singlton.energy_shed.connect(_on_energy_shed)
+	Singlton.remove_object.connect(_on_remove_object)
+	
 	await NavigationServer2D.map_changed
 	_init_collision_walls()
 	
@@ -48,7 +51,7 @@ func _init_collision_walls():	# fast way make dynamic walls
 	right_border.position = Vector2(MAP_WIDTH, MAP_HEIGHT / 2)
 	right_border.scale = Vector2(NO_SCALE, UPSCALE)
 
-func _on_bacterium_energy_shed(global_position: Vector2, impulse: float, energy: int):	# create energy_cell
+func _on_energy_shed(global_position: Vector2, impulse: float, energy: int):	# create energy_cell
 	var cell: EnergyCell = energy_cell_instance.instantiate()
 	cell.cell_name = "Simple Cell"
 	cell.type = Enums.EnergyCellTypes.GRASS
@@ -67,6 +70,9 @@ func _on_bacterium_energy_shed(global_position: Vector2, impulse: float, energy:
 	# save energy_cell
 	energy_cells.push_back(cell)
 	add_child(energy_cells.back())
+
+func _on_remove_object(object: Entity):
+	object.queue_free()	# literally remove object
 
 # time season configuration
 func _start_day():

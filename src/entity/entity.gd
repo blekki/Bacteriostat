@@ -30,23 +30,22 @@ func _deceleration():
 		velocity = Vector2.ZERO
 
 func _collision_fluence():
-	var collision
+	var collision: KinematicCollision2D
 	if get_slide_collision_count() > 0:
 		collision = get_slide_collision(0)
 	if collision:
-		var collider = collision.get_collider()		# todo: fix unsync fluence
+		# todo: fix unsync fluence
 		velocity += collision.get_normal() * (COLLISION_DEFLECTION)
 
 func get_obj_name() -> String:
 	return obj_name
 	
 func death():
-	#Debug.remove_layer(debug_layer)
 	Debug.clean_layer(debug_layer)	# todo: chnage to "remove_layer"
 	modulate = Color.DIM_GRAY	# todo: change texture
-	# todo: add signal to map remove obj
+	Singlton.remove_object.emit(self)
 
-# <> other <>
+# <> reaction on signals section <>
 func _on_clickable_area_input_event(viewport: Node, event: InputEvent, shape_idx: int):
 	if event is InputEventMouseButton:
 		# print info about the obj

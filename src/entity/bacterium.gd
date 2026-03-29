@@ -1,8 +1,6 @@
 class_name Bacterium
 extends Entity
 
-signal energy_shed(global_position: Vector2, impulse: float, energy: int)
-
 # object parameters
 # > speed - pixel/sec
 const ACCELERATION: float = 10.0	# todo: rewrite ACCEELRATION into variable
@@ -252,7 +250,7 @@ func shedding():
 	var impulse: float    = _random.randi_range(MIN_IMPULSE, MAX_IMPULSE)
 	var cell_energy: int  = can_consume_energy(energy_value)
 	spend_energy(cell_energy)
-	energy_shed.emit(self.global_position, impulse, cell_energy)
+	Singlton.energy_shed.emit(self.global_position, impulse, cell_energy)
 
 func vampirism(pray: Entity):
 	if chained_to == null:
@@ -297,4 +295,4 @@ func throw_lure(impulse: float):
 	var energy_value: int = _random.randi_range(MIN_LURE_ENERGY, MAX_LURE_ENERGY)
 	var cell_energy: int = self.can_consume_energy(energy_value)
 	self.spend_energy(cell_energy)
-	energy_shed.emit(self.global_position, impulse, cell_energy)
+	Singlton.energy_shed.emit(self.global_position, impulse, cell_energy)
