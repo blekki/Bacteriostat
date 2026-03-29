@@ -252,6 +252,18 @@ func shedding():
 	spend_energy(cell_energy)
 	Singlton.energy_shed.emit(self.global_position, impulse, cell_energy)
 
+func fission():
+	if energy < EnergyLimit.FISSION:
+		return
+	
+	_try_priming(240)
+	if _is_priming_finished == false:
+		return
+	
+	var child_energy: int = roundi(energy / 2.0)
+	spend_energy(child_energy)
+	Singlton.fission.emit(self)
+
 func vampirism(pray: Entity):
 	if chained_to == null:
 		return

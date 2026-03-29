@@ -15,6 +15,7 @@ var energy_cells: Array[EnergyCell] = []
 
 func _ready():
 	Singlton.energy_shed.connect(_on_energy_shed)
+	Singlton.fission.connect(_on_fission)
 	Singlton.remove_object.connect(_on_remove_object)
 	
 	await NavigationServer2D.map_changed
@@ -70,6 +71,27 @@ func _on_energy_shed(position: Vector2, impulse: float, energy: int):	# create e
 	# save energy_cell
 	energy_cells.push_back(cell)
 	add_child(cell)
+
+func _on_fission(parent: Bacterium):
+	const FLAG_FULL_COPY: int = 7
+	var child: Entity = parent.duplicate(FLAG_FULL_COPY)
+	child.change_state_to(StateMachine.get_start_green_bacterium_state())
+	
+	# add bacterium child to scene
+	bacteria.push_back(child)
+	add_child(child)
+	
+	# Comment: Position sets after [add_child()] because then it gets default value
+	
+	# add impulse to a child
+	const IMPULSE_POWER: int = 10
+	var direction = Vector2.RIGHT.rotated(randf_range(0, PI * 2))
+	var new_velocity = direction * IMPULSE_POWER
+	child.velocity = new_velocity
+	
+	# add tiny offset to solve collision problems
+	const OFFSET: int = 20
+	child.position = parent.global_position + direction * OFFSET
 
 func _on_remove_object(object: Entity):
 	object.queue_free()	# literally remove object

@@ -9,5 +9,8 @@ static func do_task(bacterium: Bacterium):
 	bacterium.vampirism(bacterium.chained_to)
 
 static func try_update_behavior(bacterium: Bacterium):
+	if bacterium.energy >= bacterium.EnergyLimit.FISSION:
+		bacterium.change_state_to(StateMachine.fission_state)
+	
 	if bacterium.chained_to == null:
 		bacterium.change_state_to(StateMachine.silent_hunting)
