@@ -121,10 +121,6 @@ func can_spend_energy(delta_energy: int) -> int:	# todo: replace into Entity
 	var value = mini(delta_energy, energy)
 	return value
 
-func death():
-	change_state_to(StateMachine.waiting_state)
-	super()	# run algorith to remove object out the simulation
-
 # <> for movement <>
 func is_target_reached() -> bool:
 	return $NavigationAgent.is_navigation_finished()
