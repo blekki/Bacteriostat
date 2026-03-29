@@ -6,7 +6,7 @@ static var name: String = "Photosynthesizing"
 # Parameter [bacterium] is needed to keep a duck typing abstaction
 static func do_task(bacterium: Bacterium):
 	Debug.clean_layer(bacterium.debug_layer)
-	if bacterium.energy < bacterium.EnergyLimit.FISSION:
+	if bacterium.energy < bacterium.EnergyLimit.SHADING:
 		bacterium.photosynthesizing()
 	else:
 		bacterium.shedding()

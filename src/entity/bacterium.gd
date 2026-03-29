@@ -12,7 +12,8 @@ const OVERAGE_ENERGY_LIMIT = 90
 enum EnergyLimit {
 	DEATH = 0,
 	LURING = 35,
-	FISSION = 90,
+	SHADING = 90,
+	FISSION = 95,
 	MAX = 100,
 }
 const MAX_ENERGY: int = 100	# todo: remove
@@ -264,7 +265,7 @@ func vampirism(pray: Entity):
 	rotation = lerp_angle(rotation, distance.angle(), LERP_WEIGHT)
 	
 	# priming to vampirism
-	_try_priming(1)
+	_try_priming(10)
 	if _is_priming_finished == false:
 		return
 	
