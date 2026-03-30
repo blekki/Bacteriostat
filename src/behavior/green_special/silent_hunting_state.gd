@@ -48,17 +48,18 @@ static func _silent_hunting(bacterium: Bacterium):
 static func _get_nearby_objects(observer: Bacterium) -> Array[InfoPack]:
 	# init var's
 	var unknown_objects = observer.get_nearby_objects(ActionRadii.HUNTING)	# can be EnergyCells or Bacteria
-	var nearby_objects: Array[InfoPack] = []
-	var relationship: Enums.RelationshipTypes = Enums.RelationshipTypes.NONE
+	var identified_objects: Array[InfoPack] = []
 	
 	# identification
 	for object in unknown_objects:
+		var relationship: Enums.RelationshipTypes = Enums.RelationshipTypes.NONE
+		
 		if object.has_method("get_bacterium_type"):
 			relationship = _identify_relationship(object.get_bacterium_type())
 		elif object.has_method("get_cell_type"):
 			relationship = Enums.RelationshipTypes.INEDIBLE	# green bacteria can't eat energy cells
 		
-		nearby_objects.push_back(
+		identified_objects.push_back(
 			InfoPack.new(object, relationship)
 		)
 		
@@ -70,7 +71,7 @@ static func _get_nearby_objects(observer: Bacterium) -> Array[InfoPack]:
 			Enums.DEBUG_RELATIONSHIP_COLORS[relationship]
 		)
 	
-	return nearby_objects
+	return identified_objects
 
 static func _identify_relationship(target: Enums.BacteriumTypes) -> Enums.RelationshipTypes:
 	var relationship: Enums.RelationshipTypes
