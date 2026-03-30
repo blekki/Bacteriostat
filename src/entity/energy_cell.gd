@@ -5,6 +5,9 @@ var cell_name: String = "Unknown Cell"
 var type: Enums.EnergyCellTypes
 
 # <> Methods section <>
+func _init():
+	_max_energy = 60
+
 func _physics_process(delta: float) -> void:
 	super(delta)	# default physics
 

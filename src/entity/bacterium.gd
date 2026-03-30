@@ -10,14 +10,12 @@ const HIGTER_ENERGY_LIMIT = 100
 const OVERAGE_ENERGY_LIMIT = 90
 
 enum EnergyLimit {
-	DEATH = 0,
+	DEATH = _MIN_ENERGY,	# default "0"
 	LURING = 35,
 	SHADING = 90,
 	FISSION = 95,
 	MAX = 100,
 }
-const MAX_ENERGY: int = 100	# todo: remove
-const MIN_ENERGY: int = 0	# todo: remove
 
 # changeable object parameters
 var bacterium_name: String = "Unknown Bacterium"
@@ -38,7 +36,10 @@ var _physics_frame: int = 0
 # <> Methods section <>
 func _ready():
 	super()	# set default parameters
-	energy = 40
+	
+	_max_energy = 100
+	energy = 90 # 40
+	
 	_random.randomize()
 	#_set_random_type()
 	position = _generate_smart_point()
@@ -99,27 +100,6 @@ func get_obj_name() -> String:
 
 func get_bacterium_type() -> Enums.BacteriumTypes:	# need for identification
 	return type
-
-# <> Health methods <>
-## Change energy value
-func consume_energy(delta_energy: int):	# todo: replace into Entity
-	var new_energy = clampi(energy + delta_energy, MIN_ENERGY, MAX_ENERGY)
-	self.energy = new_energy
-	if energy <= MIN_ENERGY:
-		death()
-
-func spend_energy(delta_energy: int):	# todo: replace into Entity
-	consume_energy(-delta_energy)
-
-## Return how much energy bacterium can consume
-func can_consume_energy(delta_energy: int) -> int:	# todo: replace into Entity
-	var value = mini(delta_energy, MAX_ENERGY - energy)
-	return value
-
-## Return how much energy bacterium can spend
-func can_spend_energy(delta_energy: int) -> int:	# todo: replace into Entity
-	var value = mini(delta_energy, energy)
-	return value
 
 # <> for movement <>
 func is_target_reached() -> bool:
