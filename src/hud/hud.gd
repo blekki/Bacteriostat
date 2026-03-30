@@ -2,6 +2,7 @@ class_name HUD
 extends Control
 
 # label pointers
+@onready var season_info: Label = $TimeSeasonPanel/MarginContainer/SeasonInfo
 @onready var object_name: Label = $Panel/MarginContainer/VBox/ObjName
 @onready var object_parameters: Label = $Panel/MarginContainer/VBox/ObjParameters
 
@@ -14,10 +15,21 @@ func _ready():
 	$Panel.hide()
 
 func _process(delta: float):
-	_update_info()
+	_update_season_info()
+	_update_object_info()
 
 # <> text changing <>
-func _update_info():
+func _update_season_info():
+	var current_season: String = "DAY" # default
+	if Singlton.time_season == Enums.TimeSeasons.NIGHT:
+		current_season = "NIGHT"
+	
+	# print info
+	season_info.text  = "%.1f/" % Singlton.season_continues
+	season_info.text += "%d " % Singlton.season_duration
+	season_info.text += "(%s)" % current_season
+
+func _update_object_info():
 	if $Panel.visible == true:
 		if tracked_object == null:
 			_print_empty_page()
@@ -52,5 +64,5 @@ func _on_close_button_pressed():
 
 func _on_click_on_object(object: Entity):
 	tracked_object = object
-	_update_info()
+	_update_object_info()
 	$Panel.show()

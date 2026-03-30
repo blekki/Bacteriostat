@@ -1,6 +1,8 @@
 # Global class for saving shared data
 extends Node
 
+var season_continues: float = 0.0
+var season_duration: float = 0.0
 var time_season = Enums.TimeSeasons.DAY
 
 signal click_on_object(entity: Entity)

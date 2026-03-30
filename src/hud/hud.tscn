@@ -10,19 +10,22 @@ default_font_size = 20
 
 [node name="HUD" type="Control" unique_id=758395760]
 layout_mode = 3
-anchors_preset = 0
-offset_left = -64.0
-offset_right = -64.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = SubResource("Theme_ony6l")
 script = ExtResource("1_t0re6")
+metadata/_edit_use_anchors_ = true
 
 [node name="Panel" type="Panel" parent="." unique_id=514441669]
 clip_contents = true
 layout_mode = 1
-offset_left = 888.0
-offset_right = 1144.0
+offset_left = 824.0
+offset_right = 1080.0
 offset_bottom = 328.0
 metadata/_edit_group_ = true
 
@@ -83,5 +86,30 @@ autowrap_mode = 3
 clip_text = true
 text_overrun_behavior = 5
 uppercase = true
+
+[node name="TimeSeasonPanel" type="Panel" parent="." unique_id=1760835207]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+offset_left = 464.0
+offset_top = 688.0
+offset_right = 616.0
+offset_bottom = 728.0
+metadata/_edit_group_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="TimeSeasonPanel" unique_id=1926547538]
+layout_mode = 0
+offset_right = 152.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="SeasonInfo" type="Label" parent="TimeSeasonPanel/MarginContainer" unique_id=2044545666]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "55/100 day"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="Panel/MarginContainer/VBox/CloseButton" to="." method="_on_close_button_pressed"]

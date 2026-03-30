@@ -31,6 +31,14 @@ func _ready():
 	
 	_start_day()
 
+func _process(delta: float):
+	if Singlton.time_season == Enums.TimeSeasons.DAY:
+		Singlton.season_continues = $Day.time_left
+		Singlton.season_duration = $Day.wait_time
+	else: # Singlton.time_season == Enums.TimeSeasons.NIGHT:
+		Singlton.season_continues = $Night.time_left
+		Singlton.season_duration = $Night.wait_time
+
 func _init_collision_walls():	# fast way make dynamic walls
 	const UPSCALE = 1000
 	const NO_SCALE = 1
