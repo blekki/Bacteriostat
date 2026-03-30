@@ -5,6 +5,7 @@ static var waiting_state = WaitingState.new()
 static var photosynthesizing = PhotosynthesizingState.new()
 static var silent_hunting = SilentHuntingState.new()
 static var vampirism = VampirismState.new()
+static var grass_finding = GrassFindingState.new()
 static var fission_state = FissionState.new()
 
 static func get_start_green_bacterium_state() -> RefCounted:	# todo: set normal returning type

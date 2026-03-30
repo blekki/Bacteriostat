@@ -10,7 +10,7 @@ const HIGTER_ENERGY_LIMIT = 100
 const OVERAGE_ENERGY_LIMIT = 90
 
 enum EnergyLimit {
-	DEATH = _MIN_ENERGY,	# default "0"
+	DEATH = _MIN_ENERGY,	# default value = 0
 	LURING = 35,
 	SHADING = 90,
 	FISSION = 95,
@@ -110,7 +110,11 @@ func set_nav_target(target_pos: Vector2):	# todo: rename into "_set_nav_target"
 
 func get_nav_target() -> Vector2:
 	return $NavigationAgent.target_position
-	
+
+func generate_new_nav_target():
+	var target = _generate_smart_point()
+	set_nav_target(target)
+
 func _dash(impulse: float):
 	velocity += Vector2.RIGHT.rotated(rotation) * impulse
 
@@ -275,7 +279,18 @@ func vampirism(pray: Entity):
 func is_ready_luring() -> bool:
 	var is_ready = energy >= EnergyLimit.LURING
 	return is_ready
+
+func bite_target(pray: Entity):
+	_try_priming(30)
+	if _is_priming_finished == false:
+		return
 	
+	const BITE_POWER: int = 30
+	var can_be_took 	= pray.can_spend_energy(BITE_POWER)
+	var can_be_consumed = self.can_consume_energy(can_be_took)
+	pray.spend_energy(can_be_consumed)
+	self.consume_energy(can_be_consumed)
+
 ## Generate lure [EnergyCell] with a custom impulse
 func throw_lure(impulse: float):
 	_try_priming(100)
