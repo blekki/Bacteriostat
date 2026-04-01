@@ -10,10 +10,12 @@ enum ActionRadii {
 
 # <> method section <>
 static func do_task(bacterium: Bacterium):
+	Debug.clean_layer(bacterium.debug_layer)
 	_grass_finding(bacterium)
 
 static func try_update_behavior(bacterium: Bacterium):
-	pass
+	if bacterium.energy >= bacterium.EnergyLimit.FISSION:
+		bacterium.change_state_to(StateMachine.fission_state)
 
 static func _grass_finding(bacterium: Bacterium):
 	# get the all nearby objects in the area
@@ -25,13 +27,17 @@ static func _grass_finding(bacterium: Bacterium):
 		var food_record: InfoPack = InfoUtils.get_nearest_energy_cell(nearby_objects)
 		if food_record.relationship != Enums.RelationshipTypes.NONE:
 			_choice_action(bacterium, food_record)
+			return	# skip changing place
+	
+	change_place(bacterium)
+
+static func change_place(bacterium: Bacterium):
+	# continue find
+	if bacterium.is_target_reached():
+		bacterium.generate_new_nav_target()
 	else:
-		# continue find
-		if bacterium.is_target_reached():
-			bacterium.generate_new_nav_target()
-		else:
-			var target = bacterium.get_nav_target() 
-			bacterium.reach_target(target)
+		var target = bacterium.get_nav_target() 
+		bacterium.reach_target(target)
 
 static func _get_nearby_objects(observer: Bacterium) -> Array[InfoPack]:
 	# init var's
