@@ -34,9 +34,9 @@ func _update_object_info():
 		if tracked_object == null:
 			_print_empty_page()
 		elif tracked_object is Bacterium:
-			_print_bacterium_info()
+			_print_bacterium_info(tracked_object)
 		elif tracked_object is EnergyCell:
-			_print_energy_cell_info()
+			_print_energy_cell_info(tracked_object)
 
 func _print_empty_page():
 	object_name.text = "Object undefined"
@@ -45,18 +45,23 @@ func _print_empty_page():
 	object_parameters.text += "priming: ?\n"
 	object_parameters.text += "debug layer: ?\n"
 
-func _print_bacterium_info():
-	object_name.text = tracked_object.bacterium_name	# header
+## Parameter is needed to help text editor understand object
+func _print_bacterium_info(object: Bacterium):
+	# header
+	object_name.text = tracked_object.bacterium_name
 	# print parameters
 	object_parameters.text  = ""
-	object_parameters.text += "energy: %d\n" % tracked_object.energy
-	object_parameters.text += "state: %s\n" % tracked_object.behavior_state.name
-	object_parameters.text += "priming: %.2f\n" % (tracked_object.action_priming / 60.0)
-	object_parameters.text += "debug layer: %d\n" % tracked_object.debug_layer
+	object_parameters.text += "energy: %d\n" % object.energy
+	object_parameters.text += "state: %s\n" % object.behavior_state.name
+	object_parameters.text += "action: %s\n" % object.priming.get_action()
+	object_parameters.text += "priming: %.1f\n" % object.priming.get_remaining_time()
+	#object_parameters.text += "priming: %.2f\n" % (tracked_object.action_priming / 60.0)
+	object_parameters.text += "debug layer: %d\n" % object.debug_layer
 
-func _print_energy_cell_info():
-	object_name.text = tracked_object.cell_name	# header
-	object_parameters.text = "energy_equivalent: %d\n" % tracked_object.energy	# print parameters
+## Parameter is needed to help text redactor understand object
+func _print_energy_cell_info(object: EnergyCell):
+	object_name.text = object.cell_name
+	object_parameters.text = "energy_equivalent: %d\n" % object.energy
 
 # <> signals <>
 func _on_close_button_pressed():

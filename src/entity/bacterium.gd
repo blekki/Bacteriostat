@@ -21,17 +21,14 @@ enum EnergyLimit {
 var bacterium_name: String = "Unknown Bacterium"
 var type: Enums.BacteriumTypes
 var behavior_state: RefCounted
-var state_remaining: int = 0
-var action_priming: int = 0
-var _is_priming_finished: bool = false
-
 var chained_to: Entity = null
+@onready var priming = $ActionPriming	# todo: make the same to nav_agent
 # todo: add nearby_objects var
 
 # technical
-var _nav_field: Vector2	# area from (xy = 0) to (xy = nav_field.xy) pixels
-var _random: RandomNumberGenerator = RandomNumberGenerator.new()
 var _physics_frame: int = 0
+var _nav_field: Vector2 = Vector2.ZERO # area from (xy = 0) to (xy = nav_field.xy) pixels
+var _random: RandomNumberGenerator = RandomNumberGenerator.new()
 
 # <> Methods section <>
 func _init():
@@ -49,8 +46,6 @@ func _physics_process(delta: float) -> void:
 	if _physics_frame >= STATE_UPDATE_INTERVAL:
 		_physics_frame = 0
 	else: _physics_frame += 1
-	
-	_reduce_state_remaining()
 	
 	behavior_state.do_task(self)
 	if _physics_frame == STATE_UPDATE_INTERVAL:
@@ -71,6 +66,7 @@ func _generate_smart_point() -> Vector2:	# todo: generate point inside navigatio
 	)
 	return point
 
+## safe behavior changing
 func change_state_to(new_state: RefCounted):
 	Debug.clean_layer(debug_layer)
 	behavior_state = new_state
@@ -190,29 +186,8 @@ func get_nearby_objects(area_radius: float) -> Array[Variant]:
 	
 	return objects_in_area
 
-func _reduce_state_remaining():
-	if state_remaining > 0:
-		state_remaining -= 1
-
-func _try_priming(physic_frames_count: int):
-	# error: priming remaining time is keeped after action changing
-	
-	# is priming completed from the previous iteration
-	if _is_priming_finished == true:
-		action_priming = physic_frames_count
-		_is_priming_finished = false	# reset
-		return _is_priming_finished
-	
-	# reduce priming time
-	if action_priming == 0:
-		_is_priming_finished = true
-	else:
-		action_priming -= 1
-	return _is_priming_finished
-
 func photosynthesizing():
-	_try_priming(5)
-	if _is_priming_finished == false:
+	if priming.try_process(0.2, "PHOTOSYNTHESIZING") == false:
 		return
 	
 	const PHOTOSYNTHES_ENERGY: int = 1
@@ -224,8 +199,7 @@ func shedding():
 	if energy < EnergyLimit.SHADING:
 		return
 	
-	_try_priming(120)
-	if _is_priming_finished == false:
+	if priming.try_process(2, "SHEDDING") == false:
 		return
 	
 	const MIN_CELL_ENERGY: int = 15; const MAX_CELL_ENERGY:  int = 20
@@ -240,8 +214,7 @@ func fission():
 	if energy < EnergyLimit.FISSION:
 		return
 	
-	_try_priming(240)
-	if _is_priming_finished == false:
+	if priming.try_process(3, "FISSION") == false:
 		return
 	
 	var child_energy: int = roundi(energy / 2.0)
@@ -260,8 +233,7 @@ func vampirism(pray: Entity):
 	rotation = lerp_angle(rotation, distance.angle(), LERP_WEIGHT)
 	
 	# priming to vampirism
-	_try_priming(10)
-	if _is_priming_finished == false:
+	if priming.try_process(0.15, "VAMPIRISM") == false:
 		return
 	
 	const VAMPIRISM_RADIUS: int = 60	# todo: replace this area into enums
@@ -281,8 +253,7 @@ func is_ready_luring() -> bool:
 	return is_ready
 
 func bite_target(pray: Entity):
-	_try_priming(30)
-	if _is_priming_finished == false:
+	if priming.try_process(0.2, "BITE") == false:
 		return
 	
 	const BITE_POWER: int = 30
@@ -293,8 +264,7 @@ func bite_target(pray: Entity):
 
 ## Generate lure [EnergyCell] with a custom impulse
 func throw_lure(impulse: float):
-	_try_priming(100)
-	if _is_priming_finished == false:
+	if priming.try_process(1.4, "THROW LURE") == false:
 		return
 	
 	const MIN_LURE_ENERGY:  int = 10;

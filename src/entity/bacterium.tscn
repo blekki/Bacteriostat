@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bo1y1apxgdai4" path="res://src/entity/entity.tscn" id="1_do35s"]
 [ext_resource type="Script" uid="uid://ccwjhxdl3dfin" path="res://src/entity/bacterium.gd" id="2_wpy8d"]
+[ext_resource type="Script" uid="uid://d0q81esm3nag4" path="res://src/bacterium/action_priming.gd" id="3_0p2cm"]
 
 [node name="Bacterium" unique_id=1553382449 instance=ExtResource("1_do35s")]
 script = ExtResource("2_wpy8d")
@@ -16,3 +17,10 @@ width = 4.0
 default_color = Color(0, 1, 0, 1)
 begin_cap_mode = 2
 end_cap_mode = 2
+
+[node name="ActionPriming" type="Timer" parent="." index="5" unique_id=1915797556]
+process_callback = 0
+wait_time = 0.1
+one_shot = true
+autostart = true
+script = ExtResource("3_0p2cm")

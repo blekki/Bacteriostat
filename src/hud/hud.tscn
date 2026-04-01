@@ -26,7 +26,7 @@ clip_contents = true
 layout_mode = 1
 offset_left = 824.0
 offset_right = 1080.0
-offset_bottom = 328.0
+offset_bottom = 384.0
 metadata/_edit_group_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=342176252]
@@ -78,7 +78,7 @@ size_flags_horizontal = 0
 texture = ExtResource("3_ony6l")
 
 [node name="ObjParameters" type="Label" parent="Panel/MarginContainer/VBox" unique_id=1453492340]
-custom_minimum_size = Vector2(0, 100)
+custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
 text = "energy = 0/max
 state = state"
