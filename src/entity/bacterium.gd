@@ -42,14 +42,13 @@ func _ready():
 	position = _generate_smart_point()
 
 func _physics_process(delta: float) -> void:
-	const STATE_UPDATE_INTERVAL = 2		# physic frames count
+	behavior_state.do_task(self)
+	
+	const STATE_UPDATE_INTERVAL = 2
 	if _physics_frame >= STATE_UPDATE_INTERVAL:
+		behavior_state.try_update_behavior(self)
 		_physics_frame = 0
 	else: _physics_frame += 1
-	
-	behavior_state.do_task(self)
-	if _physics_frame == STATE_UPDATE_INTERVAL:
-		behavior_state.try_update_behavior(self)
 	
 	_limit_speed()
 	super(delta)	# use also default physics parameters
