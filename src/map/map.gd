@@ -81,16 +81,12 @@ func _on_energy_shed(position: Vector2, impulse: float, energy: int):	# create e
 	add_child(cell)
 
 func _on_fission(parent: Bacterium):
-	const FLAG_FULL_COPY: int = 7
-	var child: Entity = parent.duplicate(FLAG_FULL_COPY)
-	child.change_state_to(StateMachine.get_start_green_bacterium_state())
-	
-	# add bacterium child to scene
+	# prepare child object
+	var child = parent.duplicate(DUPLICATE_SCRIPTS | DUPLICATE_SIGNALS | DUPLICATE_INTERNAL_STATE | DUPLICATE_USE_INSTANTIATION)
 	bacteria.push_back(child)
 	add_child(child)
 	
-	# Comment: Position sets after [add_child()] because then it gets default value
-	
+	# Comment: a couple parameters set after [add_child()] because then it gets default value
 	# add impulse to a child
 	const IMPULSE_POWER: int = 10
 	var direction = Vector2.RIGHT.rotated(randf_range(0, PI * 2))
@@ -98,7 +94,7 @@ func _on_fission(parent: Bacterium):
 	child.velocity = new_velocity
 	
 	# add tiny offset to solve collision problems
-	const OFFSET: int = 20
+	const OFFSET: int = 30
 	child.position = parent.global_position + direction * OFFSET
 
 func _on_remove_object(object: Entity):

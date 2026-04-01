@@ -14,7 +14,7 @@ var _max_energy: int = 10	# default value
 var _is_selected_with_mouse: bool = false	# todo: replace logic into world
 
 # <> Methods section <>
-func _ready():
+func _init():
 	debug_layer = Debug.get_new_layer()
 
 func _physics_process(delta: float):

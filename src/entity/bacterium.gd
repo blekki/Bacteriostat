@@ -34,16 +34,16 @@ var _random: RandomNumberGenerator = RandomNumberGenerator.new()
 var _physics_frame: int = 0
 
 # <> Methods section <>
-func _ready():
+func _init():
 	super()	# set default parameters
-	
+	_random.randomize()
 	_max_energy = 100
 	energy = 90 # 40
-	
-	_random.randomize()
-	#_set_random_type()
+
+func _ready():
+	#_set_random_type()	# todo: replace into _init
 	position = _generate_smart_point()
-	
+
 func _physics_process(delta: float) -> void:
 	const STATE_UPDATE_INTERVAL = 2		# physic frames count
 	if _physics_frame >= STATE_UPDATE_INTERVAL:
