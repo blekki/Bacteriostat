@@ -23,9 +23,7 @@ static func try_update_behavior(bacterium: Bacterium):
 		bacterium.change_state_to(StateMachine.photosynthesizing)
 	
 	# vampirist section
-	var nearby_objects: Array[InfoPack] = []
-	nearby_objects = _get_nearby_objects(bacterium)
-	var pray_record: InfoPack = InfoUtils.get_nearest_pray(nearby_objects)
+	var pray_record: InfoPack = InfoUtils.get_nearest_pray(bacterium.nearby_objects)
 	if pray_record.object != null:
 		var distance_to_pray = (bacterium.position - pray_record.object.position).length()
 		if distance_to_pray < ActionRadii.VAMPIRISM:
@@ -35,13 +33,12 @@ static func try_update_behavior(bacterium: Bacterium):
 # <> Algorithm requirements section <>
 static func _silent_hunting(bacterium: Bacterium):
 	# get the all nearby objects in the hunting area
-	var nearby_objects: Array[InfoPack] = []
-	nearby_objects = _get_nearby_objects(bacterium)
+	bacterium.nearby_objects = _get_nearby_objects(bacterium)
 	
 	# find a nearest prey
-	if nearby_objects.size() > 0:
-		var pray_record: InfoPack = InfoUtils.get_nearest_pray(nearby_objects)
-		var is_nearby_lure: bool  = InfoUtils.is_lure_nearby(nearby_objects)
+	if bacterium.nearby_objects.size() > 0:
+		var pray_record: InfoPack = InfoUtils.get_nearest_pray(bacterium.nearby_objects)
+		var is_nearby_lure: bool  = InfoUtils.is_lure_nearby(bacterium.nearby_objects)
 		if pray_record.relationship != Enums.RelationshipTypes.NONE:
 			_choice_action(bacterium, pray_record, is_nearby_lure)
 

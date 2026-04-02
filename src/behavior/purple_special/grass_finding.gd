@@ -19,12 +19,11 @@ static func try_update_behavior(bacterium: Bacterium):
 
 static func _grass_finding(bacterium: Bacterium):
 	# get the all nearby objects in the area
-	var nearby_objects: Array[InfoPack] = []
-	nearby_objects = _get_nearby_objects(bacterium)
+	bacterium.nearby_objects = _get_nearby_objects(bacterium)
 	
 	# find a nearest food
-	if nearby_objects.size() > 0:
-		var food_record: InfoPack = InfoUtils.get_nearest_energy_cell(nearby_objects)
+	if bacterium.nearby_objects.size() > 0:
+		var food_record: InfoPack = InfoUtils.get_nearest_energy_cell(bacterium.nearby_objects)
 		if food_record.relationship != Enums.RelationshipTypes.NONE:
 			_choice_action(bacterium, food_record)
 			return	# skip changing place

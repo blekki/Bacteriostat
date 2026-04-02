@@ -21,9 +21,9 @@ enum EnergyLimit {
 var bacterium_name: String = "Unknown Bacterium"
 var type: Enums.BacteriumTypes
 var behavior_state: RefCounted
+var nearby_objects: Array[InfoPack] = []	# save identified nearby objects [object, relationship]
 var chained_to: Entity = null
 @onready var priming = $ActionPriming	# todo: make the same to nav_agent
-# todo: add nearby_objects var
 
 # technical
 var _physics_frame: int = 0
@@ -42,6 +42,7 @@ func _ready():
 	position = _generate_smart_point()
 
 func _physics_process(delta: float) -> void:
+	nearby_objects.clear()
 	behavior_state.do_task(self)
 	
 	const STATE_UPDATE_INTERVAL = 2
