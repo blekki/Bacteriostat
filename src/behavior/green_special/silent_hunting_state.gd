@@ -32,8 +32,20 @@ static func try_update_behavior(bacterium: Bacterium):
 
 # <> Algorithm requirements section <>
 static func _silent_hunting(bacterium: Bacterium):
-	# get the all nearby objects in the hunting area
-	bacterium.nearby_objects = _get_nearby_objects(bacterium)
+	## get the all nearby objects in the hunting area
+	#bacterium.nearby_objects = _get_nearby_objects(bacterium)
+	
+	# rules how to identified object
+	var identification_rules = func(object: Entity) -> Enums.RelationshipTypes:
+		if object.has_method("get_bacterium_type"):
+			# comment: bacterium identification is complex, so logic was replaced
+			return _bacterium_identification(object.get_bacterium_type())
+		elif object.has_method("get_cell_type"):
+			return Enums.RelationshipTypes.INEDIBLE	# green bacteria can't eat energy cells
+		return Enums.RelationshipTypes.NONE # default
+	
+	# get the all nearby objects in the area
+	bacterium.nearby_objects = bacterium.get_nearby_objects(ActionRadii.HUNTING, identification_rules)
 	
 	# find a nearest prey
 	if bacterium.nearby_objects.size() > 0:
@@ -42,42 +54,10 @@ static func _silent_hunting(bacterium: Bacterium):
 		if pray_record.relationship != Enums.RelationshipTypes.NONE:
 			_choice_action(bacterium, pray_record, is_nearby_lure)
 
-static func _get_nearby_objects(observer: Bacterium) -> Array[InfoPack]:
-	# init var's
-	var unknown_objects = observer.get_nearby_objects(ActionRadii.HUNTING)	# can be EnergyCells or Bacteria
-	var identified_objects: Array[InfoPack] = []
-	
-	# identification
-	for object in unknown_objects:
-		var relationship: Enums.RelationshipTypes = Enums.RelationshipTypes.NONE
-		
-		if object.has_method("get_bacterium_type"):
-			relationship = _identify_relationship(object.get_bacterium_type())
-		elif object.has_method("get_cell_type"):
-			relationship = Enums.RelationshipTypes.INEDIBLE	# green bacteria can't eat energy cells
-		
-		identified_objects.push_back(
-			InfoPack.new(object, relationship)
-		)
-		
-		# DEBUG:
-		Debug.add_line(
-			observer.debug_layer,
-			observer.position,
-			object.position,
-			Enums.DEBUG_RELATIONSHIP_COLORS[relationship]
-		)
-	
-	return identified_objects
-
-static func _identify_relationship(target: Enums.BacteriumTypes) -> Enums.RelationshipTypes:
-	var relationship: Enums.RelationshipTypes
-	
+static func _bacterium_identification(target: Enums.BacteriumTypes) -> Enums.RelationshipTypes:
 	if target == Enums.BacteriumTypes.GREEN:
-		relationship = Enums.RelationshipTypes.NEUTRAL
-	else: relationship = Enums.RelationshipTypes.PRAY		# anyway other bacteria is the prays
-	
-	return relationship
+		return Enums.RelationshipTypes.NEUTRAL
+	else: return Enums.RelationshipTypes.PRAY		# anyway other bacteria is the prays
 
 ## Decide what kind action must be used if nearby environment full of objects.
 static func _choice_action(bacterium: Bacterium, pray_info: InfoPack, is_nearby_lure: bool):

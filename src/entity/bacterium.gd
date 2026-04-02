@@ -154,10 +154,9 @@ func intercept_target(target_pos: Vector2, target_velocity: Vector2):
 	dash_to(anchor_point)
 	
 # <> states requirement <>
-## Result: Array[Variant] can contains Bacteria and EnergyCells
-func get_nearby_objects(area_radius: float) -> Array[Variant]:
+func get_unidentified_nearby_objects(area_radius: float) -> Array[Entity]:
 	const RAYS_COUNT: int = 32
-	var objects_in_area: Array = []
+	var objects_in_area: Array[Entity] = []
 	var space_state = get_world_2d().direct_space_state
 	
 	# use raycast to findind nearby objects
@@ -185,6 +184,29 @@ func get_nearby_objects(area_radius: float) -> Array[Variant]:
 		)
 	
 	return objects_in_area
+
+func get_nearby_objects(area_radius: float, identification_rules: Callable) -> Array[InfoPack]:
+	# init var's
+	var unknown_objects = get_unidentified_nearby_objects(area_radius)	# can be EnergyCells or Bacteria
+	var identified_objects: Array[InfoPack] = []
+	
+	# identification
+	for object in unknown_objects:
+		var relationship: Enums.RelationshipTypes = Enums.RelationshipTypes.NONE
+		relationship = identification_rules.call(object)
+		
+		identified_objects.push_back(
+			InfoPack.new(object, relationship)
+		)
+		
+		# DEBUG:
+		Debug.add_line(
+			self.debug_layer,
+			self.position,
+			object.position,
+			Enums.DEBUG_RELATIONSHIP_COLORS[relationship]
+		)
+	return identified_objects
 
 func photosynthesizing():
 	if priming.try_process(0.2, "PHOTOSYNTHESIZING") == false:

@@ -18,17 +18,22 @@ static func try_update_behavior(bacterium: Bacterium):
 		bacterium.change_state_to(StateMachine.fission_state)
 
 static func _grass_finding(bacterium: Bacterium):
+	# rules how to identified object
+	var identification_rules = func(object: Entity) -> Enums.RelationshipTypes:
+		if object.has_method("get_cell_type"):
+			return Enums.RelationshipTypes.EDIBLE
+		return Enums.RelationshipTypes.NONE # default
+	
 	# get the all nearby objects in the area
-	bacterium.nearby_objects = _get_nearby_objects(bacterium)
+	bacterium.nearby_objects = bacterium.get_nearby_objects(ActionRadii.DETECTION, identification_rules)
 	
 	# find a nearest food
 	if bacterium.nearby_objects.size() > 0:
 		var food_record: InfoPack = InfoUtils.get_nearest_energy_cell(bacterium.nearby_objects)
 		if food_record.relationship != Enums.RelationshipTypes.NONE:
 			_choice_action(bacterium, food_record)
-			return	# skip changing place
-	
-	change_place(bacterium)
+	else: # continue find target
+		change_place(bacterium)
 
 static func change_place(bacterium: Bacterium):
 	# continue find
@@ -37,32 +42,6 @@ static func change_place(bacterium: Bacterium):
 	else:
 		var target = bacterium.get_nav_target() 
 		bacterium.reach_target(target)
-
-static func _get_nearby_objects(observer: Bacterium) -> Array[InfoPack]:
-	# init var's
-	var unknown_objects = observer.get_nearby_objects(ActionRadii.DETECTION)	# can be EnergyCells or Bacteria
-	var identified_objects: Array[InfoPack] = []
-	
-	# identification
-	for object in unknown_objects:
-		var relationship: Enums.RelationshipTypes = Enums.RelationshipTypes.NONE
-		
-		if object.has_method("get_cell_type"):
-			relationship = Enums.RelationshipTypes.EDIBLE
-		
-		identified_objects.push_back(
-			InfoPack.new(object, relationship)
-		)
-		
-		# DEBUG:
-		Debug.add_line(
-			observer.debug_layer,
-			observer.position,
-			object.position,
-			Enums.DEBUG_RELATIONSHIP_COLORS[relationship]
-		)
-	
-	return identified_objects
 
 static func _choice_action(bacterium: Bacterium, food_record: InfoPack):
 	var distance: float = (food_record.object.position - bacterium.position).length()
