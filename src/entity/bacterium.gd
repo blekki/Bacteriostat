@@ -2,7 +2,7 @@ class_name Bacterium
 extends Entity
 
 # object parameters
-# > speed - pixel/sec
+# > speed - pixel/physic_frame
 const ACCELERATION: float = 10.0	# todo: rewrite ACCEELRATION into variable
 const MAX_SPEED: float = 600.00
 const FOV: float = PI / 3
@@ -18,9 +18,8 @@ enum EnergyLimit {
 }
 
 # changeable object parameters
-var bacterium_name: String = "Unknown Bacterium"
-var type: Enums.BacteriumTypes
-var behavior_state: RefCounted
+var bacterium_name: String = "Bacterium"
+var behavior_state: RefCounted = StateMachine.waiting_state	# default
 var nearby_objects: Array[InfoPack] = []	# save identified nearby objects [object, relationship]
 var chained_to: Entity = null
 @onready var priming = $ActionPriming	# todo: make the same to nav_agent
@@ -38,11 +37,9 @@ func _init():
 	energy = 90 # 40
 
 func _ready():
-	#_set_random_type()	# todo: replace into _init
 	position = _generate_smart_point()
 
 func _physics_process(delta: float) -> void:
-	nearby_objects.clear()
 	behavior_state.do_task(self)
 	
 	const STATE_UPDATE_INTERVAL = 2
@@ -71,31 +68,8 @@ func change_state_to(new_state: RefCounted):
 	Debug.clean_layer(debug_layer)
 	behavior_state = new_state
 
-# <> "set" methods <>
-func _set_random_type():
-	const BACTERIA_ORIGIN_TYPES = 3	# todo: add special file with all prop constants
-	match 0:	# todo: add real generation "randi_range(0, BACTERIA_ORIGIN_TYPES)"
-		0:
-			bacterium_name = "Green Bacterium"
-			type = Enums.BacteriumTypes.GREEN
-			modulate = Color.LAWN_GREEN
-			behavior_state = StateMachine.get_start_green_bacterium_state()	# todo: add behavior for every bacteria types
-		1: 
-			type = Enums.BacteriumTypes.PURPLE
-			modulate = Color.MEDIUM_PURPLE
-		2: 
-			type = Enums.BacteriumTypes.ORANGE
-			modulate = Color.DARK_ORANGE
-
 func set_navigation_field(field: Vector2):	# todo: remove
 	_nav_field = field
-
-# <> identification methods
-func get_obj_name() -> String:
-	return bacterium_name
-
-func get_bacterium_type() -> Enums.BacteriumTypes:	# need for identification
-	return type
 
 # <> for movement <>
 func is_target_reached() -> bool:
@@ -243,7 +217,7 @@ func fission():
 	spend_energy(child_energy)
 	Singlton.fission.emit(self)
 
-func vampirism(pray: Entity):
+func vampirism(pray: Bacterium):
 	if chained_to == null:
 		return
 	

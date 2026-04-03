@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://ciy107vvx6xws"]
+
+[ext_resource type="PackedScene" uid="uid://m5iibvcvh23p" path="res://src/entity/bacterium.tscn" id="1_5pxxg"]
+[ext_resource type="Script" uid="uid://3r2ovofbmd1w" path="res://src/entity/purple_bacterium.gd" id="2_fwdc8"]
+
+[node name="Bacterium" unique_id=1553382449 instance=ExtResource("1_5pxxg")]
+script = ExtResource("2_fwdc8")

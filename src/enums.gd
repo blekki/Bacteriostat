@@ -6,20 +6,6 @@ enum TimeSeasons {
 	NIGHT,
 }
 
-enum BacteriumTypes {
-	NONE,
-	GREEN,
-	PURPLE,
-	ORANGE,
-	DEFAULT = GREEN,
-}
-
-enum EnergyCellTypes {
-	NONE,
-	GRASS,
-	MEAT,
-}
-
 enum RelationshipTypes {
 	NONE,
 	# only cells

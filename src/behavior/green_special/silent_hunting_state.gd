@@ -1,4 +1,3 @@
-## Attension!!! : Works only with the "Green" bacteria
 class_name SilentHuntingState
 extends RefCounted
 
@@ -32,15 +31,13 @@ static func try_update_behavior(bacterium: Bacterium):
 
 # <> Algorithm requirements section <>
 static func _silent_hunting(bacterium: Bacterium):
-	## get the all nearby objects in the hunting area
-	#bacterium.nearby_objects = _get_nearby_objects(bacterium)
-	
 	# rules how to identified object
 	var identification_rules = func(object: Entity) -> Enums.RelationshipTypes:
-		if object.has_method("get_bacterium_type"):
-			# comment: bacterium identification is complex, so logic was replaced
-			return _bacterium_identification(object.get_bacterium_type())
-		elif object.has_method("get_cell_type"):
+		if object is Bacterium:
+			if object is GreenBacterium:
+				return Enums.RelationshipTypes.NEUTRAL
+			else: return Enums.RelationshipTypes.PRAY		# anyway other bacteria is pray
+		elif object is EnergyCell:
 			return Enums.RelationshipTypes.INEDIBLE	# green bacteria can't eat energy cells
 		return Enums.RelationshipTypes.NONE # default
 	
@@ -53,11 +50,6 @@ static func _silent_hunting(bacterium: Bacterium):
 		var is_nearby_lure: bool  = InfoUtils.is_lure_nearby(bacterium.nearby_objects)
 		if pray_record.relationship != Enums.RelationshipTypes.NONE:
 			_choice_action(bacterium, pray_record, is_nearby_lure)
-
-static func _bacterium_identification(target: Enums.BacteriumTypes) -> Enums.RelationshipTypes:
-	if target == Enums.BacteriumTypes.GREEN:
-		return Enums.RelationshipTypes.NEUTRAL
-	else: return Enums.RelationshipTypes.PRAY		# anyway other bacteria is the prays
 
 ## Decide what kind action must be used if nearby environment full of objects.
 static func _choice_action(bacterium: Bacterium, pray_info: InfoPack, is_nearby_lure: bool):

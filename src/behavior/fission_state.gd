@@ -10,7 +10,7 @@ static func do_task(bacterium: Bacterium):
 
 static func try_update_behavior(bacterium: Bacterium):
 	if bacterium.energy < bacterium.EnergyLimit.FISSION:
-		if bacterium.type == Enums.BacteriumTypes.GREEN:
+		if bacterium is GreenBacterium:
 			bacterium.change_state_to(StateMachine.silent_hunting)
-		elif bacterium.type == Enums.BacteriumTypes.PURPLE:
+		elif bacterium is PurpleBacterium:
 			bacterium.change_state_to(StateMachine.grass_finding)

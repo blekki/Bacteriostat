@@ -62,10 +62,7 @@ func _init_collision_walls():	# fast way make dynamic walls
 
 func _on_energy_shed(position: Vector2, impulse: float, energy: int):	# create energy_cell
 	var cell: EnergyCell = energy_cell_instance.instantiate()
-	cell.cell_name = "Simple Cell"
-	cell.type = Enums.EnergyCellTypes.GRASS
 	cell.energy = energy
-	cell.scale *= 0.4
 	
 	# add impulse to the cell
 	var direction = Vector2.RIGHT.rotated(randf_range(0, PI * 2))
