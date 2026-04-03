@@ -1,7 +1,8 @@
-class_name GrassFindingState	# todo: rename to CellFinding
+# Purple bacterium special state
+class_name GrassFindingState	# rename into "CellFinding"
 extends RefCounted
 
-static var name: String = "GrassFinding"
+static var name: String = "Grass finding"
 
 enum ActionRadii {
 	BITE = 40,
@@ -20,7 +21,9 @@ static func try_update_behavior(bacterium: Bacterium):
 static func _grass_finding(bacterium: Bacterium):
 	# rules how to identified object
 	var identification_rules = func(object: Entity) -> Enums.RelationshipTypes:
-		if object.has_method("get_cell_type"):
+		if object is OrangeBacterium:
+			return Enums.RelationshipTypes.PREDATOR
+		elif object is EnergyCell:
 			return Enums.RelationshipTypes.EDIBLE
 		return Enums.RelationshipTypes.NONE # default
 	
@@ -28,10 +31,9 @@ static func _grass_finding(bacterium: Bacterium):
 	bacterium.nearby_objects = bacterium.get_nearby_objects(ActionRadii.DETECTION, identification_rules)
 	
 	# find a nearest food
-	if bacterium.nearby_objects.size() > 0:
-		var food_record: InfoPack = InfoUtils.get_nearest_energy_cell(bacterium.nearby_objects)
-		if food_record.relationship != Enums.RelationshipTypes.NONE:
-			_choice_action(bacterium, food_record)
+	var food_record: InfoPack = InfoUtils.get_nearest_energy_cell(bacterium.nearby_objects)
+	if food_record.object != null:
+		_choice_action(bacterium, food_record)
 	else: # continue find target
 		change_place(bacterium)
 
