@@ -8,5 +8,6 @@ static func do_task(bacterium: Bacterium):
 	# just wait... no more
 	pass
 
+## need to keep solid abstraction
 static func try_update_behavior(bacterium: Bacterium):
 	pass

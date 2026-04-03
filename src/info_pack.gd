@@ -5,7 +5,7 @@ extends RefCounted
 var object: Entity
 var relationship: Enums.RelationshipTypes
 
-func _init(object: Entity, relationship: Enums.RelationshipTypes) -> void:
+func _init(object: Entity, relationship: Enums.RelationshipTypes):
 	set_pack(object, relationship)
 
 # can be used to a fast way save parameters

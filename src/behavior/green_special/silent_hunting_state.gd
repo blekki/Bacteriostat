@@ -59,5 +59,5 @@ static func _choice_action(bacterium: Bacterium, pray_info: InfoPack, is_nearby_
 			bacterium.intercept_target(pray_info.object.position, pray_info.object.velocity)
 		var a when (a < ActionRadii.LURING):
 			if (is_nearby_lure != false) and (bacterium.is_ready_luring() == true):
-				const lure_impulse: float = 100
-				bacterium.throw_lure(lure_impulse)
+				const LURE_IMPULSE: float = 100
+				bacterium.throw_lure(LURE_IMPULSE)

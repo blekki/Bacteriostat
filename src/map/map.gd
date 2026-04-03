@@ -107,13 +107,11 @@ func _start_day():
 	$Night.stop()
 	Singlton.time_season = Enums.TimeSeasons.DAY
 	$Day.start()
-	print("day started")
 
 func _start_night():
 	$Day.stop()
 	Singlton.time_season = Enums.TimeSeasons.NIGHT
 	$Night.start()
-	print("night started")
 
 func _on_day_timeout():
 	_start_night()
