@@ -17,6 +17,11 @@ static func do_task(bacterium: Bacterium):
 static func try_update_behavior(bacterium: Bacterium):
 	if bacterium.energy >= bacterium.EnergyLimit.FISSION:
 		bacterium.change_state_to(StateMachine.fission_state)
+	
+	# should "swim" away
+	var is_predator_nearby: bool = InfoUtils.is_predator_nearby(bacterium.nearby_objects)
+	if is_predator_nearby == true:
+		bacterium.change_state_to(StateMachine.swim_away)
 
 static func _grass_finding(bacterium: Bacterium):
 	# rules how to identified object

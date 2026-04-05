@@ -14,17 +14,14 @@ enum RelationshipTypes {
 	# only bacteria
 	PRAY,
 	NEUTRAL,
-	ENEMY,
+	PREDATOR,
 }
 
-# dictionary
-const DEBUG_RELATIONSHIP_COLORS = {
+const DEBUG_RELATIONSHIP_COLORS: Dictionary = {
 	RelationshipTypes.NONE: Color.DIM_GRAY,
 	RelationshipTypes.INEDIBLE: Color.GRAY,
 	RelationshipTypes.EDIBLE: Color.MEDIUM_SPRING_GREEN,
 	RelationshipTypes.PRAY: Color.YELLOW,
 	RelationshipTypes.NEUTRAL: Color.GREEN,
-	RelationshipTypes.ENEMY: Color.RED,
-}
-
+	RelationshipTypes.PREDATOR: Color.RED,
 }

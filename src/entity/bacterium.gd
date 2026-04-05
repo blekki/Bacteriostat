@@ -258,6 +258,10 @@ func bite_target(pray: Entity):
 	pray.spend_energy(can_be_consumed)
 	self.consume_energy(can_be_consumed)
 
+func swim_away(enemy_detection_radius: float):
+	# instruction is personaly to the every bacterium type
+	pass
+
 ## Generate lure [EnergyCell] with a custom impulse
 func throw_lure(impulse: float):
 	if priming.try_process(1.4, "THROW LURE") == false:
