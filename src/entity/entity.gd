@@ -2,15 +2,17 @@
 class_name Entity
 extends CharacterBody2D
 
+# > pixel/physic_frame
 const PASSIVE_DECELERATION: float = 2.0
 const COLLISION_DEFLECTION: float = 5.0
-const _MIN_ENERGY: int = 0	# default value	# todo: rename as "ENERGY_LIMIT" or same
 
-var obj_name = "Raw Entity"
-var energy: int = 0		# equivalent to health
-var debug_layer: int = -1	# [-1] as "nothing" code
+@export var obj_name = "Raw Entity"
+@export var energy = 50	# equivalent to health
+@export var min_energy = 0
+@export var max_energy = 100
+
 # technical var's
-var _max_energy: int = 10	# default value
+var debug_layer: int = -1	# [-1] is as "nothing" code
 var _is_selected_with_mouse: bool = false	# todo: replace logic into world
 
 # <> Methods section <>
@@ -46,9 +48,9 @@ func get_obj_name() -> String:
 # <> Health methods <>
 ## Change energy value
 func consume_energy(delta_energy: int):
-	var new_energy = clampi(energy + delta_energy, _MIN_ENERGY, _max_energy)
+	var new_energy = clampi(energy + delta_energy, min_energy, max_energy)
 	self.energy = new_energy
-	if energy <= _MIN_ENERGY:
+	if energy <= min_energy:
 		death()
 
 func spend_energy(delta_energy: int):
@@ -56,7 +58,7 @@ func spend_energy(delta_energy: int):
 
 ## Return how much energy bacterium can consume
 func can_consume_energy(delta_energy: int) -> int:
-	var value = mini(delta_energy, _max_energy - energy)
+	var value = mini(delta_energy, max_energy - energy)
 	return value
 
 ## Return how much energy bacterium can spend
@@ -65,12 +67,12 @@ func can_spend_energy(delta_energy: int) -> int:
 	return value
 
 func death():
-	Debug.clean_layer(debug_layer)	# todo: chnage to "remove_layer"
+	Debug.clean_layer(debug_layer)	# todo: change to "remove_layer"
 	modulate = Color.DIM_GRAY	# todo: change texture
 	Singlton.remove_object.emit(self)
 
 # <> reaction on signals section <>
-func _on_clickable_area_input_event(viewport: Node, event: InputEvent, shape_idx: int):
+func _on_clickable_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int):
 	if event is InputEventMouseButton:
 		# print info about the obj
 		if event.pressed:

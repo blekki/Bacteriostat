@@ -12,7 +12,7 @@ enum RelationshipTypes {
 	INEDIBLE,
 	EDIBLE,
 	# only bacteria
-	PRAY,
+	PREY,
 	NEUTRAL,
 	PREDATOR,
 }
@@ -21,7 +21,7 @@ const DEBUG_RELATIONSHIP_COLORS: Dictionary = {
 	RelationshipTypes.NONE: Color.DIM_GRAY,
 	RelationshipTypes.INEDIBLE: Color.GRAY,
 	RelationshipTypes.EDIBLE: Color.MEDIUM_SPRING_GREEN,
-	RelationshipTypes.PRAY: Color.YELLOW,
+	RelationshipTypes.PREY: Color.YELLOW,
 	RelationshipTypes.NEUTRAL: Color.GREEN,
 	RelationshipTypes.PREDATOR: Color.RED,
 }

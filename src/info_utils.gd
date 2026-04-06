@@ -21,18 +21,18 @@ static func _try_find_nearest_obj(array: Array[InfoPack], condition: Callable) -
 	if index == _RAW_INDEX:
 		return InfoPack.get_empty_pack()
 	else:
-		return array[index]	# nearest pray
+		return array[index]	# nearest prey
 
-## Find nearest pray but if no one is, return [Enums.ObjectTypes.NONE]
-static func get_nearest_pray(array: Array[InfoPack]) -> InfoPack:
+## Find nearest prey but if no one is, return [Enums.ObjectTypes.NONE]
+static func get_nearest_prey(array: Array[InfoPack]) -> InfoPack:
 	# prepare condition
 	var condition = func(record: InfoPack):
-		var is_pray = record.relationship == Enums.RelationshipTypes.PRAY
-		return is_pray
+		var is_prey = record.relationship == Enums.RelationshipTypes.PREY
+		return is_prey
 	
 	return _try_find_nearest_obj(array, condition)
 
-## Find nearest pray but if no one is, return [Enums.ObjectTypes.NONE]
+## Find nearest prey but if no one is, return [Enums.ObjectTypes.NONE]
 static func get_nearest_energy_cell(array: Array[InfoPack]) -> InfoPack:
 	# prepare condition
 	var condition = func(record: InfoPack):

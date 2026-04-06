@@ -21,7 +21,7 @@ func _process(delta: float):
 # <> text changing <>
 func _update_season_info():
 	var current_season: String = "DAY" # default
-	if Singlton.time_season == Enums.TimeSeasons.NIGHT:
+	if Singlton.is_night():
 		current_season = "NIGHT"
 	
 	# print info
@@ -51,7 +51,7 @@ func _print_bacterium_info(object: Bacterium):
 	object_name.text = tracked_object.bacterium_name
 	# print parameters
 	object_parameters.text  = ""
-	object_parameters.text += "energy: %d\n" % object.energy
+	object_parameters.text += "energy: %d/%d\n" % [object.energy, object.max_energy]
 	object_parameters.text += "state: %s\n" % object.behavior_state.name
 	object_parameters.text += "action: %s\n" % object.priming.get_action()
 	object_parameters.text += "priming: %.1f\n" % object.priming.get_remaining_time()

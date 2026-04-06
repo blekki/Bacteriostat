@@ -3,14 +3,18 @@ extends RefCounted
 
 static var name: String = "Fission"
 
-# Parameter [bacterium] is needed to keep a duck typing abstaction
 static func do_task(bacterium: Bacterium):
 	Debug.clean_layer(bacterium.debug_layer)
 	bacterium.fission()
 
 static func try_update_behavior(bacterium: Bacterium):
-	if bacterium.energy < bacterium.EnergyLimit.FISSION:
+	if bacterium.energy < bacterium.energy_level_fission:
 		if bacterium is GreenBacterium:
-			bacterium.change_state_to(StateMachine.silent_hunting)
+			bacterium.change_state_to(StateMachine.hunting_state)
 		elif bacterium is PurpleBacterium:
-			bacterium.change_state_to(StateMachine.grass_finding)
+			if Singlton.is_day():
+				bacterium.change_state_to(StateMachine.cell_finding_state)
+			else:
+				bacterium.change_state_to(StateMachine.hunting_state)
+		elif bacterium is OrangeBacterium:
+			pass # todo: add state changing

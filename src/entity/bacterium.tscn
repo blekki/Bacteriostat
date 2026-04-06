@@ -6,6 +6,17 @@
 
 [node name="Bacterium" unique_id=1553382449 instance=ExtResource("1_do35s")]
 script = ExtResource("2_wpy8d")
+acceleration = 10.0
+max_speed = 600.0
+FOV = 1.0471975511965976
+energy_level_death = null
+energy_level_luring = 35
+energy_level_shading = 85
+energy_level_fission = 95
+attack_radius = 45
+dash_attack_radius = 120
+luring_radius = 140
+view_distance = 160
 
 [node name="NavigationAgent" type="NavigationAgent2D" parent="." index="3" unique_id=2079435920]
 target_desired_distance = 20.0

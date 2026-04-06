@@ -9,3 +9,9 @@ signal click_on_object(entity: Entity)
 signal energy_shed(position: Vector2, impulse: float, energy: int)
 signal fission(parent: Bacterium)
 signal remove_object(entity: Entity)
+
+func is_day() -> bool:
+	return time_season == Enums.TimeSeasons.DAY
+
+func is_night() -> bool:
+	return time_season == Enums.TimeSeasons.NIGHT
