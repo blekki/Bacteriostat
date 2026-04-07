@@ -48,18 +48,18 @@ func vampirism(prey: Bacterium):
 	
 	# replace self closer to a prey
 	const LERP_WEIGHT: float = 0.5
-	var distance: Vector2 = prey.global_position - self.global_position
-	var lerp_to = global_position + distance - (distance.normalized() * 32)	# fix collision troubles
+	var direction: Vector2 = prey.global_position - self.global_position
+	var lerp_to = global_position + direction - (direction.normalized() * 32)	# fix collision troubles
 	global_position = lerp(global_position, lerp_to, LERP_WEIGHT)
-	rotation = lerp_angle(rotation, distance.angle(), LERP_WEIGHT)
+	rotation = lerp_angle(rotation, direction.angle(), LERP_WEIGHT)
 	
 	# priming to vampirism
 	if priming.try_process(0.15, "VAMPIRISM") == false:
 		return
 	
-	#const VAMPIRISM_RADIUS: int = 60	# todo: replace this area into enums
 	const VAMPIRISM_POWER: int = 1 	# per action tick
-	if distance.length() < attack_radius:
+	var distance: float = direction.length()
+	if distance < attack_radius:
 		var can_be_took     = prey.can_spend_energy(VAMPIRISM_POWER)
 		var can_be_consumed = self.can_consume_energy(can_be_took)
 		prey.spend_energy(can_be_consumed)
