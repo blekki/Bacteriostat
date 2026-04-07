@@ -9,7 +9,7 @@ static func do_task(bacterium: PurpleBacterium):
 	bacterium.cell_finding()
 
 static func try_update_behavior(bacterium: PurpleBacterium):
-	if bacterium.energy >= bacterium.energy_level_fission:
+	if bacterium.is_ready_to_fission() == true:
 		bacterium.change_state_to(StateMachine.fission_state)
 	
 	if Singlton.is_night():

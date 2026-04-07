@@ -28,7 +28,7 @@ func photosynthesizing():
 
 ## Generate [EnergyCell] with the fixed impulse
 func shedding():
-	if energy < energy_level_shading:
+	if not is_ready_to_shedding():
 		return
 	
 	if priming.try_process(2, "SHEDDING") == false:

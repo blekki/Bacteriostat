@@ -29,7 +29,7 @@ static func _green_bacterium_conditions(bacterium: GreenBacterium):
 			bacterium.change_state_to(StateMachine.vampirism_state)
 
 static func _purple_bacterium_conditions(bacterium: PurpleBacterium):
-	if bacterium.energy >= bacterium.energy_level_fission:
+	if bacterium.is_ready_to_fission() == true:
 		bacterium.change_state_to(StateMachine.fission_state)
 	
 	if Singlton.is_day():

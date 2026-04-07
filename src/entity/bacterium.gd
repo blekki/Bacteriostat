@@ -10,7 +10,7 @@ extends Entity
 # energy levels
 @export var energy_level_death: int = min_energy
 @export var energy_level_luring: int = 35
-@export var energy_level_shading: int = 85
+@export var energy_level_shedding: int = 85
 @export var energy_level_fission: int = 95
 
 # action radii
@@ -68,6 +68,16 @@ func _generate_smart_point() -> Vector2:	# todo: generate point inside navigatio
 func change_state_to(new_state: RefCounted):
 	Debug.clean_layer(debug_layer)
 	behavior_state = new_state
+
+# <> is ready to ... <>
+func is_ready_to_luring() -> bool:
+	return energy >= energy_level_luring
+
+func is_ready_to_shedding() -> bool:
+	return energy >= energy_level_shedding
+
+func is_ready_to_fission() -> bool:
+	return energy >= energy_level_fission
 
 # <> for movement <>
 func is_target_reached() -> bool:
@@ -186,7 +196,7 @@ func get_nearby_objects(area_radius: float, identification_rules: Callable) -> A
 	return identified_objects
 
 func fission():
-	if energy < energy_level_fission:
+	if not is_ready_to_fission():
 		return
 	
 	if priming.try_process(3, "FISSION") == false:
@@ -229,7 +239,7 @@ func swim_away(_enemy_detection_radius: float):
 
 ## Generate lure [EnergyCell] with a custom impulse
 func throw_lure(impulse: float):
-	if energy <= energy_level_luring:
+	if not is_ready_to_luring():
 		return	# not enough energy
 	
 	if priming.try_process(1.4, "THROW LURE") == false:
