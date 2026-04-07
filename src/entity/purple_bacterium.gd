@@ -35,7 +35,7 @@ func cell_finding():
 		if object is OrangeBacterium:
 			return Enums.RelationshipTypes.PREDATOR
 		elif object is EnergyCell:
-			return Enums.RelationshipTypes.EDIBLE
+			return Enums.RelationshipTypes.PREY
 		return Enums.RelationshipTypes.NONE # default
 	
 	# get the all nearby objects in the area
@@ -62,7 +62,7 @@ func hunting():
 	_choice_hunting_action(prey_record)
 
 func _choice_hunting_action(target_record: InfoPack):
-	if target_record.object != null:
+	if target_record.is_not_empty():
 		var distance: float = (target_record.object.position - position).length()
 		
 		if distance < view_distance:

@@ -8,10 +8,7 @@ enum TimeSeasons {
 
 enum RelationshipTypes {
 	NONE,
-	# only cells
-	INEDIBLE,
-	EDIBLE,
-	# only bacteria
+	CELL,
 	PREY,
 	NEUTRAL,
 	PREDATOR,
@@ -19,9 +16,8 @@ enum RelationshipTypes {
 
 const DEBUG_RELATIONSHIP_COLORS: Dictionary = {
 	RelationshipTypes.NONE: Color.DIM_GRAY,
-	RelationshipTypes.INEDIBLE: Color.GRAY,
-	RelationshipTypes.EDIBLE: Color.MEDIUM_SPRING_GREEN,
-	RelationshipTypes.PREY: Color.YELLOW,
-	RelationshipTypes.NEUTRAL: Color.GREEN,
+	RelationshipTypes.CELL: Color.YELLOW,
+	RelationshipTypes.PREY: Color.MEDIUM_SPRING_GREEN,
+	RelationshipTypes.NEUTRAL: Color.LIGHT_GRAY,
 	RelationshipTypes.PREDATOR: Color.RED,
 }

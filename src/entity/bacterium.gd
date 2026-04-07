@@ -216,7 +216,7 @@ func hunting():
 
 func swim_away(_enemy_detection_radius: float):
 	var predator_record: InfoPack = InfoUtils.get_nearest_predator(nearby_objects)
-	if predator_record.object != null:
+	if predator_record.is_not_empty():
 		var predator = predator_record.object
 		
 		const ESCAPE_DISTANCE: float = 140

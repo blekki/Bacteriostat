@@ -77,14 +77,14 @@ func hunting():
 				return Enums.RelationshipTypes.NEUTRAL
 			else: return Enums.RelationshipTypes.PREY	# anyway other bacteria is prey
 		elif object is EnergyCell:
-			return Enums.RelationshipTypes.INEDIBLE	# green bacteria can't eat energy cells
+			return Enums.RelationshipTypes.CELL	# green bacteria can't eat energy cells
 		return Enums.RelationshipTypes.NONE # default
 	
 	# get the all nearby objects in the area
 	nearby_objects = get_nearby_objects(view_distance, identification_rules)
 	
 	var prey_record: InfoPack = InfoUtils.get_nearest_prey(nearby_objects)
-	if prey_record.object != null:
+	if prey_record.is_not_empty():
 		_choice_hunting_action(prey_record)
 
 ## Decide what kind action must be used if nearby environment full of objects.

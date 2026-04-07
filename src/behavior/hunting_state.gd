@@ -22,7 +22,7 @@ static func _green_bacterium_conditions(bacterium: GreenBacterium):
 	
 	# vampirist section
 	var prey_record: InfoPack = InfoUtils.get_nearest_prey(bacterium.nearby_objects)
-	if prey_record.object != null:
+	if prey_record.is_not_empty():
 		var distance_to_prey = (prey_record.object.position - bacterium.position).length()
 		if distance_to_prey < bacterium.attack_radius:
 			bacterium.chained_to = prey_record.object

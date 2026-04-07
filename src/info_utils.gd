@@ -27,8 +27,7 @@ static func _try_find_nearest_obj(array: Array[InfoPack], condition: Callable) -
 static func get_nearest_prey(array: Array[InfoPack]) -> InfoPack:
 	# prepare condition
 	var condition = func(record: InfoPack):
-		var is_prey = record.relationship == Enums.RelationshipTypes.PREY
-		return is_prey
+		return record.is_prey()
 	
 	return _try_find_nearest_obj(array, condition)
 
@@ -36,10 +35,7 @@ static func get_nearest_prey(array: Array[InfoPack]) -> InfoPack:
 static func get_nearest_energy_cell(array: Array[InfoPack]) -> InfoPack:
 	# prepare condition
 	var condition = func(record: InfoPack):
-		var is_inedible = record.relationship == Enums.RelationshipTypes.INEDIBLE
-		var is_edible = record.relationship == Enums.RelationshipTypes.EDIBLE
-		var is_energy_cell = is_inedible or is_edible
-		return is_energy_cell
+		return record.is_cell()
 	
 	return _try_find_nearest_obj(array, condition)
 
@@ -47,8 +43,7 @@ static func get_nearest_energy_cell(array: Array[InfoPack]) -> InfoPack:
 static func get_nearest_predator(array: Array[InfoPack]) -> InfoPack:
 	# prepare condition
 	var condition = func(record: InfoPack):
-		var is_predator = record.relationship == Enums.RelationshipTypes.PREDATOR
-		return is_predator
+		return record.is_predator()
 	
 	return _try_find_nearest_obj(array, condition)
 
@@ -68,15 +63,14 @@ static func _try_find_obj(array: Array[InfoPack], condition: Callable) -> bool:
 static func is_lure_nearby(array: Array[InfoPack]) -> bool:
 	# prepare condition
 	var condition = func(record: InfoPack):
-		var is_inedible = record.relationship == Enums.RelationshipTypes.INEDIBLE
-		var is_edible = record.relationship == Enums.RelationshipTypes.EDIBLE
-		var is_lure = is_inedible or is_edible
+		var is_lure = record.is_cell()
 		return is_lure
+	
 	return _try_find_obj(array, condition)
 
 static func is_predator_nearby(array: Array[InfoPack]) -> bool:
 	# prepare condition
 	var condition = func(record: InfoPack):
-		var is_predator = record.relationship == Enums.RelationshipTypes.PREDATOR
-		return is_predator
+		return record.is_predator()
+	
 	return _try_find_obj(array, condition)
