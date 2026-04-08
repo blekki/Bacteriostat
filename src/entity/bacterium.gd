@@ -97,12 +97,12 @@ func _dash(impulse: float):
 	velocity += Vector2.RIGHT.rotated(rotation) * impulse
 
 func try_rotate_to(target_pos: Vector2) -> bool:
-	var target_rotation = (target_pos - position).angle()
 	const ROTATION_WEIGHT: float = 0.075
-	rotation = lerp_angle(rotation, target_rotation, ROTATION_WEIGHT)
+	var target_angle = (target_pos - position).angle()
+	rotation = lerp_angle(rotation, target_angle, ROTATION_WEIGHT)
 	
 	var field_of_dash = (FOV / 6)
-	if abs(angle_difference(rotation, target_rotation)) < field_of_dash:
+	if abs(angle_difference(rotation, target_angle)) < field_of_dash:
 		return true	# rotation finished
 	return false	# need to continue rotate
 
