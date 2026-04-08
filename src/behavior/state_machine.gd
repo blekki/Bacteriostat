@@ -13,7 +13,7 @@ static func get_start_green_bacterium_state() -> RefCounted:	# todo: set normal 
 	return photosynthesizing_state
 
 static func get_start_orange_bacterium_state() -> RefCounted:	# todo: set normal returning type
-	return waiting_state
+	return hunting_state
 
 static func get_start_purple_bacterium_state() -> RefCounted:	# todo: set normal returning type
 	return cell_finding_state

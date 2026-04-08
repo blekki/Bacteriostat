@@ -15,7 +15,6 @@ extends Entity
 
 # action radii
 @export var attack_radius: int = 45
-@export var dash_attack_radius: int = 120
 @export var luring_radius: int = 140
 @export var view_distance: int = 160
 
@@ -96,6 +95,7 @@ func generate_new_nav_target():
 func _dash(impulse: float):
 	velocity += Vector2.RIGHT.rotated(rotation) * impulse
 
+## Rotate and get result [is_rotated_to].
 func try_rotate_to(target_pos: Vector2) -> bool:
 	const ROTATION_WEIGHT: float = 0.075
 	var target_angle = (target_pos - position).angle()
@@ -126,7 +126,7 @@ func intercept_target(target_pos: Vector2, target_velocity: Vector2):
 	var dash_direction = abs(velocity.angle_to(to_target))
 	
 	var anchor_point = Vector2.ZERO
-	if (dash_direction < PI / 36.0) or (velocity.length() < 10):
+	if (dash_direction < PI / 18.0) or (velocity.length() < 10):
 		anchor_point = self.position + to_target.normalized()	# dash to a target
 	else:
 		anchor_point = target_pos - (velocity * 2)	# change trajectory

@@ -10,7 +10,10 @@ func _ready():
 	modulate = Color.PURPLE				# todo: change on texture
 	behavior_state = StateMachine.get_start_purple_bacterium_state();
 
-	# todo: set personal action radii
+	# set personal action radii
+	view_distance = 160
+	luring_radius = -1	# no active
+	attack_radius = 45
 
 func _physics_process(delta: float):
 	super(delta)
@@ -63,13 +66,11 @@ func hunting():
 
 func _choice_hunting_action(target_record: InfoPack):
 	if target_record.is_not_empty():
-		var distance: float = (target_record.object.position - position).length()
+		set_nav_target(target_record.object.position)
 		
+		var distance: float = (target_record.object.position - position).length()
 		if distance < view_distance:
-			# intercept target
-			set_nav_target(target_record.object.position)
 			intercept_target(get_nav_target(), target_record.object.velocity)
-			
 		if distance < attack_radius:
 			bite_target(target_record.object)
 	else:

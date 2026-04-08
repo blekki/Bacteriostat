@@ -55,6 +55,8 @@ func _print_bacterium_info(object: Bacterium):
 	object_parameters.text += "state: %s\n" % object.behavior_state.name
 	object_parameters.text += "action: %s\n" % object.priming.get_action()
 	object_parameters.text += "priming: %.1f\n" % object.priming.get_remaining_time()
+	if object is OrangeBacterium:
+		object_parameters.text += "cooldown: %.1f\n" % object.cooldown.get_remaining_time()
 	object_parameters.text += "debug layer: %d\n" % object.debug_layer
 
 ## Parameter is needed to help text redactor understand object

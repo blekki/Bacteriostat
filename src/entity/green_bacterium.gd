@@ -3,6 +3,8 @@ extends Bacterium
 
 var chained_to: Entity = null
 
+@export var dash_attack_radius: int = 120
+
 # <> method section <>
 func _ready():
 	super()
@@ -12,7 +14,10 @@ func _ready():
 	modulate = Color.LAWN_GREEN			# todo: change on texture
 	behavior_state = StateMachine.get_start_green_bacterium_state();
 	
-	# todo: set personal action radii
+	# set personal action radii
+	view_distance = 160
+	luring_radius = 140
+	attack_radius = 45
 
 func _physics_process(delta: float):
 	super(delta)
@@ -84,16 +89,17 @@ func hunting():
 	nearby_objects = get_nearby_objects(view_distance, identification_rules)
 	
 	var prey_record: InfoPack = InfoUtils.get_nearest_prey(nearby_objects)
-	if prey_record.is_not_empty():
-		_choice_hunting_action(prey_record)
+	_choice_hunting_action(prey_record)
 
 ## Decide what kind action must be used if nearby environment full of objects.
-func _choice_hunting_action(prey_info: InfoPack):
-	var distance: float = (prey_info.object.position - position).length()
-	if distance < dash_attack_radius:
-		intercept_target(prey_info.object.position, prey_info.object.velocity)
-	elif distance < luring_radius:
-		var is_nearby_lure: bool = InfoUtils.is_lure_nearby(nearby_objects)
-		if (is_nearby_lure == false):
-			const LURE_IMPULSE: float = 100
-			throw_lure(LURE_IMPULSE)
+func _choice_hunting_action(prey_record: InfoPack):
+	if prey_record.is_not_empty():
+		var distance: float = (prey_record.object.position - position).length()
+		if distance < dash_attack_radius:
+			set_nav_target(prey_record.object.position)
+			intercept_target(get_nav_target(), prey_record.object.velocity)
+		elif distance < luring_radius:
+			var is_nearby_lure: bool = InfoUtils.is_lure_nearby(nearby_objects)
+			if (is_nearby_lure == false):
+				const LURE_IMPULSE: float = 100
+				throw_lure(LURE_IMPULSE)
