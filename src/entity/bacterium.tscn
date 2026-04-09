@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bo1y1apxgdai4" path="res://src/entity/entity.tscn" id="1_do35s"]
 [ext_resource type="Script" uid="uid://ccwjhxdl3dfin" path="res://src/entity/bacterium.gd" id="2_wpy8d"]
-[ext_resource type="Script" uid="uid://d0q81esm3nag4" path="res://src/bacterium/action_priming.gd" id="3_0p2cm"]
+[ext_resource type="Script" uid="uid://d0q81esm3nag4" path="res://src/bacterium/smart_timer.gd" id="3_0p2cm"]
 
 [node name="Bacterium" unique_id=1553382449 instance=ExtResource("1_do35s")]
 script = ExtResource("2_wpy8d")
@@ -11,10 +11,9 @@ max_speed = 600.0
 FOV = 1.0471975511965976
 energy_level_death = null
 energy_level_luring = 35
-energy_level_shading = 85
+energy_level_shedding = 85
 energy_level_fission = 95
 attack_radius = 45
-dash_attack_radius = 120
 luring_radius = 140
 view_distance = 160
 

@@ -3,8 +3,8 @@ extends Bacterium
 
 var is_power_dash_activated: bool = false
 var power_dash_acceleration: float = 3000
-@onready var timer = $SmartTimer
 var is_power_dash_active = false
+@onready var dash_timer = $DashTimer
 
 # <> method section <>
 func _ready():
@@ -45,16 +45,16 @@ func hunting():
 
 func dash_target(target: Entity):
 	if is_power_dash_active == true:
-		timer.try_process(2, "POWER_DASH")
+		dash_timer.try_process(2, "POWER_DASH")
 		intercept_target(target.position, target.velocity)
 	else:
-		timer.try_process(1.2, "COOLDOWN")
+		dash_timer.try_process(1.2, "COOLDOWN")
 		reach_target(target.position)
 
 ## Decide what kind action must be used if nearby environment full of objects.
 func _choice_hunting_action(prey_record: InfoPack):
 	
-	if timer.is_stopped():
+	if dash_timer.is_stopped():
 		if is_power_dash_active:
 			is_power_dash_active = false
 		else:

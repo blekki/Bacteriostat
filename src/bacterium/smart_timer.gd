@@ -1,4 +1,4 @@
-class_name ActionPriming
+class_name SmartTimer
 extends Timer
 
 const _FINISHED: bool = true
