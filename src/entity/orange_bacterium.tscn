@@ -8,7 +8,7 @@
 script = ExtResource("2_11rw8")
 energy_level_shedding = 85
 
-[node name="ActionCooldown" type="Timer" parent="." index="6" unique_id=1868866381]
+[node name="SmartTimer" type="Timer" parent="." index="6" unique_id=1868866381]
 wait_time = 0.1
 one_shot = true
 autostart = true
