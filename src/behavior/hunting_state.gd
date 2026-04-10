@@ -44,3 +44,5 @@ static func _orange_bacterium_conditions(bacterium: OrangeBacterium):
 	if bacterium.is_ready_to_fission() == true:
 		bacterium.change_state_to(StateMachine.fission_state)
 	
+	if Singlton.is_night():
+		bacterium.change_state_to(StateMachine.hiding_state)

@@ -45,6 +45,10 @@ func _collision_fluence():
 func get_obj_name() -> String:
 	return obj_name
 
+## Need to safety object identification. Can be override to make complex identification.
+func can_be_identified() -> bool:
+	return true
+
 # <> Health methods <>
 ## Change energy value
 func consume_energy(delta_energy: int):

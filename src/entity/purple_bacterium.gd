@@ -20,6 +20,7 @@ func _physics_process(delta: float):
 
 # <> behaviour dependencies <>
 func swim_away(enemy_detection_radius: float):
+	# scan environment on predators
 	var identification_rules = func(object: Entity) -> Enums.RelationshipTypes:
 		if Singlton.is_day():
 			if object is OrangeBacterium:

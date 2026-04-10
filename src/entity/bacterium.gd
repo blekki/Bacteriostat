@@ -159,8 +159,9 @@ func scan_environment(area_radius: float) -> Array[Entity]:
 		var result = space_state.intersect_ray(query)
 		if result:
 			var collider = result.collider
-			if collider is CharacterBody2D:
-				objects_in_area.push_back(collider)
+			if collider is Entity:
+				if collider.can_be_identified():
+					objects_in_area.push_back(collider)
 		
 		# save line parameters to debug printing
 		Debug.add_line(

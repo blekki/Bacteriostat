@@ -8,6 +8,7 @@ static var cell_finding_state = CellFindingState.new()
 static var vampirism_state = VampirismState.new()
 static var fission_state = FissionState.new()
 static var swim_away_state = SwimAwayState.new()
+static var hiding_state = HidingState.new()
 
 static func get_start_green_bacterium_state() -> RefCounted:	# todo: set normal returning type
 	return photosynthesizing_state

@@ -28,13 +28,52 @@ func _ready():
 func _physics_process(delta: float):
 	super(delta)
 
+## Override method to realize stealth mode.
+func can_be_identified() -> bool:
+	return not is_stealth_mode_on
+
 func _dash(_acceleration: float):
 	if not dash_timer.is_stopped():
 		super(power_dash_acceleration)
 	else:
 		super(acceleration)	# default dash
 
+func stealth_mode_on():
+	is_stealth_mode_on = true
+	modulate.a = 0.2
+
+func stealth_mode_off():
+	is_stealth_mode_on = false
+	modulate.a = 1.0
+
 # <> behavior methods section <>
+func hiding():
+	stealth_mode_on()
+	
+	# rules how to identified object
+	var identification_rules = func(object: Entity) -> Enums.RelationshipTypes:
+		if (object is PurpleBacterium) or (object is GreenBacterium):
+			return Enums.RelationshipTypes.PREDATOR
+		return Enums.RelationshipTypes.NONE # default
+	
+	# get the all nearby objects in the area
+	nearby_objects = get_nearby_objects(view_distance, identification_rules)
+	
+	# choice action
+	var predator_record: InfoPack = InfoUtils.get_nearest_predator(nearby_objects)
+	_choice_hiding_action(predator_record)
+
+func _choice_hiding_action(predator_record: InfoPack):
+	if predator_record.is_not_empty():
+		var predator: Entity = predator_record.object
+		
+		var direction = predator.position - self.position
+		var distance = direction.length()
+		if distance < luring_radius:
+			const THROWING_FORCE: float = 260
+			throw_lure_to(direction, THROWING_FORCE)
+	# else: just wait
+
 func hunting():
 	# rules how to identified object
 	var identification_rules = func(object: Entity) -> Enums.RelationshipTypes:
@@ -63,5 +102,6 @@ func _choice_hunting_action(prey_record: InfoPack):
 	else:
 		patrol()	# default
 
+# <> signals section <>
 func _on_dash_timer_timeout():
 	cooldown_timer.start(4)
