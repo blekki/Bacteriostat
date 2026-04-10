@@ -60,18 +60,14 @@ func _init_collision_walls():	# fast way make dynamic walls
 	right_border.position = Vector2(MAP_WIDTH, MAP_HEIGHT / 2)
 	right_border.scale = Vector2(NO_SCALE, UPSCALE)
 
-func _on_energy_shed(position: Vector2, impulse: float, energy: int):	# create energy_cell
+func _on_energy_shed(position: Vector2, impulse: Vector2, energy: int):	# create energy_cell
 	var cell: EnergyCell = energy_cell_instance.instantiate()
 	cell.energy = energy
-	
-	# add impulse to the cell
-	var direction = Vector2.RIGHT.rotated(randf_range(0, PI * 2))
-	var new_velocity = direction * impulse
-	cell.velocity = new_velocity
+	cell.velocity = impulse
 	
 	# set start position
-	const OFFSET: int = 20
-	cell.position = position + direction * OFFSET	# tiny offset for solve collision problems
+	const OFFSET: int = 30
+	cell.position = position + impulse.normalized() * OFFSET	# tiny offset to solve collision problems
 	
 	# save energy_cell
 	energy_cells.push_back(cell)

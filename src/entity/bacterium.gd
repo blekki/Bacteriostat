@@ -238,16 +238,23 @@ func swim_away(_enemy_detection_radius: float):
 		intercept_target(get_nav_target(), predator_record.object.velocity * -1)
 
 ## Generate lure [EnergyCell] with a custom impulse
-func throw_lure(impulse: float):
+func throw_lure_to(direction: Vector2, throw_power: float):
 	if not is_ready_to_luring():
 		return	# not enough energy
 	
 	if priming.try_process(1.4, "THROW LURE") == false:
 		return
 	
-	const MIN_LURE_ENERGY:  int = 10;
-	const MAX_LURE_ENERGY:  int = 20;
+	# impulse
+	var accuracy_offset = _random.randf_range(-PI / 4.0, PI / 4.0)
+	var impulse = direction.rotated(accuracy_offset).normalized() * throw_power
+	
+	# energy
+	const MIN_LURE_ENERGY:  int = 8;
+	const MAX_LURE_ENERGY:  int = 12;
 	var energy_value: int = _random.randi_range(MIN_LURE_ENERGY, MAX_LURE_ENERGY)
-	var cell_energy: int = self.can_consume_energy(energy_value)
-	self.spend_energy(cell_energy)
+	var cell_energy: int = can_spend_energy(energy_value)
+	spend_energy(cell_energy)
+	
+	# create lure
 	Singlton.energy_shed.emit(self.global_position, impulse, cell_energy)

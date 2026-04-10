@@ -31,7 +31,7 @@ func photosynthesizing():
 	var value = can_consume_energy(PHOTOSYNTHES_ENERGY)
 	consume_energy(value)
 
-## Generate [EnergyCell] with the fixed impulse
+## Generate [EnergyCell] with the fixed impulse and throw in random direction
 func shedding():
 	if not is_ready_to_shedding():
 		return
@@ -39,12 +39,18 @@ func shedding():
 	if priming.try_process(2, "SHEDDING") == false:
 		return
 	
-	const MIN_CELL_ENERGY: int = 15; const MAX_CELL_ENERGY:  int = 20
+	# impulse
 	const MIN_IMPULSE: int = 40;     const MAX_IMPULSE: int = 60
+	var power: float = _random.randi_range(MIN_IMPULSE, MAX_IMPULSE)
+	var impulse: Vector2 = Vector2(power, 0.0).rotated(_random.randf_range(-PI, PI))
+	
+	# energy
+	const MIN_CELL_ENERGY: int = 15; const MAX_CELL_ENERGY:  int = 20
 	var energy_value: int = _random.randi_range(MIN_CELL_ENERGY, MAX_CELL_ENERGY)
-	var impulse: float    = _random.randi_range(MIN_IMPULSE, MAX_IMPULSE)
 	var cell_energy: int  = can_spend_energy(energy_value)
 	spend_energy(cell_energy)
+	
+	# apply parameters and create new energy_cell
 	Singlton.energy_shed.emit(self.global_position, impulse, cell_energy)
 
 func vampirism(prey: Bacterium):
@@ -94,12 +100,16 @@ func hunting():
 ## Decide what kind action must be used if nearby environment full of objects.
 func _choice_hunting_action(prey_record: InfoPack):
 	if prey_record.is_not_empty():
-		var distance: float = (prey_record.object.position - position).length()
+		var prey: Entity = prey_record.object
+		
+		var direction_to_prey: Vector2 = prey.position - self.position
+		var distance: float = direction_to_prey.length()
+		
 		if distance < dash_attack_radius:
 			set_nav_target(prey_record.object.position)
 			intercept_target(get_nav_target(), prey_record.object.velocity)
 		elif distance < luring_radius:
 			var is_nearby_lure: bool = InfoUtils.is_lure_nearby(nearby_objects)
-			if (is_nearby_lure == false):
-				const LURE_IMPULSE: float = 100
-				throw_lure(LURE_IMPULSE)
+			if is_nearby_lure == false:
+				const THROWING_FORCE: float = 80
+				throw_lure_to(direction_to_prey, THROWING_FORCE)

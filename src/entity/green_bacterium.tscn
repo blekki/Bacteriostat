@@ -5,4 +5,4 @@
 
 [node name="GreenBacterium" unique_id=1553382449 instance=ExtResource("1_m1jx1")]
 script = ExtResource("2_wljwo")
-energy_level_shedding = 85
+dash_attack_radius = 120
