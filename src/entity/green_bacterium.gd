@@ -77,7 +77,7 @@ func vampirism(prey: Bacterium):
 		self.consume_energy(can_be_consumed)
 		
 		# check did the prey die
-		if prey.energy == 0:
+		if prey.energy <= 0:
 			chained_to = null
 
 func hunting():
