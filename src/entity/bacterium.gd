@@ -22,7 +22,7 @@ extends Entity
 var bacterium_name: String = "Bacterium"
 var behavior_state: RefCounted = StateMachine.waiting_state	# default
 var nearby_objects: Array[InfoPack] = []	# save identified nearby objects [object, relationship]
-@onready var priming = $ActionPriming	# todo: make the same to nav_agent
+@onready var priming: ActionPriming = $ActionPriming	# todo: make the same to nav_agent
 
 # technical
 var _physics_frame: int = 0

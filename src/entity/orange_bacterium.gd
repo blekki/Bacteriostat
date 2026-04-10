@@ -1,10 +1,12 @@
 class_name OrangeBacterium
 extends Bacterium
 
-var is_power_dash_activated: bool = false
-var power_dash_acceleration: float = 3000
-var is_power_dash_active = false
-@onready var dash_timer = $DashTimer
+@export var power_dash_acceleration: float = 30
+@export var warning_radius: int = 95
+@export var is_stealth_mode_on: bool = false
+
+@onready var dash_timer: Timer = $DashTimer
+@onready var cooldown_timer: Timer = $CooldownTimer
 
 # <> method section <>
 func _ready():
@@ -17,18 +19,21 @@ func _ready():
 	
 	# set personal action radii
 	view_distance = 160
-	luring_radius = 140
+	luring_radius = 150
 	attack_radius = 45
+	
+	acceleration = 3
+	dash_timer.timeout.connect(_on_dash_timer_timeout)
 
 func _physics_process(delta: float):
 	super(delta)
 
 func _dash(_acceleration: float):
-	if is_power_dash_activated == true:
+	if not dash_timer.is_stopped():
 		super(power_dash_acceleration)
 	else:
 		super(acceleration)	# default dash
-	
+
 # <> behavior methods section <>
 func hunting():
 	# rules how to identified object
@@ -43,30 +48,20 @@ func hunting():
 	var prey_record: InfoPack = InfoUtils.get_nearest_prey(nearby_objects)
 	_choice_hunting_action(prey_record)
 
-func dash_target(target: Entity):
-	if is_power_dash_active == true:
-		dash_timer.try_process(2, "POWER_DASH")
-		intercept_target(target.position, target.velocity)
-	else:
-		dash_timer.try_process(1.2, "COOLDOWN")
-		reach_target(target.position)
-
 ## Decide what kind action must be used if nearby environment full of objects.
 func _choice_hunting_action(prey_record: InfoPack):
-	
-	if dash_timer.is_stopped():
-		if is_power_dash_active:
-			is_power_dash_active = false
-		else:
-			is_power_dash_active = true
-	
+	# choice action
 	if prey_record.is_not_empty():
 		set_nav_target(prey_record.object.position)
-		
 		var distance: float = (prey_record.object.position - self.position).length()
 		if distance < attack_radius:
 			bite_target(prey_record.object)
 		if distance < view_distance:
-			dash_target(prey_record.object)
+			if cooldown_timer.is_stopped():	# activate power-dash if cooldown timeout
+				dash_timer.start(3)
+			intercept_target(get_nav_target(), prey_record.object.velocity)
 	else:
 		patrol()	# default
+
+func _on_dash_timer_timeout():
+	cooldown_timer.start(4)

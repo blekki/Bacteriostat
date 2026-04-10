@@ -2,14 +2,17 @@
 
 [ext_resource type="PackedScene" uid="uid://m5iibvcvh23p" path="res://src/entity/bacterium.tscn" id="1_t0hj7"]
 [ext_resource type="Script" uid="uid://b2ir52vl5gir6" path="res://src/entity/orange_bacterium.gd" id="2_11rw8"]
-[ext_resource type="Script" uid="uid://d0q81esm3nag4" path="res://src/bacterium/smart_timer.gd" id="3_xjsjs"]
 
 [node name="Bacterium" unique_id=1553382449 instance=ExtResource("1_t0hj7")]
 script = ExtResource("2_11rw8")
+power_dash_acceleration = 30.0
+warning_radius = 95
+is_stealth_mode_on = false
 
-[node name="DashTimer" type="Timer" parent="." index="6" unique_id=1868866381]
-wait_time = 0.1
+[node name="DashTimer" type="Timer" parent="." index="6" unique_id=632611988]
 one_shot = true
 autostart = true
-script = ExtResource("3_xjsjs")
-metadata/_custom_type_script = "uid://d0q81esm3nag4"
+
+[node name="CooldownTimer" type="Timer" parent="." index="7" unique_id=1318684438]
+one_shot = true
+autostart = true
