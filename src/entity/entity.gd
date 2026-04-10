@@ -6,10 +6,10 @@ extends CharacterBody2D
 const PASSIVE_DECELERATION: float = 2.0
 const COLLISION_DEFLECTION: float = 5.0
 
-@export var obj_name = "Raw Entity"
-@export var energy = 50	# equivalent to health
-@export var min_energy = 0
-@export var max_energy = 100
+@export var obj_name: String = "Raw Entity"
+@export var energy: int = 50	# equivalent to health
+@export var min_energy: int = 0
+@export var max_energy: int = 100
 
 # technical var's
 var debug_layer: int = -1	# [-1] is as "nothing" code
