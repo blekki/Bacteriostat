@@ -47,6 +47,25 @@ func stealth_mode_off():
 	modulate.a = 1.0
 
 # <> behavior methods section <>
+## Analyse environment for predators and check are they so close.
+func should_swim_away() -> bool:
+	var predator_record = InfoUtils.get_nearest_predator(nearby_objects)
+	if predator_record.is_not_empty():
+		var distance = (predator_record.object.position - self.position).length()
+		if distance < warning_radius:
+			return true
+	return false
+
+func swim_away(enemy_detection_radius: float):
+	# scan environment on predators
+	var identification_rules = func(object: Entity) -> Enums.RelationshipTypes:
+		if (object is PurpleBacterium) or (object is GreenBacterium):
+			return Enums.RelationshipTypes.PREDATOR
+		return Enums.RelationshipTypes.NONE	# default
+	
+	nearby_objects = get_nearby_objects(enemy_detection_radius, identification_rules)
+	super(enemy_detection_radius)	# default swim away instuction
+
 func hiding():
 	stealth_mode_on()
 	
