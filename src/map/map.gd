@@ -13,7 +13,10 @@ var collision_borders: Array[CollisionShape2D] = []
 var bacteria: Array[Bacterium] = []
 var energy_cells: Array[EnergyCell] = []
 
+var _selected_object: CharacterBody2D = null
+
 func _ready():
+	Singlton.click_on_object.connect(_on_click_ob_object)
 	Singlton.energy_shed.connect(_on_energy_shed)
 	Singlton.fission.connect(_on_fission)
 	Singlton.remove_object.connect(_on_remove_object)
@@ -31,13 +34,26 @@ func _ready():
 	
 	_start_day()
 
-func _process(delta: float):
-	if Singlton.time_season == Enums.TimeSeasons.DAY:
+func _physics_process(_delta: float):
+	move_selected_object()
+
+func _process(_delta: float):
+	if Singlton.is_day():
 		Singlton.season_continues = $Day.time_left
 		Singlton.season_duration = $Day.wait_time
-	else: # Singlton.time_season == Enums.TimeSeasons.NIGHT:
+	else:
 		Singlton.season_continues = $Night.time_left
 		Singlton.season_duration = $Night.wait_time
+	
+func _input(event: InputEvent):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed == false:
+			# stop hold object
+			if _selected_object != null:
+				# shoot object in mouse direction after dragging
+				const IMPULSE_MULTIPLIER: int = 10
+				_selected_object.velocity = (get_local_mouse_position() - _selected_object.position) * IMPULSE_MULTIPLIER
+			_selected_object = null
 
 func _init_collision_walls():	# fast way make dynamic walls
 	const UPSCALE = 1000
@@ -59,6 +75,17 @@ func _init_collision_walls():	# fast way make dynamic walls
 	var right_border = $Collision/RightSide
 	right_border.position = Vector2(MAP_WIDTH, MAP_HEIGHT / 2)
 	right_border.scale = Vector2(NO_SCALE, UPSCALE)
+
+func move_selected_object():
+	if _selected_object != null:
+		const LERP_WEIGH: float = 0.2
+		var new_position: Vector2 = lerp(_selected_object.position, get_local_mouse_position(), LERP_WEIGH)
+		_selected_object.position = new_position
+
+# <> signals section <>
+func _on_click_ob_object(object: Entity):
+	object.velocity = Vector2.ZERO
+	_selected_object = object
 
 func _on_energy_shed(position: Vector2, impulse: Vector2, energy: int):	# create energy_cell
 	var cell: EnergyCell = energy_cell_instance.instantiate()
@@ -91,6 +118,9 @@ func _on_fission(parent: Bacterium):
 	child.position = parent.global_position + direction * OFFSET
 
 func _on_remove_object(object: Entity):
+	if object == _selected_object:
+		_selected_object = null
+	
 	if object is Bacterium:
 		bacteria.erase(object)
 	elif object is EnergyCell:

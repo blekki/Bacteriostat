@@ -20,10 +20,6 @@ func _init():
 	debug_layer = Debug.get_new_layer()
 
 func _physics_process(delta: float):
-	if _is_selected_with_mouse == true:
-		velocity = Vector2.ZERO
-		global_position = lerp(global_position, get_global_mouse_position(), 10 * delta)
-	
 	_deceleration()
 	_collision_fluence()
 	move_and_slide()
@@ -78,11 +74,6 @@ func death():
 # <> reaction on signals section <>
 func _on_clickable_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int):
 	if event is InputEventMouseButton:
-		# print info about the obj
+		# signal that currect object was clicked
 		if event.pressed:
 			Singlton.click_on_object.emit(self)
-		
-		# move the obj
-		if Input.is_action_pressed("move_object"):
-			_is_selected_with_mouse = true
-		else: _is_selected_with_mouse = false
