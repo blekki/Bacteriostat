@@ -14,11 +14,11 @@ static func try_update_behavior(bacterium: Bacterium):
 	elif bacterium is PurpleBacterium:
 		_purple_bacterium_conditions(bacterium)
 	elif bacterium is OrangeBacterium:
-		pass	# todo: add conditions
+		_orange_bacterium_conditions(bacterium)
 
 static func _green_bacterium_conditions(bacterium: GreenBacterium):
 	if Singlton.is_day():
-			bacterium.change_state_to(StateMachine.photosynthesizing_state)
+		bacterium.change_state_to(StateMachine.photosynthesizing_state)
 	
 	# vampirist section
 	var prey_record: InfoPack = InfoUtils.get_nearest_prey(bacterium.nearby_objects)
@@ -39,3 +39,8 @@ static func _purple_bacterium_conditions(bacterium: PurpleBacterium):
 	var is_predator_nearby: bool = InfoUtils.is_predator_nearby(bacterium.nearby_objects)
 	if is_predator_nearby == true:
 		bacterium.change_state_to(StateMachine.swim_away_state)
+
+static func _orange_bacterium_conditions(bacterium: OrangeBacterium):
+	if bacterium.is_ready_to_fission() == true:
+		bacterium.change_state_to(StateMachine.fission_state)
+	
