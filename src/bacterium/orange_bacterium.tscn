@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dmr8ofcqw1456"]
 
-[ext_resource type="PackedScene" uid="uid://m5iibvcvh23p" path="res://src/entity/bacterium.tscn" id="1_t0hj7"]
-[ext_resource type="Script" uid="uid://b2ir52vl5gir6" path="res://src/entity/orange_bacterium.gd" id="2_11rw8"]
+[ext_resource type="PackedScene" uid="uid://m5iibvcvh23p" path="res://src/bacterium/bacterium.tscn" id="1_t0hj7"]
+[ext_resource type="Script" uid="uid://b2ir52vl5gir6" path="res://src/bacterium/orange_bacterium.gd" id="2_11rw8"]
 
 [node name="Bacterium" unique_id=1553382449 instance=ExtResource("1_t0hj7")]
 script = ExtResource("2_11rw8")

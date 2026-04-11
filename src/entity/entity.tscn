@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bo1y1apxgdai4"]
 
-[ext_resource type="Script" uid="uid://brk38vor22qpq" path="res://src/energy_cell/energy_cell_old.gd" id="1_4sea2"]
+[ext_resource type="Script" uid="uid://dwxwe6rtv1hsb" path="res://src/entity/entity.gd" id="1_jrrsu"]
 [ext_resource type="Texture2D" uid="uid://dx5eawmxmsgpv" path="res://assets/Ellipse 1.svg" id="2_jsgn5"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_v5jjv"]
@@ -14,7 +14,7 @@ z_index = -1
 scale = Vector2(0.5, 0.5)
 collision_layer = 4
 collision_mask = 5
-script = ExtResource("1_4sea2")
+script = ExtResource("1_jrrsu")
 metadata/_edit_group_ = true
 
 [node name="Texture" type="Sprite2D" parent="." unique_id=314057492]
