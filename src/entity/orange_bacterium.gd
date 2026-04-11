@@ -49,7 +49,7 @@ func stealth_mode_off():
 # <> behavior methods section <>
 ## Analyse environment for predators and check are they so close.
 func should_swim_away() -> bool:
-	var predator_record = InfoUtils.get_nearest_predator(nearby_objects)
+	var predator_record = InfoUtils.get_nearest_predator(self.position, nearby_objects)
 	if predator_record.is_not_empty():
 		var distance = (predator_record.object.position - self.position).length()
 		if distance < warning_radius:
@@ -79,7 +79,7 @@ func hiding():
 	nearby_objects = get_nearby_objects(view_distance, identification_rules)
 	
 	# choice action
-	var predator_record: InfoPack = InfoUtils.get_nearest_predator(nearby_objects)
+	var predator_record: InfoPack = InfoUtils.get_nearest_predator(self.position, nearby_objects)
 	_choice_hiding_action(predator_record)
 
 func _choice_hiding_action(predator_record: InfoPack):
@@ -103,7 +103,7 @@ func hunting():
 	# get the all nearby objects in the area
 	nearby_objects = get_nearby_objects(view_distance, identification_rules)
 	
-	var prey_record: InfoPack = InfoUtils.get_nearest_prey(nearby_objects)
+	var prey_record: InfoPack = InfoUtils.get_nearest_prey(self.position, nearby_objects)
 	_choice_hunting_action(prey_record)
 
 ## Decide what kind action must be used if nearby environment full of objects.

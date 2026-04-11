@@ -94,7 +94,7 @@ func hunting():
 	# get the all nearby objects in the area
 	nearby_objects = get_nearby_objects(view_distance, identification_rules)
 	
-	var prey_record: InfoPack = InfoUtils.get_nearest_prey(nearby_objects)
+	var prey_record: InfoPack = InfoUtils.get_nearest_prey(self.position, nearby_objects)
 	_choice_hunting_action(prey_record)
 
 ## Decide what kind action must be used if nearby environment full of objects.

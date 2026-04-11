@@ -46,7 +46,7 @@ func cell_finding():
 	nearby_objects = get_nearby_objects(view_distance, identification_rules)
 	
 	# find a nearest food
-	var food_record: InfoPack = InfoUtils.get_nearest_energy_cell(nearby_objects)
+	var food_record: InfoPack = InfoUtils.get_nearest_energy_cell(self.position, nearby_objects)
 	_choice_hunting_action(food_record)
 
 func hunting():
@@ -62,7 +62,7 @@ func hunting():
 	nearby_objects = get_nearby_objects(view_distance, identification_rules)
 	
 	## find a nearest food
-	var prey_record: InfoPack = InfoUtils.get_nearest_prey(nearby_objects)
+	var prey_record: InfoPack = InfoUtils.get_nearest_prey(self.position, nearby_objects)
 	_choice_hunting_action(prey_record)
 
 func _choice_hunting_action(target_record: InfoPack):

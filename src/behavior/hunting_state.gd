@@ -21,7 +21,7 @@ static func _green_bacterium_conditions(bacterium: GreenBacterium):
 		bacterium.change_state_to(StateMachine.photosynthesizing_state)
 	
 	# vampirist section
-	var prey_record: InfoPack = InfoUtils.get_nearest_prey(bacterium.nearby_objects)
+	var prey_record: InfoPack = InfoUtils.get_nearest_prey(bacterium.position, bacterium.nearby_objects)
 	if prey_record.is_not_empty():
 		var distance_to_prey = (prey_record.object.position - bacterium.position).length()
 		if distance_to_prey < bacterium.attack_radius:

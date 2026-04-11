@@ -226,7 +226,7 @@ func hunting():
 	pass
 
 func swim_away(_enemy_detection_radius: float):
-	var predator_record: InfoPack = InfoUtils.get_nearest_predator(nearby_objects)
+	var predator_record: InfoPack = InfoUtils.get_nearest_predator(self.position, nearby_objects)
 	if predator_record.is_not_empty():
 		var predator = predator_record.object
 		
