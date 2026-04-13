@@ -4,7 +4,6 @@ extends CharacterBody2D
 
 # > pixel/physic_frame
 const PASSIVE_DECELERATION: float = 2.0
-const COLLISION_DEFLECTION: float = 5.0
 
 @export var obj_name: String = "Raw Entity"
 @export var energy: int = 50	# equivalent to health

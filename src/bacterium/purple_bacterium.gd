@@ -66,13 +66,14 @@ func hunting():
 	_choice_hunting_action(prey_record)
 
 func _choice_hunting_action(target_record: InfoPack):
+	# choice action
 	if target_record.is_not_empty():
-		set_nav_target(target_record.object.position)
+		set_nav_target(target_record.object.position)	# save last target pos
 		
-		var distance: float = (target_record.object.position - position).length()
-		if distance < view_distance:
-			intercept_target(get_nav_target(), target_record.object.velocity)
+		var distance: float = (target_record.object.position - self.position).length()
 		if distance < attack_radius:
 			bite_target(target_record.object)
+		elif distance < view_distance:
+			intercept_target(get_nav_target(), target_record.object.velocity)
 	else:
 		patrol() # continue find target

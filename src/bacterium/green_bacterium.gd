@@ -85,9 +85,8 @@ func hunting():
 	# rules how to identified object
 	var identification_rules = func(object: Entity) -> Enums.RelationshipTypes:
 		if object is Bacterium:
-			if object is GreenBacterium:
-				return Enums.RelationshipTypes.NEUTRAL
-			else: return Enums.RelationshipTypes.PREY	# anyway other bacteria is prey
+			if not object is GreenBacterium:
+				return Enums.RelationshipTypes.PREY
 		elif object is EnergyCell:
 			return Enums.RelationshipTypes.LURE	# green bacteria can't eat energy cells
 		return Enums.RelationshipTypes.NONE # default

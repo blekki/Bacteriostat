@@ -110,11 +110,12 @@ func hunting():
 func _choice_hunting_action(prey_record: InfoPack):
 	# choice action
 	if prey_record.is_not_empty():
-		set_nav_target(prey_record.object.position)
+		set_nav_target(prey_record.object.position)	# save last target pos
+		
 		var distance: float = (prey_record.object.position - self.position).length()
 		if distance < attack_radius:
 			bite_target(prey_record.object)
-		if distance < view_distance:
+		elif distance < view_distance:
 			if cooldown_timer.is_stopped():	# activate power-dash if cooldown timeout
 				dash_timer.start(3)
 			intercept_target(get_nav_target(), prey_record.object.velocity)

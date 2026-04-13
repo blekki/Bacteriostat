@@ -8,10 +8,10 @@ const orange_bacteria_instance = preload("res://src/bacterium/orange_bacterium.t
 const purple_bacteria_instance = preload("res://src/bacterium/purple_bacterium.tscn")
 const energy_cell_instance     = preload("res://src/energy_cell/energy_cell.tscn")
 
-var collision_borders: Array[CollisionShape2D] = []
 var bacteria: Array[Bacterium] = []
 var energy_cells: Array[EnergyCell] = []
 
+# <> technical
 var _selected_object: CharacterBody2D = null
 
 func _ready():

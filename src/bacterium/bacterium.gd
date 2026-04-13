@@ -68,7 +68,7 @@ func is_ready_to_fission() -> bool:
 func is_target_reached() -> bool:
 	return $NavigationAgent.is_navigation_finished()
 
-func set_nav_target(target_pos: Vector2):	# todo: rename into "_set_nav_target"
+func set_nav_target(target_pos: Vector2):
 	$NavigationAgent.target_position = target_pos
 
 func get_nav_target() -> Vector2:
