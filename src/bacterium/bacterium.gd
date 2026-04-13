@@ -28,14 +28,10 @@ var nearby_objects: Array[InfoPack] = []	# save identified nearby objects [objec
 var _physics_frame: int = 0
 
 # <> Methods section <>
-func setup(navigation_field: Vector2):
-	_navigation_field = navigation_field
-
 func _ready():
 	super()
 	max_energy = 100
 	energy = 90
-	position = _generate_smart_point()
 
 func _physics_process(delta: float) -> void:
 	behavior_state.do_task(self)

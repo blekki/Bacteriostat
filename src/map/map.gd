@@ -3,11 +3,10 @@ extends Node2D
 
 const MAP_WIDTH = 1080		# in pixels
 const MAP_HEIGHT = 720
-const BACTERIAS_COUNT = 1
-const green_bacteria_instance = preload("res://src/bacterium/green_bacterium.tscn")
+const green_bacteria_instance  = preload("res://src/bacterium/green_bacterium.tscn")
 const orange_bacteria_instance = preload("res://src/bacterium/orange_bacterium.tscn")
 const purple_bacteria_instance = preload("res://src/bacterium/purple_bacterium.tscn")
-const energy_cell_instance = preload("res://src/energy_cell/energy_cell.tscn")
+const energy_cell_instance     = preload("res://src/energy_cell/energy_cell.tscn")
 
 var collision_borders: Array[CollisionShape2D] = []
 var bacteria: Array[Bacterium] = []
@@ -24,6 +23,7 @@ func _ready():
 	await NavigationServer2D.map_changed
 	_init_collision_walls()
 	create_bacteria(100)
+	create_energy_cell(100)
 	_start_day()
 	
 
@@ -49,27 +49,6 @@ func _input(event: InputEvent):
 				_selected_object.velocity = (get_local_mouse_position() - _selected_object.position) * IMPULSE_MULTIPLIER
 			_selected_object = null
 
-func create_bacteria(count: int):
-	var random = RandomNumberGenerator.new()
-	var map_area = Vector2(MAP_WIDTH, MAP_HEIGHT)
-	
-	for i in range(0, count):
-		# set bacterium type
-		var num = random.randi_range(0, 2)
-		var bacterium: Bacterium
-		match num:
-			0: bacterium = green_bacteria_instance.instantiate()
-			1: bacterium = orange_bacteria_instance.instantiate()
-			2: bacterium = purple_bacteria_instance.instantiate()
-		
-		# set parameters
-		bacterium.setup(map_area)
-		bacterium.velocity = Vector2(100, 34)
-		
-		# save object
-		bacteria.push_back(bacterium)
-		add_child(bacterium)
-
 func _init_collision_walls():	# fast way make dynamic walls
 	const UPSCALE = 1000
 	const NO_SCALE = 1
@@ -90,6 +69,37 @@ func _init_collision_walls():	# fast way make dynamic walls
 	var right_border = $Collision/RightSide
 	right_border.position = Vector2(MAP_WIDTH, MAP_HEIGHT / 2)
 	right_border.scale = Vector2(NO_SCALE, UPSCALE)
+
+func create_bacteria(count: int):
+	var random = RandomNumberGenerator.new()
+	var map_area = Vector2(MAP_WIDTH, MAP_HEIGHT)
+	
+	for i in range(0, count):
+		# set bacterium type
+		var num = random.randi_range(0, 2)
+		var bacterium: Bacterium
+		match num:
+			0: bacterium = green_bacteria_instance.instantiate()
+			1: bacterium = orange_bacteria_instance.instantiate()
+			2: bacterium = purple_bacteria_instance.instantiate()
+		
+		# set parameters
+		bacterium.setup(map_area)
+		
+		# save and add to scene object
+		bacteria.push_back(bacterium)
+		add_child(bacterium)
+
+func create_energy_cell(count: int):
+	var map_area = Vector2(MAP_WIDTH, MAP_HEIGHT)
+	
+	for i in range(0, count):
+		var cell: EnergyCell = energy_cell_instance.instantiate()
+		cell.setup(map_area)
+		
+		# save and add to scene object
+		energy_cells.push_back(cell)
+		add_child(cell)
 
 func move_selected_object():
 	if _selected_object != null:

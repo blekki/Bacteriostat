@@ -17,9 +17,13 @@ var _navigation_field: Vector2 = Vector2.ZERO # area from (xy = 0) to (xy = nav_
 var _random: RandomNumberGenerator = RandomNumberGenerator.new()
 
 # <> Methods section <>
+func setup(navigation_field: Vector2):
+	_navigation_field = navigation_field
+
 func _ready():
-	debug_layer = Debug.get_new_layer()
 	_random.randomize()
+	debug_layer = Debug.get_new_layer()
+	position = _generate_smart_point()
 
 func _physics_process(delta: float):
 	_deceleration()
