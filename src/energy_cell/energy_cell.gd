@@ -4,9 +4,10 @@ extends Entity
 var cell_name: String = "Energy Cell"
 
 # <> Methods section <>
-func _init():
-	max_energy = 6000
-	scale *= 0.4
+func _ready():
+	super()
+	max_energy = 25
+	energy = _random.randi_range(5, 12)
 	# todo: set texture
 
 func _physics_process(delta: float) -> void:

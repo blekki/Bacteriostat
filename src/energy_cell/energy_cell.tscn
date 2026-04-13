@@ -1,7 +1,11 @@
 [gd_scene format=3 uid="uid://c47vlux1sva1s"]
 
 [ext_resource type="PackedScene" uid="uid://bo1y1apxgdai4" path="res://src/entity/entity.tscn" id="1_3a1qc"]
-[ext_resource type="Script" uid="uid://cbxsc2mprx64n" path="res://src/energy_cell/energy_cell.gd" id="2_bjre1"]
+[ext_resource type="Script" uid="uid://bs6qv8dqtkfbu" path="res://src/energy_cell/energy_cell.gd" id="2_bjre1"]
 
-[node name="EnergyCell2" unique_id=1553382449 instance=ExtResource("1_3a1qc")]
+[node name="EnergyCell" unique_id=1553382449 instance=ExtResource("1_3a1qc")]
+scale = Vector2(0.2, 0.2)
 script = ExtResource("2_bjre1")
+
+[node name="Texture" parent="." index="0" unique_id=314057492]
+self_modulate = Color(0.37981972, 0.8739389, 0.3236056, 1)

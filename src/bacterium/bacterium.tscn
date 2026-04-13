@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://d0q81esm3nag4" path="res://src/bacterium/action_priming.gd" id="3_0p2cm"]
 
 [node name="Bacterium" unique_id=1553382449 instance=ExtResource("1_do35s")]
+scale = Vector2(0.5, 0.5)
 script = ExtResource("2_wpy8d")
 acceleration = 10.0
 max_speed = 600.0
