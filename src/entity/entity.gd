@@ -44,12 +44,18 @@ func _deceleration():
 		velocity = Vector2.ZERO
 
 func _collision_fluence():
-	var collision: KinematicCollision2D
-	if get_slide_collision_count() > 0:
 		collision = get_slide_collision(0)
-	if collision:
-		# todo: fix unsync fluence
-		velocity += collision.get_normal() * (COLLISION_DEFLECTION)
+		var collision = get_slide_collision(0)
+		var collider  = collision.get_collider()
+		var normal    = collision.get_normal()
+		
+		var v1  = self.velocity
+		var v2  = collision.get_collider_velocity()
+		var dot = (v1 + v2).dot(normal)
+		
+		self.velocity += -dot * normal			# lose momentum
+		if collider is Entity:					# is moveble object
+			collider.velocity += dot * normal	# get momentum
 
 func get_obj_name() -> String:
 	return obj_name
