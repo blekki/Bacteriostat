@@ -16,7 +16,7 @@ var energy_cells: Array[EnergyCell] = []
 var _selected_object: CharacterBody2D = null
 
 func _ready():
-	Singlton.click_on_object.connect(_on_click_ob_object)
+	Singlton.click_on_object.connect(_on_click_on_object)
 	Singlton.energy_shed.connect(_on_energy_shed)
 	Singlton.fission.connect(_on_fission)
 	Singlton.remove_object.connect(_on_remove_object)
@@ -44,7 +44,7 @@ func _process(_delta: float):
 	else:
 		Singlton.season_continues = $Night.time_left
 		Singlton.season_duration = $Night.wait_time
-	
+
 func _input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed == false:
@@ -83,7 +83,7 @@ func move_selected_object():
 		_selected_object.position = new_position
 
 # <> signals section <>
-func _on_click_ob_object(object: Entity):
+func _on_click_on_object(object: Entity):
 	object.velocity = Vector2.ZERO
 	_selected_object = object
 
