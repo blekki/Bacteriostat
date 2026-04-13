@@ -189,6 +189,9 @@ func fission():
 	if priming.try_process(3, "FISSION") == false:
 		return
 	
+	const FISSION_COSTS: int = 30
+	spend_energy(FISSION_COSTS)
+	
 	var child_energy: int = roundi(energy / 2.0)
 	spend_energy(child_energy)
 	Singlton.fission.emit(self)
