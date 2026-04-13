@@ -35,10 +35,10 @@ static func get_nearest_prey(parent_position: Vector2, array: Array[InfoPack]) -
 	return _try_find_nearest_obj(parent_position, array, condition)
 
 ## Find nearest prey but if no one is, return [Enums.ObjectTypes.NONE]
-static func get_nearest_energy_cell(parent_position: Vector2, array: Array[InfoPack]) -> InfoPack:
+static func get_nearest_lure(parent_position: Vector2, array: Array[InfoPack]) -> InfoPack:
 	# prepare condition
 	var condition = func(record: InfoPack):
-		return record.is_cell()
+		return record.is_lure()
 	
 	return _try_find_nearest_obj(parent_position, array, condition)
 
@@ -61,7 +61,7 @@ static func _try_find_obj(array: Array[InfoPack], condition: Callable) -> bool:
 static func is_lure_nearby(array: Array[InfoPack]) -> bool:
 	# prepare condition
 	var condition = func(record: InfoPack):
-		var is_lure = record.is_cell()
+		var is_lure = record.is_lure()
 		return is_lure
 	
 	return _try_find_obj(array, condition)

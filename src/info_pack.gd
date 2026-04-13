@@ -20,8 +20,8 @@ static func get_empty_pack() -> InfoPack:
 func is_not_empty() -> bool:
 	return (object != null)
 
-func is_cell():
-	return relationship == Enums.RelationshipTypes.CELL
+func is_lure():
+	return relationship == Enums.RelationshipTypes.LURE
 
 func is_prey():
 	return relationship == Enums.RelationshipTypes.PREY

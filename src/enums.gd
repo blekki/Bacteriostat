@@ -8,16 +8,14 @@ enum TimeSeasons {
 
 enum RelationshipTypes {
 	NONE,
-	CELL,
+	LURE,
 	PREY,
-	NEUTRAL,
 	PREDATOR,
 }
 
 const DEBUG_RELATIONSHIP_COLORS: Dictionary = {
 	RelationshipTypes.NONE: Color.DIM_GRAY,
-	RelationshipTypes.CELL: Color.YELLOW,
+	RelationshipTypes.LURE: Color.YELLOW,
 	RelationshipTypes.PREY: Color.MEDIUM_SPRING_GREEN,
-	RelationshipTypes.NEUTRAL: Color.LIGHT_GRAY,
 	RelationshipTypes.PREDATOR: Color.RED,
 }

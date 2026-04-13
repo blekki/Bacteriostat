@@ -89,7 +89,7 @@ func hunting():
 				return Enums.RelationshipTypes.NEUTRAL
 			else: return Enums.RelationshipTypes.PREY	# anyway other bacteria is prey
 		elif object is EnergyCell:
-			return Enums.RelationshipTypes.CELL	# green bacteria can't eat energy cells
+			return Enums.RelationshipTypes.LURE	# green bacteria can't eat energy cells
 		return Enums.RelationshipTypes.NONE # default
 	
 	# get the all nearby objects in the area
