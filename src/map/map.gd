@@ -23,16 +23,9 @@ func _ready():
 	
 	await NavigationServer2D.map_changed
 	_init_collision_walls()
-	
-	# generate bacterias
-	for i in range(BACTERIAS_COUNT):
-		var unit: Bacterium = bacteria_instance.instantiate()
-		unit.set_navigation_field(Vector2(MAP_WIDTH, MAP_HEIGHT))	# need for correct positionate
-		unit.energy_shed.connect(_on_bacterium_energy_shed)
-		bacteria.push_back(unit)
-		add_child(bacteria.back())
-	
+	create_bacteria(100)
 	_start_day()
+	
 
 func _physics_process(_delta: float):
 	move_selected_object()
@@ -45,6 +38,7 @@ func _process(_delta: float):
 		Singlton.season_continues = $Night.time_left
 		Singlton.season_duration = $Night.wait_time
 
+# <> other methods <>
 func _input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed == false:
@@ -54,6 +48,27 @@ func _input(event: InputEvent):
 				const IMPULSE_MULTIPLIER: int = 10
 				_selected_object.velocity = (get_local_mouse_position() - _selected_object.position) * IMPULSE_MULTIPLIER
 			_selected_object = null
+
+func create_bacteria(count: int):
+	var random = RandomNumberGenerator.new()
+	var map_area = Vector2(MAP_WIDTH, MAP_HEIGHT)
+	
+	for i in range(0, count):
+		# set bacterium type
+		var num = random.randi_range(0, 2)
+		var bacterium: Bacterium
+		match num:
+			0: bacterium = green_bacteria_instance.instantiate()
+			1: bacterium = orange_bacteria_instance.instantiate()
+			2: bacterium = purple_bacteria_instance.instantiate()
+		
+		# set parameters
+		bacterium.setup(map_area)
+		bacterium.velocity = Vector2(100, 34)
+		
+		# save object
+		bacteria.push_back(bacterium)
+		add_child(bacterium)
 
 func _init_collision_walls():	# fast way make dynamic walls
 	const UPSCALE = 1000

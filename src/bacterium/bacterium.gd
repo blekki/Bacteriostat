@@ -26,15 +26,13 @@ var nearby_objects: Array[InfoPack] = []	# save identified nearby objects [objec
 
 # technical
 var _physics_frame: int = 0
-var nav_field: Vector2 = Vector2.ZERO # area from (xy = 0) to (xy = nav_field.xy) pixels
-var _random: RandomNumberGenerator = RandomNumberGenerator.new()
 
 # <> Methods section <>
-func _init():
-	super()	# set default parameters
-	_random.randomize()
+func setup(navigation_field: Vector2):
+	_navigation_field = navigation_field
 
 func _ready():
+	super()
 	max_energy = 100
 	energy = 90
 	position = _generate_smart_point()
@@ -54,14 +52,6 @@ func _physics_process(delta: float) -> void:
 func _limit_speed():
 	if velocity.length() > max_speed:
 		velocity = velocity.normalized() * max_speed
-
-func _generate_smart_point() -> Vector2:	# todo: generate point inside navigation area
-	# generate random point
-	var point = Vector2(
-		_random.randf_range(0, nav_field.x),
-		_random.randf_range(0, nav_field.y)
-	)
-	return point
 
 ## safe behavior changing
 func change_state_to(new_state: RefCounted):

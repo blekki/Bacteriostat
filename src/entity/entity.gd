@@ -13,16 +13,25 @@ const COLLISION_DEFLECTION: float = 5.0
 
 # technical var's
 var debug_layer: int = -1	# [-1] is as "nothing" code
-var _is_selected_with_mouse: bool = false	# todo: replace logic into world
+var _navigation_field: Vector2 = Vector2.ZERO # area from (xy = 0) to (xy = nav_field.xy) pixels
+var _random: RandomNumberGenerator = RandomNumberGenerator.new()
 
 # <> Methods section <>
-func _init():
+func _ready():
 	debug_layer = Debug.get_new_layer()
+	_random.randomize()
 
 func _physics_process(delta: float):
 	_deceleration()
 	_collision_fluence()
 	move_and_slide()
+
+func _generate_smart_point() -> Vector2:
+	var point = Vector2(
+		_random.randf_range(0, _navigation_field.x),
+		_random.randf_range(0, _navigation_field.y)
+	)
+	return point
 
 func _deceleration():
 	if velocity.length() > PASSIVE_DECELERATION:
