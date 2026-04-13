@@ -44,7 +44,7 @@ func _deceleration():
 		velocity = Vector2.ZERO
 
 func _collision_fluence():
-		collision = get_slide_collision(0)
+	if get_slide_collision_count() > 0:
 		var collision = get_slide_collision(0)
 		var collider  = collision.get_collider()
 		var normal    = collision.get_normal()
