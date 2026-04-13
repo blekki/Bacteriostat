@@ -54,7 +54,8 @@ func shedding():
 	Singlton.energy_shed.emit(self.global_position, impulse, cell_energy)
 
 func vampirism(prey: Bacterium):
-	if chained_to == null:
+	if not is_instance_valid(chained_to):
+		chained_to = null
 		return
 	
 	# replace self closer to a prey
