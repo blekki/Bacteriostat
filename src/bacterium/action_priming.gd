@@ -5,7 +5,7 @@ extends Timer
 const FINISHED: bool = true
 const IN_PROCESS: bool = false
 # other
-const _NO_ACTION = ""
+const _NO_ACTION = "WAITING"
 
 var _action: String = _NO_ACTION
 

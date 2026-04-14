@@ -201,10 +201,10 @@ func bite_target(prey: Entity):
 	if distance_to_target >= attack_radius:
 		return	# prey is to far away
 	
-	if priming.try_process(0.2, "BITE") == false:
+	if priming.try_process(0.5, "BITE") == false:
 		return
 	
-	const BITE_POWER: int = 30
+	const BITE_POWER: int = 4
 	var can_be_took 	= prey.can_spend_energy(BITE_POWER)
 	var can_be_consumed = self.can_consume_energy(can_be_took)
 	prey.spend_energy(can_be_consumed)

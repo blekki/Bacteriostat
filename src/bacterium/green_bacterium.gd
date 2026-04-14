@@ -24,7 +24,7 @@ func _physics_process(delta: float):
 
 # <> states algorithms <>
 func photosynthesizing():
-	if priming.try_process(0.2, "PHOTOSYNTHESIZING") == false:
+	if priming.try_process(0.5, "PHOTOSYNTHESIZING") == false:
 		return
 	
 	const PHOTOSYNTHES_ENERGY: int = 1
@@ -66,7 +66,7 @@ func vampirism(prey: Bacterium):
 	rotation = lerp_angle(rotation, direction.angle(), LERP_WEIGHT)
 	
 	# priming to vampirism
-	if priming.try_process(0.15, "VAMPIRISM") == false:
+	if priming.try_process(0.1, "VAMPIRISM") == false:
 		return
 	
 	const VAMPIRISM_POWER: int = 1 	# per action tick

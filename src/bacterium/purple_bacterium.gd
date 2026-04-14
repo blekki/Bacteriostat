@@ -52,7 +52,7 @@ func cell_finding():
 func hunting():
 	# rules how to identified object
 	var identification_rules = func(object: Entity) -> Enums.RelationshipTypes:
-		if object is OrangeBacterium:
+		if (object is OrangeBacterium) or (object is EnergyCell):
 			return Enums.RelationshipTypes.PREY
 		elif object is GreenBacterium:
 			return Enums.RelationshipTypes.PREDATOR

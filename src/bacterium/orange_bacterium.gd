@@ -89,7 +89,7 @@ func _choice_hiding_action(predator_record: InfoPack):
 		var direction = predator.position - self.position
 		var distance = direction.length()
 		if distance < luring_radius:
-			const THROWING_FORCE: float = 260
+			const THROWING_FORCE: float = 260.0
 			throw_lure_to(direction, THROWING_FORCE)
 	# else: just wait
 

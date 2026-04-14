@@ -16,6 +16,7 @@ var _navigation_field: Vector2 = Vector2.ZERO # area from (xy = 0) to (xy = nav_
 var _random: RandomNumberGenerator = RandomNumberGenerator.new()
 
 # <> Methods section <>
+## Need to call always.
 func setup(navigation_field: Vector2):
 	_navigation_field = navigation_field
 
