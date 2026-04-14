@@ -6,7 +6,7 @@ extends Entity
 @export var acceleration: float = 10.0
 @export var dash_acceleration: float = 15.0
 @export var max_speed: float = 600.0
-@export var FOV: float = PI / 3
+@export var field_of_dash: float = PI / 12
 
 # energy levels
 @export var energy_level_death: int = min_energy
@@ -94,7 +94,6 @@ func try_rotate_to(target_pos: Vector2) -> bool:
 	var target_angle = (target_pos - position).angle()
 	rotation = lerp_angle(rotation, target_angle, ROTATION_WEIGHT)
 	
-	var field_of_dash = (FOV / 6)
 	if abs(angle_difference(rotation, target_angle)) < field_of_dash:
 		return true	# rotation finished
 	return false	# need to continue rotate

@@ -8,6 +8,7 @@ script = ExtResource("2_11rw8")
 warning_radius = 95
 is_stealth_mode_on = false
 dash_acceleration = 15.0
+field_of_dash = 0.2617993877991494
 
 [node name="DashTimer" type="Timer" parent="." index="6" unique_id=632611988]
 wait_time = 2.5
