@@ -70,36 +70,35 @@ func _init_collision_walls():	# fast way make dynamic walls
 	right_border.position = Vector2(MAP_WIDTH, MAP_HEIGHT / 2)
 	right_border.scale = Vector2(NO_SCALE, UPSCALE)
 
-func create_bacteria(count: int):
-	var random = RandomNumberGenerator.new()
+## save and add to scene object
+func add_to_scene_bacterium(bacterium: Bacterium):
 	var map_area = Vector2(MAP_WIDTH, MAP_HEIGHT)
-	
+	bacterium.setup(map_area)
+	bacteria.push_back(bacterium)
+	add_child(bacterium)
+
+func add_to_scene_cell(cell: EnergyCell):
+	var map_area = Vector2(MAP_WIDTH, MAP_HEIGHT)
+	cell.setup(map_area)
+	energy_cells.push_back(cell)
+	add_child(cell)
+
+func create_bacteria(count: int):
 	for i in range(0, count):
-		# set bacterium type
-		var num = random.randi_range(0, 2)
+		# set randomly bacterium type
+		var num = randi_range(0, 2)
 		var bacterium: Bacterium
 		match num:
 			0: bacterium = green_bacteria_instance.instantiate()
 			1: bacterium = orange_bacteria_instance.instantiate()
 			2: bacterium = purple_bacteria_instance.instantiate()
 		
-		# set parameters
-		bacterium.setup(map_area)
-		
-		# save and add to scene object
-		bacteria.push_back(bacterium)
-		add_child(bacterium)
+		add_to_scene_bacterium(bacterium)
 
-func create_energy_cell(count: int):
-	var map_area = Vector2(MAP_WIDTH, MAP_HEIGHT)
-	
+func create_energy_cells(count: int):
 	for i in range(0, count):
 		var cell: EnergyCell = energy_cell_instance.instantiate()
-		cell.setup(map_area)
-		
-		# save and add to scene object
-		energy_cells.push_back(cell)
-		add_child(cell)
+		add_to_scene_cell(cell)
 
 func move_selected_object():
 	if _selected_object != null:
@@ -112,18 +111,17 @@ func _on_click_on_object(object: Entity):
 	object.velocity = Vector2.ZERO
 	_selected_object = object
 
-func _on_energy_shed(position: Vector2, impulse: Vector2, energy: int):	# create energy_cell
+func _on_energy_shed(_position: Vector2, _impulse: Vector2, _energy: int):	# create energy_cell
+	var map_area = Vector2(MAP_WIDTH, MAP_HEIGHT)
 	var cell: EnergyCell = energy_cell_instance.instantiate()
-	cell.energy = energy
-	cell.velocity = impulse
+	add_to_scene_cell(cell)
 	
-	# set start position
-	const OFFSET: int = 30
-	cell.position = position + impulse.normalized() * OFFSET	# tiny offset to solve collision problems
+	# change cell parameters
+	cell.energy = _energy
+	cell.velocity = _impulse
 	
-	# save energy_cell
-	energy_cells.push_back(cell)
-	add_child(cell)
+	const OFFSET: float = 30.0
+	cell.position = _position + _impulse.normalized() * OFFSET	# tiny offset to solve collision problems
 
 func _on_fission(parent: Bacterium):
 	# prepare child object

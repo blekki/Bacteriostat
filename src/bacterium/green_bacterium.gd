@@ -40,9 +40,9 @@ func shedding():
 		return
 	
 	# impulse
-	const MIN_IMPULSE: int = 40;     const MAX_IMPULSE: int = 60
-	var power: float = _random.randi_range(MIN_IMPULSE, MAX_IMPULSE)
-	var impulse: Vector2 = Vector2(power, 0.0).rotated(_random.randf_range(-PI, PI))
+	const MIN_IMPULSE: int = 40; const MAX_IMPULSE: int = 60
+	var impulse: float = _random.randi_range(MIN_IMPULSE, MAX_IMPULSE)
+	var rotated_impulse: Vector2 = Vector2(impulse, 0.0).rotated(_random.randf_range(-PI, PI))
 	
 	# energy
 	const MIN_CELL_ENERGY: int = 15; const MAX_CELL_ENERGY:  int = 20
@@ -51,7 +51,7 @@ func shedding():
 	spend_energy(cell_energy)
 	
 	# apply parameters and create new energy_cell
-	Singlton.energy_shed.emit(self.global_position, impulse, cell_energy)
+	Singlton.energy_shed.emit(self.global_position, rotated_impulse, cell_energy)
 
 func vampirism(prey: Bacterium):
 	if not is_instance_valid(chained_to):
