@@ -9,18 +9,33 @@ var chained_to: Entity = null
 func _ready():
 	super()
 	
-	# override var's
+	# set personal parameters
 	bacterium_name = "Green Bacterium"
 	modulate = Color.LAWN_GREEN			# todo: change on texture
 	behavior_state = StateMachine.get_start_green_bacterium_state();
 	
-	# set personal action radii
-	view_distance = 160
-	luring_radius = 140
-	attack_radius = 45
+	set_parameters_for_day()
 
 func _physics_process(delta: float):
 	super(delta)
+
+func set_parameters_for_day():
+	acceleration = 0
+	dash_acceleration = 0
+	
+	attack_radius = 0
+	dash_attack_radius = 0
+	luring_radius = 0
+	view_distance = 0
+
+func set_parameters_for_night():
+	acceleration = 0
+	dash_acceleration = 20
+	
+	attack_radius = 45
+	dash_attack_radius = 120
+	luring_radius = 140
+	view_distance = 160
 
 # <> states algorithms <>
 func photosynthesizing():

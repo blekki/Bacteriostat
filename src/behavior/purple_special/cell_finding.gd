@@ -13,6 +13,7 @@ static func try_update_behavior(bacterium: PurpleBacterium):
 		bacterium.change_state_to(StateMachine.fission_state)
 	
 	if Singlton.is_night():
+		bacterium.set_parameters_for_night()
 		bacterium.change_state_to(StateMachine.hunting_state)
 	
 	# should "swim" away

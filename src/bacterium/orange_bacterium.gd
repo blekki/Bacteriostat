@@ -11,21 +11,34 @@ extends Bacterium
 func _ready():
 	super()	# set default parameters
 	
-	# override var's
+	# set personal parameters
 	bacterium_name = "Orange Bacterium"
 	modulate = Color.ORANGE				# todo: change on texture
 	behavior_state = StateMachine.get_start_orange_bacterium_state();
-	
-	# set personal action radii
-	view_distance = 160
-	luring_radius = 150
-	attack_radius = 45
-	
-	acceleration = 3
 	dash_timer.timeout.connect(_on_dash_timer_timeout)
+	
+	set_parameters_for_day()
 
 func _physics_process(delta: float):
 	super(delta)
+
+func set_parameters_for_day():
+	acceleration = 3
+	dash_acceleration = 40
+	
+	attack_radius  = 45
+	warning_radius = 0
+	luring_radius  = 0
+	view_distance  = 240
+
+func set_parameters_for_night():
+	acceleration = 3
+	dash_acceleration = 3
+	
+	attack_radius  = 0
+	warning_radius = 70
+	luring_radius  = 85
+	view_distance  = 95
 
 ## Override method to realize stealth mode.
 func can_be_identified() -> bool:

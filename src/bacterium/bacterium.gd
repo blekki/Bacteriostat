@@ -50,6 +50,12 @@ func _limit_speed():
 	if velocity.length() > max_speed:
 		velocity = velocity.normalized() * max_speed
 
+func set_parameters_for_day():
+	pass
+
+func set_parameters_for_night():
+	pass
+
 ## safe behavior changing
 func change_state_to(new_state: RefCounted):
 	Debug.clean_layer(debug_layer)

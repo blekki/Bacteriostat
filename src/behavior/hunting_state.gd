@@ -18,6 +18,7 @@ static func try_update_behavior(bacterium: Bacterium):
 
 static func _green_bacterium_conditions(bacterium: GreenBacterium):
 	if Singlton.is_day():
+		bacterium.set_parameters_for_day()
 		bacterium.change_state_to(StateMachine.photosynthesizing_state)
 	
 	# vampirist section
@@ -33,6 +34,7 @@ static func _purple_bacterium_conditions(bacterium: PurpleBacterium):
 		bacterium.change_state_to(StateMachine.fission_state)
 	
 	if Singlton.is_day():
+		bacterium.set_parameters_for_day()
 		bacterium.change_state_to(StateMachine.cell_finding_state)
 	
 	# should "swim" away
@@ -45,4 +47,5 @@ static func _orange_bacterium_conditions(bacterium: OrangeBacterium):
 		bacterium.change_state_to(StateMachine.fission_state)
 	
 	if Singlton.is_night():
+		bacterium.set_parameters_for_night()
 		bacterium.change_state_to(StateMachine.hiding_state)

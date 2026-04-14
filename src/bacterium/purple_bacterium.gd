@@ -18,6 +18,22 @@ func _ready():
 func _physics_process(delta: float):
 	super(delta)
 
+func set_parameters_for_day():
+	acceleration = 15
+	dash_acceleration = 20
+	
+	attack_radius = 45
+	luring_radius = 0
+	view_distance = 150
+
+func set_parameters_for_night():
+	acceleration = 10
+	dash_acceleration = 15
+	
+	attack_radius = 45
+	luring_radius = 0
+	view_distance = 200
+
 # <> behaviour dependencies <>
 func swim_away(enemy_detection_radius: float):
 	# scan environment on predators

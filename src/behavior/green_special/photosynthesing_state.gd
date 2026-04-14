@@ -12,4 +12,5 @@ static func do_task(bacterium: GreenBacterium):
 
 static func try_update_behavior(bacterium: GreenBacterium):
 	if Singlton.is_night():
+		bacterium.set_parameters_for_night()
 		bacterium.change_state_to(StateMachine.hunting_state)
