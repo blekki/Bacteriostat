@@ -5,14 +5,16 @@
 
 [node name="Bacterium" unique_id=1553382449 instance=ExtResource("1_t0hj7")]
 script = ExtResource("2_11rw8")
-power_dash_acceleration = 30.0
 warning_radius = 95
 is_stealth_mode_on = false
+dash_acceleration = 15.0
 
 [node name="DashTimer" type="Timer" parent="." index="6" unique_id=632611988]
+wait_time = 2.5
 one_shot = true
 autostart = true
 
 [node name="CooldownTimer" type="Timer" parent="." index="7" unique_id=1318684438]
+wait_time = 5.0
 one_shot = true
 autostart = true

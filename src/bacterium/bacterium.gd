@@ -4,6 +4,7 @@ extends Entity
 # basic parameters
 # > movement - pixel/physic_frame
 @export var acceleration: float = 10.0
+@export var dash_acceleration: float = 15.0
 @export var max_speed: float = 600.0
 @export var FOV: float = PI / 3
 
@@ -92,10 +93,10 @@ func try_rotate_to(target_pos: Vector2) -> bool:
 		return true	# rotation finished
 	return false	# need to continue rotate
 
-func dash_to(target_pos: Vector2):
-	var is_rotated: bool = try_rotate_to(target_pos)
+func dash_to(_target_pos: Vector2, _acceleration: float):
+	var is_rotated: bool = try_rotate_to(_target_pos)
 	if is_rotated == true:
-		_dash(acceleration)
+		_dash(_acceleration)
 
 ## Use to "delicate" reaching a target. An object comes to and stops on a target. Need to simple patrol or to similar action.
 func reach_target(target_pos: Vector2):
@@ -104,7 +105,7 @@ func reach_target(target_pos: Vector2):
 		velocity += velocity.normalized() * PASSIVE_DECELERATION
 	
 	var anchor_point = target_pos - velocity
-	dash_to(anchor_point)
+	dash_to(anchor_point, acceleration)
 
 ## Use to "rough" reaching a target. An object comes across a target. Can be used to attack somebody or run away.
 func intercept_target(target_pos: Vector2, target_velocity: Vector2):
@@ -116,7 +117,7 @@ func intercept_target(target_pos: Vector2, target_velocity: Vector2):
 		anchor_point = self.position + to_target.normalized()	# dash to a target
 	else:
 		anchor_point = target_pos - (velocity * 2)	# change trajectory
-	dash_to(anchor_point)
+	dash_to(anchor_point, dash_acceleration)
 
 func patrol():
 	if is_target_reached():

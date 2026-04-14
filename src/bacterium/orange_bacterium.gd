@@ -1,7 +1,6 @@
 class_name OrangeBacterium
 extends Bacterium
 
-@export var power_dash_acceleration: float = 30
 @export var warning_radius: int = 95
 @export var is_stealth_mode_on: bool = false
 
@@ -34,7 +33,7 @@ func can_be_identified() -> bool:
 
 func _dash(_acceleration: float):
 	if not dash_timer.is_stopped():
-		super(power_dash_acceleration)
+		super(dash_acceleration)
 	else:
 		super(acceleration)	# default dash
 
@@ -46,6 +45,10 @@ func stealth_mode_off():
 	is_stealth_mode_on = false
 	modulate.a = 1.0
 
+func try_activate_power_dash():
+	if cooldown_timer.is_stopped():	# activate power-dash if cooldown timeout
+		dash_timer.start()
+	
 # <> behavior methods section <>
 ## Analyse environment for predators and check are they so close.
 func should_swim_away() -> bool:
@@ -94,6 +97,8 @@ func _choice_hiding_action(predator_record: InfoPack):
 	# else: just wait
 
 func hunting():
+	stealth_mode_off()
+	
 	# rules how to identified object
 	var identification_rules = func(object: Entity) -> Enums.RelationshipTypes:
 		if (object is PurpleBacterium) or (object is EnergyCell):
@@ -116,12 +121,11 @@ func _choice_hunting_action(prey_record: InfoPack):
 		if distance < attack_radius:
 			bite_target(prey_record.object)
 		elif distance < view_distance:
-			if cooldown_timer.is_stopped():	# activate power-dash if cooldown timeout
-				dash_timer.start(3)
+			try_activate_power_dash()
 			intercept_target(get_nav_target(), prey_record.object.velocity)
 	else:
 		patrol()	# default
 
 # <> signals section <>
 func _on_dash_timer_timeout():
-	cooldown_timer.start(4)
+	cooldown_timer.start()
