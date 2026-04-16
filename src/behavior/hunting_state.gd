@@ -5,7 +5,6 @@ var name: String = "Hunting"
 
 # <> Methods <>
 static func do_task(bacterium: Bacterium):
-	Debug.clean_layer(bacterium.debug_layer)
 	bacterium.hunting()
 
 static func try_update_behavior(bacterium: Bacterium):

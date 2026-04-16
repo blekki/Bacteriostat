@@ -4,7 +4,6 @@ extends RefCounted
 static var name: String = "Swim away"
 
 static func do_task(bacterium: Bacterium):
-	Debug.clean_layer(bacterium.debug_layer)
 	bacterium.swim_away(bacterium.view_distance)
 
 static func try_update_behavior(bacterium: Bacterium):

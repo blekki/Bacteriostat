@@ -4,7 +4,6 @@ extends RefCounted
 static var name: String = "Photosynthesizing"
 
 static func do_task(bacterium: GreenBacterium):
-	Debug.clean_layer(bacterium.debug_layer)
 	if bacterium.is_ready_to_shedding() == false:
 		bacterium.photosynthesizing()
 	else:

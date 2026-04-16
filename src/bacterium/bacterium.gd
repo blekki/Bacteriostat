@@ -35,6 +35,7 @@ func _ready():
 	energy = _random.randi_range(15, 25)
 
 func _physics_process(delta: float) -> void:
+	Debug.clean_layer(debug_layer)
 	behavior_state.do_task(self)
 	
 	const STATE_UPDATE_INTERVAL = 2

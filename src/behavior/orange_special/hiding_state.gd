@@ -4,7 +4,6 @@ extends RefCounted
 static var name: String = "Hiding"
 
 static func do_task(bacterium: OrangeBacterium):
-	Debug.clean_layer(bacterium.debug_layer)
 	bacterium.hiding()
 
 static func try_update_behavior(bacterium: OrangeBacterium):

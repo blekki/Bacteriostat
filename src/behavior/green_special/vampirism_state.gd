@@ -4,8 +4,6 @@ extends RefCounted
 static var name: String = "Vampirism"
 
 static func do_task(bacterium: GreenBacterium):
-	Debug.clean_layer(bacterium.debug_layer)
-	
 	var prey: Entity = bacterium.chained_to
 	if is_instance_valid(prey):
 		bacterium.vampirism(prey)
