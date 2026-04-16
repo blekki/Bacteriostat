@@ -1,83 +1,132 @@
 [gd_scene format=3 uid="uid://bx6lul282ajbx"]
 
-[ext_resource type="FontFile" uid="uid://d17h73ff4yptg" path="res://assets/font/MotionControl-Bold.otf" id="1_3phq6"]
+[ext_resource type="Theme" uid="uid://2p8lo5yetkjn" path="res://assets/styles/hud_panels/text.tres" id="1_7hkyr"]
 [ext_resource type="Script" uid="uid://d22pe2btl3reo" path="res://src/hud/hud.gd" id="1_t0re6"]
+[ext_resource type="Script" uid="uid://b1pg4k3wc4xvx" path="res://src/hud/info_panel.gd" id="3_8ej7y"]
 [ext_resource type="Texture2D" uid="uid://dx5eawmxmsgpv" path="res://assets/Ellipse 1.svg" id="3_ony6l"]
+[ext_resource type="StyleBox" uid="uid://cb38ubdeevb32" path="res://assets/styles/hud_panels/panel.tres" id="4_cs14m"]
+[ext_resource type="StyleBox" uid="uid://stm7p1c6caiv" path="res://assets/styles/hud_panels/daughter_panel.tres" id="5_7hkyr"]
 
-[sub_resource type="Theme" id="Theme_ony6l"]
-default_font = ExtResource("1_3phq6")
-default_font_size = 20
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8ej7y"]
+size = Vector2(182, 39)
 
 [node name="HUD" type="Control" unique_id=758395760]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
 size_flags_horizontal = 4
-size_flags_vertical = 4
-theme = SubResource("Theme_ony6l")
+mouse_filter = 2
+theme = ExtResource("1_7hkyr")
 script = ExtResource("1_t0re6")
-metadata/_edit_use_anchors_ = true
 
-[node name="Panel" type="Panel" parent="." unique_id=514441669]
-clip_contents = true
-layout_mode = 1
-offset_left = 824.0
-offset_right = 1080.0
-offset_bottom = 384.0
-metadata/_edit_group_ = true
+[node name="InfoPanel" type="CharacterBody2D" parent="." unique_id=1840319785]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("3_8ej7y")
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=342176252]
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="InfoPanel" unique_id=1704227267]
+position = Vector2(-120, 8)
+rect = Rect2(-8, -8, 256, 48)
+
+[node name="PanelContainer" type="PanelContainer" parent="InfoPanel" unique_id=497167825]
 clip_contents = true
-layout_mode = 1
-anchors_preset = 15
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
+offset_left = -128.0
+offset_right = 128.0
+offset_bottom = 48.0
 grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 10
+size_flags_vertical = 0
+mouse_filter = 2
+theme = ExtResource("1_7hkyr")
+theme_override_styles/panel = ExtResource("4_cs14m")
 
-[node name="VBox" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=835924133]
+[node name="VBoxContainer" type="VBoxContainer" parent="InfoPanel/PanelContainer" unique_id=95336114]
 layout_mode = 2
-theme_override_constants/separation = 10
+size_flags_vertical = 0
+mouse_filter = 2
 
-[node name="CloseButton" type="Button" parent="Panel/MarginContainer/VBox" unique_id=770498460]
+[node name="ControlPanel" type="PanelContainer" parent="InfoPanel/PanelContainer/VBoxContainer" unique_id=2024326992]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("5_7hkyr")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InfoPanel/PanelContainer/VBoxContainer/ControlPanel" unique_id=1520997471]
+layout_mode = 2
+mouse_filter = 2
+alignment = 2
+
+[node name="ClickableArea" type="Area2D" parent="InfoPanel/PanelContainer/VBoxContainer/ControlPanel/HBoxContainer" unique_id=974690348]
+z_index = 10
+position = Vector2(118, -6)
+collision_layer = 256
+collision_mask = 256
+monitoring = false
+monitorable = false
+
+[node name="ClickableCollision" type="CollisionShape2D" parent="InfoPanel/PanelContainer/VBoxContainer/ControlPanel/HBoxContainer/ClickableArea" unique_id=491070575]
+position = Vector2(-40, 16.5)
+shape = SubResource("RectangleShape2D_8ej7y")
+
+[node name="HideButton" type="Button" parent="InfoPanel/PanelContainer/VBoxContainer/ControlPanel/HBoxContainer" unique_id=437502657]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_horizontal = 8
+mouse_filter = 1
+text = "—"
+
+[node name="CloseButton" type="Button" parent="InfoPanel/PanelContainer/VBoxContainer/ControlPanel/HBoxContainer" unique_id=770498460]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 1
 text = "X"
 
-[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBox" unique_id=480120384]
+[node name="TimeSeasonPanel" type="PanelContainer" parent="InfoPanel/PanelContainer/VBoxContainer" unique_id=1945560565]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("5_7hkyr")
 
-[node name="ObjName" type="Label" parent="Panel/MarginContainer/VBox" unique_id=822319965]
-custom_minimum_size = Vector2(0, 31)
+[node name="SeasonInfo" type="Label" parent="InfoPanel/PanelContainer/VBoxContainer/TimeSeasonPanel" unique_id=251209976]
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
-text = "object_name"
+theme_override_font_sizes/font_size = 16
+text = "time season"
+horizontal_alignment = 1
+vertical_alignment = 1
 autowrap_mode = 3
 clip_text = true
 text_overrun_behavior = 5
 uppercase = true
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBox" unique_id=1724593388]
+[node name="ObjectPanel" type="PanelContainer" parent="InfoPanel/PanelContainer/VBoxContainer" unique_id=220460775]
+custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("5_7hkyr")
 
-[node name="ObjTexture" type="TextureRect" parent="Panel/MarginContainer/VBox/MarginContainer" unique_id=1031743290]
+[node name="VBox" type="VBoxContainer" parent="InfoPanel/PanelContainer/VBoxContainer/ObjectPanel" unique_id=835924133]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ObjectName" type="Label" parent="InfoPanel/PanelContainer/VBoxContainer/ObjectPanel/VBox" unique_id=822319965]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "object name"
+autowrap_mode = 3
+clip_text = true
+text_overrun_behavior = 5
+uppercase = true
+
+[node name="ObjectTexture" type="TextureRect" parent="InfoPanel/PanelContainer/VBoxContainer/ObjectPanel/VBox" unique_id=1031743290]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 0
 texture = ExtResource("3_ony6l")
 
-[node name="ObjParameters" type="Label" parent="Panel/MarginContainer/VBox" unique_id=1453492340]
+[node name="ObjectParameters" type="Label" parent="InfoPanel/PanelContainer/VBoxContainer/ObjectPanel/VBox" unique_id=1453492340]
 custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
 text = "energy = 0/max
@@ -87,29 +136,6 @@ clip_text = true
 text_overrun_behavior = 5
 uppercase = true
 
-[node name="TimeSeasonPanel" type="Panel" parent="." unique_id=1760835207]
-self_modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-offset_left = 464.0
-offset_top = 688.0
-offset_right = 616.0
-offset_bottom = 728.0
-metadata/_edit_group_ = true
-
-[node name="MarginContainer" type="MarginContainer" parent="TimeSeasonPanel" unique_id=1926547538]
-layout_mode = 0
-offset_right = 152.0
-offset_bottom = 40.0
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="SeasonInfo" type="Label" parent="TimeSeasonPanel/MarginContainer" unique_id=2044545666]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "55/100 day"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[connection signal="pressed" from="Panel/MarginContainer/VBox/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="input_event" from="InfoPanel/PanelContainer/VBoxContainer/ControlPanel/HBoxContainer/ClickableArea" to="InfoPanel" method="_on_clickable_area_input_event"]
+[connection signal="pressed" from="InfoPanel/PanelContainer/VBoxContainer/ControlPanel/HBoxContainer/HideButton" to="." method="_on_hide_button_pressed"]
+[connection signal="pressed" from="InfoPanel/PanelContainer/VBoxContainer/ControlPanel/HBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]

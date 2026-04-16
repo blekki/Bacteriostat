@@ -1,0 +1,7 @@
+[gd_resource type="Theme" format=3 uid="uid://2p8lo5yetkjn"]
+
+[ext_resource type="FontFile" uid="uid://d17h73ff4yptg" path="res://assets/font/MotionControl-Bold.otf" id="1_r076r"]
+
+[resource]
+default_font = ExtResource("1_r076r")
+default_font_size = 20

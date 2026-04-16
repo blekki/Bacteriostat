@@ -5,7 +5,7 @@ extends CharacterBody2D
 # > pixel/physic_frame
 const PASSIVE_DECELERATION: float = 1.0
 
-@export var obj_name: String = "Raw Entity"
+@export var entity_name: String = "Raw Entity"
 @export var energy: int = 50	# equivalent to health
 @export var min_energy: int = 0
 @export var max_energy: int = 100
@@ -57,8 +57,12 @@ func _collision_fluence():
 		if collider is Entity:					# is moveble object
 			collider.velocity += dot * normal	# get momentum
 
-func get_obj_name() -> String:
-	return obj_name
+func get_personal_name() -> String:
+	return entity_name
+
+func get_info() -> String:
+	var information: String = "energy: %d/%d\n" % [energy, max_energy]
+	return information
 
 ## Need to safety object identification. Can be override to make complex identification.
 func can_be_identified() -> bool:
@@ -93,6 +97,5 @@ func death():
 # <> reaction on signals section <>
 func _on_clickable_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int):
 	if event is InputEventMouseButton:
-		# signal that currect object was clicked
-		if event.pressed:
+		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 			Singlton.click_on_object.emit(self)

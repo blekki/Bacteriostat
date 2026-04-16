@@ -1,75 +1,95 @@
+# HUD logic
 class_name HUD
 extends Control
 
-# label pointers
-@onready var season_info: Label = $TimeSeasonPanel/MarginContainer/SeasonInfo
-@onready var object_name: Label = $Panel/MarginContainer/VBox/ObjName
-@onready var object_parameters: Label = $Panel/MarginContainer/VBox/ObjParameters
+# nodes
+@onready var _info_panel: InfoPanel = $InfoPanel
+var _time_season_label: Label = null
+var _name_label: Label = null
+var _info_label: Label = null
 
 # parameters
-var tracked_object: Entity = null
+var _tracked_object: Entity = null
+var _is_hide_button_active: bool = false
 
 # <> methods <>
 func _ready():
+	_time_season_label = $InfoPanel/PanelContainer/VBoxContainer/TimeSeasonPanel/SeasonInfo
+	var _object_vbox: VBoxContainer = $InfoPanel/PanelContainer/VBoxContainer/ObjectPanel/VBox
+	_name_label = _object_vbox.get_node("ObjectName")
+	_info_label = _object_vbox.get_node("ObjectParameters")
+	
 	Singlton.click_on_object.connect(_on_click_on_object)
-	$Panel.hide()
+	Singlton.remove_object.connect(_on_remove_object)
+	_info_panel.hide()
 
-func _process(delta: float):
+func _process(_delta: float):
 	_update_season_info()
 	_update_object_info()
 
-# <> text changing <>
-func _update_season_info():
-	var current_season: String = "DAY" # default
-	if Singlton.is_night():
-		current_season = "NIGHT"
+func _move_panel_on_screen():
+	var camera = get_viewport().get_camera_2d()
+	var viewport_size = camera.get_viewport_rect().size / camera.zoom
+	var viewport_center = camera.get_screen_center_position()
 	
-	# print info
-	season_info.text  = "%.1f/" % Singlton.season_continues
-	season_info.text += "%d " % Singlton.season_duration
-	season_info.text += "(%s)" % current_season
+	# find new panel position
+	var target: Vector2 = viewport_center
+	var offset_weight: float = 3.0
+	if _info_panel.position.x < viewport_center.x:
+		target -= (viewport_size / offset_weight)
+	else:
+		target.x += (viewport_size.x / offset_weight)
+		target.y -= (viewport_size.y / offset_weight)
+	
+	_info_panel.replace_to(target)
+
+# <> text changing <>
+func _print_empty_page():
+	_name_label.text = "Undefined"
+	_info_label.text  = "energy: ?\n"
+	_info_label.text += "state: ?\n"
+	_info_label.text += "priming: ?\n"
+
+func _update_season_info():
+	_time_season_label.text = Singlton.get_season_info()
 
 func _update_object_info():
-	if $Panel.visible == true:
-		if tracked_object == null:
-			_print_empty_page()
-		elif tracked_object is Bacterium:
-			_print_bacterium_info(tracked_object)
-		elif tracked_object is EnergyCell:
-			_print_energy_cell_info(tracked_object)
-
-func _print_empty_page():
-	object_name.text = "Object undefined"
-	object_parameters.text  = "energy: ?\n"
-	object_parameters.text += "state: ?\n"
-	object_parameters.text += "priming: ?\n"
-	object_parameters.text += "debug layer: ?\n"
-
-## Parameter is needed to help text editor understand object
-func _print_bacterium_info(object: Bacterium):
-	# header
-	object_name.text = tracked_object.bacterium_name
-	# print parameters
-	object_parameters.text  = ""
-	object_parameters.text += "energy: %d/%d\n" % [object.energy, object.max_energy]
-	object_parameters.text += "state: %s\n" % object.behavior_state.name
-	object_parameters.text += "action: %s\n" % object.priming.get_action()
-	object_parameters.text += "priming: %.1f\n" % object.priming.get_remaining_time()
-	if object is OrangeBacterium:
-		object_parameters.text += "dash_active: %.1f\n" % object.dash_timer.time_left
-		object_parameters.text += "cooldown: %.1f\n" % object.cooldown_timer.time_left
-	object_parameters.text += "debug layer: %d\n" % object.debug_layer
-
-## Parameter is needed to help text redactor understand object
-func _print_energy_cell_info(object: EnergyCell):
-	object_name.text = object.cell_name
-	object_parameters.text = "energy_equivalent: %d\n" % object.energy
+	if _tracked_object == null:
+		return
+	
+	_name_label.text = _tracked_object.get_personal_name()
+	_info_label.text = _tracked_object.get_info()
 
 # <> signals <>
+## hide/show panel
+func _on_hide_button_pressed():
+	_is_hide_button_active = not _is_hide_button_active
+	
+	var container: VBoxContainer = $InfoPanel/PanelContainer/VBoxContainer
+	var season_panel: PanelContainer = container.get_node("TimeSeasonPanel")
+	var object_panel: PanelContainer = container.get_node("ObjectPanel")
+	
+	if _is_hide_button_active == true:
+		season_panel.hide()
+		object_panel.hide()
+	else:
+		season_panel.show()
+		object_panel.show()
+
 func _on_close_button_pressed():
-	$Panel.hide()
+	_info_panel.hide()
 
 func _on_click_on_object(object: Entity):
-	tracked_object = object
+	_tracked_object = object
 	_update_object_info()
-	$Panel.show()
+	_info_panel.show()
+	
+	# replace panel on screen if it's not
+	var panel_notifier = _info_panel.get_node("VisibleOnScreenNotifier2D")
+	if not panel_notifier.is_on_screen():
+		_move_panel_on_screen()
+
+func _on_remove_object(object: Entity):
+	if _tracked_object == object:
+		_tracked_object = null
+		_print_empty_page()

@@ -40,6 +40,11 @@ func set_parameters_for_night():
 	luring_radius  = 85
 	view_distance  = 95
 
+func get_info() -> String:
+	var information: String = super()
+	information += "dash active: %.1f\n" % dash_timer.time_left
+	information += "dash cooldown: %.1f\n" % cooldown_timer.time_left
+	return information
 ## Override method to realize stealth mode.
 func can_be_identified() -> bool:
 	return not is_stealth_mode_on

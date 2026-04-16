@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://duuaegris31ou"]
 
-[ext_resource type="Script" uid="uid://yywy0uwb6gro" path="res://src/map/map.gd" id="1_vfn15"]
+[ext_resource type="Script" uid="uid://yywy0uwb6gro" path="res://src/world/world.gd" id="1_vfn15"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_5o7fj"]
 vertices = PackedVector2Array(1047, 687, 33, 687, 33, 33, 1047, 33)
@@ -12,7 +12,7 @@ agent_radius = 33.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1a5qu"]
 
-[node name="Map" type="Node2D" unique_id=1084301518]
+[node name="World" type="Node2D" unique_id=1084301518]
 script = ExtResource("1_vfn15")
 metadata/_edit_group_ = true
 
@@ -37,7 +37,7 @@ shape = SubResource("RectangleShape2D_1a5qu")
 shape = SubResource("RectangleShape2D_1a5qu")
 
 [node name="Day" type="Timer" parent="." unique_id=816259507]
-wait_time = 3.0
+wait_time = 10.0
 one_shot = true
 
 [node name="Night" type="Timer" parent="." unique_id=700263351]

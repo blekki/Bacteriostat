@@ -56,6 +56,16 @@ func set_parameters_for_day():
 func set_parameters_for_night():
 	pass
 
+func get_personal_name() -> String:
+	return bacterium_name
+
+func get_info() -> String:
+	var information: String = super()
+	information += "state: %s\n" % behavior_state.name
+	information += "action: %s\n" % priming.get_action()
+	information += "priming: %.1f\n" % priming.get_remaining_time()
+	return information
+
 ## safe behavior changing
 func change_state_to(new_state: RefCounted):
 	Debug.clean_layer(debug_layer)

@@ -1,4 +1,4 @@
-class_name Map
+class_name World
 extends Node2D
 
 const MAP_WIDTH = 1080		# in pixels
@@ -22,10 +22,9 @@ func _ready():
 	
 	await NavigationServer2D.map_changed
 	_init_collision_walls()
-	create_bacteria(100)
-	create_energy_cell(100)
 	_start_day()
-	
+	create_bacteria(10)
+	create_energy_cells(20)
 
 func _physics_process(_delta: float):
 	move_selected_object()
@@ -107,7 +106,7 @@ func move_selected_object():
 		_selected_object.position = new_position
 
 # <> signals section <>
-func _on_click_on_object(object: Entity):
+func _on_click_on_object(object: CharacterBody2D):
 	object.velocity = Vector2.ZERO
 	_selected_object = object
 

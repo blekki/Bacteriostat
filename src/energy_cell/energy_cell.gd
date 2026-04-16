@@ -12,3 +12,7 @@ func _ready():
 
 func _physics_process(delta: float) -> void:
 	super(delta)	# default physics
+
+# <> other <>
+func get_personal_name() -> String:
+	return cell_name
