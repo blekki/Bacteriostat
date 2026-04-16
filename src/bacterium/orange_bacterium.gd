@@ -22,6 +22,11 @@ func _ready():
 func _physics_process(delta: float):
 	super(delta)
 
+func set_physics_updating(enable: bool):
+	dash_timer.paused = not enable
+	cooldown_timer.paused = not enable
+	super(enable)
+
 func set_parameters_for_day():
 	acceleration = 3
 	dash_acceleration = 40

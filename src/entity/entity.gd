@@ -32,6 +32,9 @@ func _physics_process(delta: float):
 	_collision_fluence()
 	move_and_slide()
 
+func set_physics_updating(enable: bool):
+	set_physics_process(enable)
+
 func _generate_smart_point() -> Vector2:
 	var point = Vector2(
 		_random.randf_range(_navigation_field_x1y1.x, _navigation_field_x2y2.x),	# x

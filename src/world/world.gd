@@ -12,6 +12,7 @@ var bacteria: Array[Bacterium] = []
 var energy_cells: Array[EnergyCell] = []
 
 # <> technical
+var _is_simulation_run: bool = true
 var _selected_object: CharacterBody2D = null
 
 func _ready():
@@ -90,13 +91,26 @@ func _setup_collision_walls():
 
 func _input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed == false:
+		if not event.pressed:
 			# stop hold object
 			if _selected_object != null:
 				# shoot object in mouse direction after dragging
 				const IMPULSE_MULTIPLIER: int = 10
 				_selected_object.velocity = (get_local_mouse_position() - _selected_object.position) * IMPULSE_MULTIPLIER
 			_selected_object = null
+	
+	if event.is_action_pressed("simulation_control"):
+		set_simulation(not _is_simulation_run)
+
+func set_simulation(enable: bool):
+	_is_simulation_run = enable
+	$Day.paused = not enable
+	$Day.paused = not enable
+	
+	for b_unit in bacteria:
+		b_unit.set_physics_updating(enable)
+	for c_unit in energy_cells:
+		c_unit.set_physics_updating(enable)
 
 func move_selected_object():
 	if _selected_object != null:

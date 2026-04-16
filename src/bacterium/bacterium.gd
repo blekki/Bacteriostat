@@ -47,6 +47,10 @@ func _physics_process(delta: float) -> void:
 	_limit_speed()
 	super(delta)	# use also default physics parameters
 
+func set_physics_updating(enable: bool):
+	priming.paused = not enable
+	super(enable)
+
 func _limit_speed():
 	if velocity.length() > max_speed:
 		velocity = velocity.normalized() * max_speed
