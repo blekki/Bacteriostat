@@ -19,7 +19,6 @@ func _draw():
 	for id in layers:
 		for line in layers.get(id):
 			draw_line(line.start, line.end, line.color, LINE_WIDTH)
-		layers[id].clear()	# clean record after drawing
 
 func get_new_layer() -> int:
 	last_id += 1
@@ -28,7 +27,7 @@ func get_new_layer() -> int:
 	return last_id
 
 func add_line(layer_id: int, start: Vector2, end: Vector2, color: Color):
-	layers.get(last_id).append(
+	layers.get(layer_id).append(
 		Line.new(start, end, color)
 	)
 
