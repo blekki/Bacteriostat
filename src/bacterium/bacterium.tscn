@@ -8,8 +8,9 @@
 scale = Vector2(0.5, 0.5)
 script = ExtResource("2_wpy8d")
 acceleration = 10.0
+dash_acceleration = 15.0
 max_speed = 600.0
-FOV = 1.0471975511965976
+field_of_dash = 0.2617993877991494
 energy_level_death = null
 energy_level_luring = 35
 energy_level_shedding = 85
@@ -20,7 +21,6 @@ view_distance = 160
 
 [node name="NavigationAgent" type="NavigationAgent2D" parent="." index="3" unique_id=2079435920]
 target_desired_distance = 20.0
-debug_enabled = true
 
 [node name="ViewDirection" type="Line2D" parent="." index="4" unique_id=1076540450]
 points = PackedVector2Array(0, 0, 100, 0)

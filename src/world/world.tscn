@@ -3,18 +3,16 @@
 [ext_resource type="Script" uid="uid://yywy0uwb6gro" path="res://src/world/world.gd" id="1_vfn15"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_5o7fj"]
-vertices = PackedVector2Array(1047, 687, 33, 687, 33, 33, 1047, 33)
-polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(0, 0, 1080, 0, 1080, 720, 0, 720)])
 agent_radius = 33.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vfn15"]
+size = Vector2(16, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1a5qu"]
+size = Vector2(16, 16)
 
 [node name="World" type="Node2D" unique_id=1084301518]
 script = ExtResource("1_vfn15")
-metadata/_edit_group_ = true
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=706864556]
 navigation_polygon = SubResource("NavigationPolygon_5o7fj")
@@ -35,6 +33,13 @@ shape = SubResource("RectangleShape2D_1a5qu")
 
 [node name="RightSide" type="CollisionShape2D" parent="Collision" unique_id=1742481543]
 shape = SubResource("RectangleShape2D_1a5qu")
+
+[node name="BorderLine" type="Line2D" parent="." unique_id=1276355183]
+points = PackedVector2Array(-128, -128, 128, -128, 128, 128, -128, 128, -128, -128)
+width = 5.0
+default_color = Color(2.9841065e-06, 0.77949333, 0.75097775, 1)
+begin_cap_mode = 1
+end_cap_mode = 1
 
 [node name="Day" type="Timer" parent="." unique_id=816259507]
 wait_time = 10.0

@@ -12,13 +12,15 @@ const PASSIVE_DECELERATION: float = 1.0
 
 # technical var's
 var debug_layer: int = -1	# [-1] is as "nothing" code
-var _navigation_field: Vector2 = Vector2.ZERO # area from (xy = 0) to (xy = nav_field.xy) pixels
+var _navigation_field_x1y1: Vector2 = Vector2.ZERO
+var _navigation_field_x2y2: Vector2 = Vector2.ZERO
 var _random: RandomNumberGenerator = RandomNumberGenerator.new()
 
 # <> Methods section <>
-## Need to call always.
-func setup(navigation_field: Vector2):
-	_navigation_field = navigation_field
+## Need to correct work of the object number generator
+func setup_nav_field(from: Vector2, to: Vector2):
+	_navigation_field_x1y1 = from
+	_navigation_field_x2y2 = to
 
 func _ready():
 	_random.randomize()
@@ -32,8 +34,8 @@ func _physics_process(delta: float):
 
 func _generate_smart_point() -> Vector2:
 	var point = Vector2(
-		_random.randf_range(0, _navigation_field.x),
-		_random.randf_range(0, _navigation_field.y)
+		_random.randf_range(_navigation_field_x1y1.x, _navigation_field_x2y2.x),	# x
+		_random.randf_range(_navigation_field_x1y1.y, _navigation_field_x2y2.y)		# y
 	)
 	return point
 

@@ -1,8 +1,8 @@
 class_name World
 extends Node2D
 
-const MAP_WIDTH = 1080		# in pixels
-const MAP_HEIGHT = 720
+const MAP_WIDTH = 1920
+const MAP_HEIGHT = 1080
 const green_bacteria_instance  = preload("res://src/bacterium/green_bacterium.tscn")
 const orange_bacteria_instance = preload("res://src/bacterium/orange_bacterium.tscn")
 const purple_bacteria_instance = preload("res://src/bacterium/purple_bacterium.tscn")
@@ -20,8 +20,8 @@ func _ready():
 	Singlton.fission.connect(_on_fission)
 	Singlton.remove_object.connect(_on_remove_object)
 	
-	await NavigationServer2D.map_changed
-	_init_collision_walls()
+	_setup_navigation_field()
+	_setup_collision_walls()
 	_start_day()
 	create_bacteria(10)
 	create_energy_cells(20)
@@ -37,7 +37,57 @@ func _process(_delta: float):
 		Singlton.season_continues = $Night.time_left
 		Singlton.season_duration = $Night.wait_time
 
-# <> other methods <>
+func _setup_navigation_field():
+	var half_width: float = MAP_WIDTH / 2.0
+	var half_height: float = MAP_HEIGHT / 2.0
+	var points = PackedVector2Array([
+		Vector2(-half_width, -half_height),
+		Vector2( half_width, -half_height),
+		Vector2( half_width,  half_height),
+		Vector2(-half_width,  half_height)
+	])
+	
+	var new_polygon: NavigationPolygon = NavigationPolygon.new()
+	new_polygon.add_outline(points)
+	new_polygon.make_polygons_from_outlines()
+	
+	var nav_region: NavigationRegion2D = $NavigationRegion2D
+	nav_region.navigation_polygon = new_polygon
+	nav_region.bake_navigation_polygon()
+	await NavigationServer2D.map_changed
+
+func _setup_collision_walls():
+	# cillision walls
+	var half_width: float = MAP_WIDTH / 2.0
+	var half_height: float = MAP_HEIGHT / 2.0
+	
+	var up_side = $Collision/UpSide
+	up_side.position.y = -half_height
+	up_side.scale.x *= half_width
+	
+	var bottom_side = $Collision/BottomSide
+	bottom_side.position.y = half_height
+	bottom_side.scale.x *= half_width
+	
+	var left_side = $Collision/LeftSide
+	left_side.position.x = -half_width
+	left_side.scale.y *= half_height
+	
+	var right_side = $Collision/RightSide
+	right_side.position.x = half_width
+	right_side.scale.y *= half_height
+	
+	# border line
+	var new_points = PackedVector2Array([
+		Vector2(-half_width, -half_height),
+		Vector2( half_width, -half_height),
+		Vector2( half_width,  half_height),
+		Vector2(-half_width,  half_height),
+		Vector2(-half_width, -half_height)
+	])
+	var line = $BorderLine
+	line.points = new_points
+
 func _input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed == false:
@@ -48,50 +98,36 @@ func _input(event: InputEvent):
 				_selected_object.velocity = (get_local_mouse_position() - _selected_object.position) * IMPULSE_MULTIPLIER
 			_selected_object = null
 
-func _init_collision_walls():	# fast way make dynamic walls
-	const UPSCALE = 1000
-	const NO_SCALE = 1
-	
-	# move collision shapes and make them so long to looks like a walls
-	var up_border = $Collision/UpSide
-	up_border.position = Vector2(MAP_WIDTH / 2, 0)
-	up_border.scale = Vector2(UPSCALE, NO_SCALE)
-	
-	var bottom_border = $Collision/BottomSide
-	bottom_border.position = Vector2(MAP_WIDTH / 2, MAP_HEIGHT)
-	bottom_border.scale = Vector2(UPSCALE, NO_SCALE)
-	
-	var left_border = $Collision/LeftSide
-	left_border.position = Vector2(0, MAP_HEIGHT / 2)
-	left_border.scale = Vector2(NO_SCALE, UPSCALE)
-	
-	var right_border = $Collision/RightSide
-	right_border.position = Vector2(MAP_WIDTH, MAP_HEIGHT / 2)
-	right_border.scale = Vector2(NO_SCALE, UPSCALE)
+func move_selected_object():
+	if _selected_object != null:
+		const LERP_WEIGH: float = 0.2
+		var new_position: Vector2 = lerp(_selected_object.position, get_local_mouse_position(), LERP_WEIGH)
+		_selected_object.position = new_position
 
-## save and add to scene object
+# <> create object section <>
 func add_to_scene_bacterium(bacterium: Bacterium):
-	var map_area = Vector2(MAP_WIDTH, MAP_HEIGHT)
-	bacterium.setup(map_area)
+	bacterium.setup_nav_field(
+		Vector2(MAP_WIDTH / -2.0, MAP_HEIGHT / -2.0),
+		Vector2(MAP_WIDTH /  2.0, MAP_HEIGHT /  2.0)
+	)
 	bacteria.push_back(bacterium)
 	add_child(bacterium)
 
 func add_to_scene_cell(cell: EnergyCell):
-	var map_area = Vector2(MAP_WIDTH, MAP_HEIGHT)
-	cell.setup(map_area)
+	cell.setup_nav_field(
+		Vector2(MAP_WIDTH / -2.0, MAP_HEIGHT / -2.0),
+		Vector2(MAP_WIDTH /  2.0, MAP_HEIGHT /  2.0)
+	)
 	energy_cells.push_back(cell)
 	add_child(cell)
 
 func create_bacteria(count: int):
 	for i in range(0, count):
-		# set randomly bacterium type
-		var num = randi_range(0, 2)
 		var bacterium: Bacterium
-		match num:
+		match randi_range(0, 2):	# set randomly bacterium type
 			0: bacterium = green_bacteria_instance.instantiate()
 			1: bacterium = orange_bacteria_instance.instantiate()
 			2: bacterium = purple_bacteria_instance.instantiate()
-		
 		add_to_scene_bacterium(bacterium)
 
 func create_energy_cells(count: int):
@@ -99,19 +135,12 @@ func create_energy_cells(count: int):
 		var cell: EnergyCell = energy_cell_instance.instantiate()
 		add_to_scene_cell(cell)
 
-func move_selected_object():
-	if _selected_object != null:
-		const LERP_WEIGH: float = 0.2
-		var new_position: Vector2 = lerp(_selected_object.position, get_local_mouse_position(), LERP_WEIGH)
-		_selected_object.position = new_position
-
 # <> signals section <>
 func _on_click_on_object(object: CharacterBody2D):
 	object.velocity = Vector2.ZERO
 	_selected_object = object
 
 func _on_energy_shed(_position: Vector2, _impulse: Vector2, _energy: int):	# create energy_cell
-	var map_area = Vector2(MAP_WIDTH, MAP_HEIGHT)
 	var cell: EnergyCell = energy_cell_instance.instantiate()
 	add_to_scene_cell(cell)
 	
