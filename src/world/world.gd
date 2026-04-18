@@ -122,7 +122,7 @@ func _input(event: InputEvent):
 func set_simulation(enable: bool):
 	_is_simulation_run = enable
 	$Day.paused = not enable
-	$Day.paused = not enable
+	$Night.paused = not enable
 	
 	for b_unit in bacteria:
 		b_unit.set_physics_updating(enable)
