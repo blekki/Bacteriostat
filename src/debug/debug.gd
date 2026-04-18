@@ -1,39 +1,75 @@
 # Singlton "Debug" for... debug features :/
 extends Node2D
 
-const IS_DEBUG_MODE_ON = true
-const LINE_WIDTH: float = 2.0
+enum DEBUG_MODES {
+	OFF,
+	SINGLE,
+	FULL
+}
 
-var last_id: int = 0;
-var layers: Dictionary[int, Array] = {}
+var debug_mode = DEBUG_MODES.SINGLE;
+var line_width: float = 2.0
+
+var _last_id: int = 0;
+var _layers: Dictionary[int, Array] = {}
+var _selected_object: Entity = null
 
 # <> methods <>
 func _ready() -> void:
-	z_index = -10
+	Singlton.click_on_object.connect(_on_click_on_object)
+	Singlton.remove_object.connect(_on_remove_object)
+	z_index = -1
 
-func _process(delta: float):
-	if IS_DEBUG_MODE_ON == true:
-		queue_redraw()
+func _process(_delta: float):
+	queue_redraw()
+
+func _input(event: InputEvent):
+	if event.is_action_pressed("debug_off"):
+		debug_mode = DEBUG_MODES.OFF
+	elif event.is_action_pressed("debug_single_mode"):
+		debug_mode = DEBUG_MODES.SINGLE
+	elif event.is_action_pressed("debug_full_mode"):
+		debug_mode = DEBUG_MODES.FULL
+		
+
+func draw_record(layer: int):
+	for line in _layers.get(layer):
+		draw_line(line.start, line.end, line.color, line_width)
+
+func draw_all():
+	for row in _layers:
+		for line in _layers.get(row):
+			draw_line(line.start, line.end, line.color, line_width)
 
 func _draw():
-	for id in layers:
-		for line in layers.get(id):
-			draw_line(line.start, line.end, line.color, LINE_WIDTH)
+	match debug_mode:
+		DEBUG_MODES.SINGLE:
+			if _selected_object != null:
+				draw_record(_selected_object.debug_layer)
+		DEBUG_MODES.FULL:
+			draw_all()
 
 func get_new_layer() -> int:
-	last_id += 1
+	_last_id += 1
 	var lines: Array[Line] = []
-	layers[last_id] = lines
-	return last_id
+	_layers[_last_id] = lines
+	return _last_id
 
 func add_line(layer_id: int, start: Vector2, end: Vector2, color: Color):
-	layers.get(layer_id).append(
+	_layers.get(layer_id).append(
 		Line.new(start, end, color)
 	)
 
 func clean_layer(id: int):
-	layers[id] = []
+	_layers[id] = []
 
 func remove_layer(id: int):
-	if layers.has(id):
-		layers.erase(id)
+	if _layers.has(id):
+		_layers.erase(id)
+
+func _on_click_on_object(entity: Bacterium):
+	_selected_object = entity
+
+func _on_remove_object(entity: Bacterium):
+	if entity == _selected_object:
+		_selected_object = null
