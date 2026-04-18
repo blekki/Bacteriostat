@@ -31,12 +31,29 @@ func _physics_process(_delta: float):
 	move_selected_object()
 
 func _process(_delta: float):
+	update_shaders()
 	if Singlton.is_day():
 		Singlton.season_continues = $Day.time_left
 		Singlton.season_duration = $Day.wait_time
 	else:
 		Singlton.season_continues = $Night.time_left
 		Singlton.season_duration = $Night.wait_time
+
+func update_shaders():
+	var cam = get_viewport().get_camera_2d()
+	var center = cam.get_screen_center_position()
+	var viewport_size = get_viewport_rect().size / cam.zoom
+	
+	## Stretch shaders on the all window
+	var water = $Background/BackgroundTexture
+	var blur = $Background/BlurTexture
+	var wales = $Wales/WalesTexture
+	water.position = center
+	water.scale = viewport_size
+	blur.position = center
+	blur.scale = viewport_size
+	wales.position = center
+	wales.scale = viewport_size
 
 func _setup_navigation_field():
 	var half_width: float = MAP_WIDTH / 2.0

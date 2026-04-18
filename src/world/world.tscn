@@ -1,6 +1,65 @@
 [gd_scene format=3 uid="uid://duuaegris31ou"]
 
 [ext_resource type="Script" uid="uid://yywy0uwb6gro" path="res://src/world/world.gd" id="1_vfn15"]
+[ext_resource type="Shader" uid="uid://bsglfytmbs7kp" path="res://src/world/border_line.gdshader" id="2_6fy3g"]
+[ext_resource type="Shader" uid="uid://u1flxrq2taeh" path="res://src/world/water.gdshader" id="2_bsf3i"]
+[ext_resource type="Texture2D" uid="uid://cnmn8wgwnesyv" path="res://assets/shader_base.png" id="3_43c6p"]
+[ext_resource type="Shader" uid="uid://beypr302yb6ch" path="res://src/world/blur.gdshader" id="4_43c6p"]
+[ext_resource type="Texture2D" uid="uid://lyv64qugfb7f" path="res://assets/m1.png" id="4_wg6dd"]
+[ext_resource type="Texture2D" uid="uid://c347jcgun4ewg" path="res://assets/m2.png" id="5_hg6dy"]
+[ext_resource type="Shader" uid="uid://py5x6iwkql4g" path="res://src/world/wales.gdshader" id="5_l0av5"]
+[ext_resource type="Texture2D" uid="uid://crnq47nyh4a5g" path="res://assets/m0.png" id="6_hg6dy"]
+[ext_resource type="Texture2D" uid="uid://5a07tvfiwbuc" path="res://assets/m4.png" id="7_ocs7n"]
+[ext_resource type="Texture2D" uid="uid://cl7opurg2wh8v" path="res://assets/m3.png" id="8_jsigt"]
+
+[sub_resource type="Gradient" id="Gradient_jsigt"]
+offsets = PackedFloat32Array(0, 0.99358976)
+colors = PackedColorArray(0.6640625, 1, 1, 1, 0.8497236, 0.9775271, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_lid7q"]
+gradient = SubResource("Gradient_jsigt")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_jsigt"]
+noise_type = 3
+frequency = 0.0025
+fractal_octaves = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_lid7q"]
+noise = SubResource("FastNoiseLite_jsigt")
+seamless = true
+seamless_blend_skirt = 0.223
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l0av5"]
+shader = ExtResource("2_bsf3i")
+shader_parameter/color = Vector4(0.842, 1, 0.978, 1)
+shader_parameter/gradient = SubResource("GradientTexture1D_lid7q")
+shader_parameter/noise = SubResource("NoiseTexture2D_lid7q")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5kmgb"]
+shader = ExtResource("4_43c6p")
+shader_parameter/blur = 2.50000011875
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5kmgb"]
+noise_type = 2
+frequency = 0.0219
+fractal_octaves = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wg6dd"]
+noise = SubResource("FastNoiseLite_5kmgb")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hg6dy"]
+shader = ExtResource("5_l0av5")
+shader_parameter/wales_speed = 0.05
+shader_parameter/roughness = 0.5
+shader_parameter/noise = SubResource("NoiseTexture2D_wg6dd")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jte2u"]
+shader = ExtResource("2_6fy3g")
+shader_parameter/color_a = Vector4(1, 1, 1, 1)
+shader_parameter/color_b = Vector4(0.305, 0.685, 0.725, 1)
+shader_parameter/frequency = 100.0
+shader_parameter/speed = 10.0
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_5o7fj"]
 agent_radius = 33.0
@@ -13,6 +72,131 @@ size = Vector2(16, 16)
 
 [node name="World" type="Node2D" unique_id=1084301518]
 script = ExtResource("1_vfn15")
+
+[node name="Background" type="CanvasGroup" parent="." unique_id=492685341]
+z_index = -1
+position = Vector2(7.6293945e-06, 0)
+
+[node name="BackgroundTexture" type="Sprite2D" parent="Background" unique_id=772542168]
+z_index = -1
+material = SubResource("ShaderMaterial_l0av5")
+texture = ExtResource("3_43c6p")
+
+[node name="Parallax2D" type="Parallax2D" parent="Background" unique_id=1071501197]
+modulate = Color(0.68, 0.68, 0.68, 0.54901963)
+z_index = -1
+rotation = 5.1609387
+scale = Vector2(1.465, 1.465)
+scroll_scale = Vector2(0.5, 0.5)
+
+[node name="Sprite2D1" type="Sprite2D" parent="Background/Parallax2D" unique_id=1604592316]
+position = Vector2(24.843977, -351.33054)
+rotation = 0.46452156
+scale = Vector2(1.645, 1.645)
+texture = ExtResource("6_hg6dy")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Background/Parallax2D" unique_id=1679115382]
+position = Vector2(112.13748, 661.14124)
+rotation = 2.6179938
+scale = Vector2(1.135, 1.135)
+texture = ExtResource("6_hg6dy")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Background/Parallax2D" unique_id=359366993]
+position = Vector2(-588.59485, -1.5599957)
+rotation = -2.3439772
+scale = Vector2(2.075, 2.075)
+texture = ExtResource("6_hg6dy")
+
+[node name="Parallax2D2" type="Parallax2D" parent="Background" unique_id=2021485786]
+modulate = Color(1, 1, 1, 0.54901963)
+z_index = -1
+scroll_scale = Vector2(0.7, 0.7)
+
+[node name="Sprite2D1" type="Sprite2D" parent="Background/Parallax2D2" unique_id=1471998698]
+position = Vector2(272, 256)
+rotation = 0.4645216
+scale = Vector2(1.645, 1.645)
+texture = ExtResource("4_wg6dd")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Background/Parallax2D2" unique_id=1730172569]
+position = Vector2(-632, -568)
+rotation = 2.2183135
+scale = Vector2(2.97, 2.97)
+texture = ExtResource("5_hg6dy")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Background/Parallax2D2" unique_id=936045939]
+position = Vector2(-168, -264)
+texture = ExtResource("5_hg6dy")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Background/Parallax2D2" unique_id=547579721]
+position = Vector2(480, 496)
+rotation = 2.1118484
+scale = Vector2(0.505, 0.505)
+texture = ExtResource("6_hg6dy")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Background/Parallax2D2" unique_id=483601433]
+position = Vector2(1223.9999, -696.0001)
+rotation = -2.0987234
+scale = Vector2(3.039875, 3.039875)
+texture = ExtResource("6_hg6dy")
+
+[node name="Parallax2D3" type="Parallax2D" parent="Background" unique_id=1573014423]
+modulate = Color(0.74, 0.74, 0.74, 0.54901963)
+z_index = -1
+scroll_scale = Vector2(0.85, 0.85)
+scroll_offset = Vector2(-832, 48)
+
+[node name="Sprite2D1" type="Sprite2D" parent="Background/Parallax2D3" unique_id=1674802532]
+position = Vector2(-312, 640)
+rotation = 0.46452162
+texture = ExtResource("4_wg6dd")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Background/Parallax2D3" unique_id=835016039]
+position = Vector2(640.0001, -400.00003)
+rotation = -0.9687233
+scale = Vector2(2.560234, 1.8330545)
+texture = ExtResource("7_ocs7n")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Background/Parallax2D3" unique_id=665407828]
+position = Vector2(432.00003, -288)
+rotation = 0.46452162
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("4_wg6dd")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Background/Parallax2D3" unique_id=1166329111]
+position = Vector2(-688, 344.00003)
+rotation = 0.9290432
+scale = Vector2(0.78, 0.78)
+texture = ExtResource("8_jsigt")
+
+[node name="ScreenBuffer" type="BackBufferCopy" parent="Background" unique_id=1531017512]
+z_index = -1
+scale = Vector2(1000, 1000)
+copy_mode = 2
+
+[node name="BlurTexture" type="Sprite2D" parent="Background" unique_id=896647230]
+z_index = -1
+material = SubResource("ShaderMaterial_5kmgb")
+scale = Vector2(1000, 1000)
+texture = ExtResource("3_43c6p")
+
+[node name="Wales" type="CanvasGroup" parent="." unique_id=1415665416]
+
+[node name="ScreenBuffer" type="BackBufferCopy" parent="Wales" unique_id=521935515]
+copy_mode = 2
+
+[node name="WalesTexture" type="Sprite2D" parent="Wales" unique_id=948580909]
+material = SubResource("ShaderMaterial_hg6dy")
+texture = ExtResource("3_43c6p")
+
+[node name="BorderLine" type="Line2D" parent="." unique_id=1276355183]
+z_index = 5
+material = SubResource("ShaderMaterial_jte2u")
+points = PackedVector2Array(-128, -128, 128, -128, 128, 128, -128, 128, -128, -128)
+default_color = Color(2.9841065e-06, 0.77949333, 0.75097775, 1)
+texture_mode = 1
+begin_cap_mode = 1
+end_cap_mode = 1
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=706864556]
 navigation_polygon = SubResource("NavigationPolygon_5o7fj")
@@ -33,13 +217,6 @@ shape = SubResource("RectangleShape2D_1a5qu")
 
 [node name="RightSide" type="CollisionShape2D" parent="Collision" unique_id=1742481543]
 shape = SubResource("RectangleShape2D_1a5qu")
-
-[node name="BorderLine" type="Line2D" parent="." unique_id=1276355183]
-points = PackedVector2Array(-128, -128, 128, -128, 128, 128, -128, 128, -128, -128)
-width = 5.0
-default_color = Color(2.9841065e-06, 0.77949333, 0.75097775, 1)
-begin_cap_mode = 1
-end_cap_mode = 1
 
 [node name="Day" type="Timer" parent="." unique_id=816259507]
 wait_time = 10.0
