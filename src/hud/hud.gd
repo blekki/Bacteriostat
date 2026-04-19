@@ -10,7 +10,6 @@ var _texture_rect: TextureRect = null
 var _info_label: Label = null
 
 # parameters
-var _default_picture: Texture2D = preload("res://assets/unknown-64x64.png")
 var _tracked_object: Entity = null
 var _is_hide_button_active: bool = false
 
@@ -50,10 +49,7 @@ func _move_panel_on_screen():
 # <> text changing <>
 func _print_empty_page():
 	_name_label.text = "Undefined"
-	_texture_rect.texture = _default_picture
-	_info_label.text  = "energy: ?\n"
-	_info_label.text += "state: ?\n"
-	_info_label.text += "priming: ?\n"
+	_info_label.text  = "energy: 0 (DEAD)\n"
 
 func _update_season_info():
 	_time_season_label.text = Singlton.get_season_info()
