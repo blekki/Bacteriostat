@@ -6,6 +6,7 @@ extends Control
 @onready var _info_panel: InfoPanel = $InfoPanel
 var _time_season_label: Label = null
 var _name_label: Label = null
+var _texture_rect: TextureRect = null
 var _info_label: Label = null
 
 # parameters
@@ -16,8 +17,9 @@ var _is_hide_button_active: bool = false
 func _ready():
 	_time_season_label = $InfoPanel/PanelContainer/VBoxContainer/TimeSeasonPanel/SeasonInfo
 	var _object_vbox: VBoxContainer = $InfoPanel/PanelContainer/VBoxContainer/ObjectPanel/VBox
-	_name_label = _object_vbox.get_node("ObjectName")
-	_info_label = _object_vbox.get_node("ObjectParameters")
+	_name_label   = _object_vbox.get_node("ObjectName")
+	_texture_rect = _object_vbox.get_node("ObjectTexture")
+	_info_label   = _object_vbox.get_node("ObjectParameters")
 	
 	Singlton.click_on_object.connect(_on_click_on_object)
 	Singlton.remove_object.connect(_on_remove_object)
@@ -58,6 +60,7 @@ func _update_object_info():
 		return
 	
 	_name_label.text = _tracked_object.get_personal_name()
+	_texture_rect.texture = _tracked_object.get_texture()
 	_info_label.text = _tracked_object.get_info()
 
 # <> signals <>

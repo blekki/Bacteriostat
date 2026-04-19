@@ -65,6 +65,9 @@ func _collision_fluence():
 func get_personal_name() -> String:
 	return entity_name
 
+func get_texture() -> Texture2D:
+	return $Texture.texture
+
 func get_info() -> String:
 	var information: String = "energy: %d/%d\n" % [energy, max_energy]
 	return information

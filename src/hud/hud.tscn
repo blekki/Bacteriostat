@@ -7,6 +7,8 @@
 [ext_resource type="StyleBox" uid="uid://cb38ubdeevb32" path="res://assets/styles/hud_panels/panel.tres" id="4_cs14m"]
 [ext_resource type="StyleBox" uid="uid://stm7p1c6caiv" path="res://assets/styles/hud_panels/daughter_panel.tres" id="5_7hkyr"]
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_uwgws"]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8ej7y"]
 size = Vector2(182, 39)
 
@@ -19,7 +21,6 @@ theme = ExtResource("1_7hkyr")
 script = ExtResource("1_t0re6")
 
 [node name="InfoPanel" type="CharacterBody2D" parent="." unique_id=1840319785]
-visible = false
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("3_8ej7y")
@@ -30,6 +31,7 @@ position = Vector2(-120, 8)
 rect = Rect2(-8, -8, 256, 48)
 
 [node name="PanelContainer" type="PanelContainer" parent="InfoPanel" unique_id=497167825]
+material = SubResource("CanvasItemMaterial_uwgws")
 clip_contents = true
 anchors_preset = 10
 anchor_right = 1.0
