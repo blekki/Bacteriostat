@@ -8,7 +8,7 @@ func _ready():
 	super()
 	max_energy = 25
 	energy = _random.randi_range(5, 12)
-	# todo: set texture
+	rotation = _random.randf_range(-PI, PI)
 
 func _physics_process(delta: float) -> void:
 	super(delta)	# default physics

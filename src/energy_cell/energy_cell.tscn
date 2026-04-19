@@ -2,10 +2,22 @@
 
 [ext_resource type="PackedScene" uid="uid://bo1y1apxgdai4" path="res://src/entity/entity.tscn" id="1_3a1qc"]
 [ext_resource type="Script" uid="uid://bs6qv8dqtkfbu" path="res://src/energy_cell/energy_cell.gd" id="2_bjre1"]
+[ext_resource type="Texture2D" uid="uid://dtusbqm3pryvq" path="res://assets/grass_energy_cell.png" id="3_v5jjv"]
 
 [node name="EnergyCell" unique_id=1553382449 instance=ExtResource("1_3a1qc")]
 scale = Vector2(0.2, 0.2)
 script = ExtResource("2_bjre1")
 
 [node name="Texture" parent="." index="0" unique_id=314057492]
-self_modulate = Color(0.37981972, 0.8739389, 0.3236056, 1)
+self_modulate = Color(0.35453427, 1, 0.58993244, 1)
+position = Vector2(0, 4.9999995)
+texture = ExtResource("3_v5jjv")
+
+[node name="Lumi" parent="." index="1" unique_id=1960966770]
+visible = false
+
+[node name="Collision" parent="." index="2" unique_id=299581857]
+scale = Vector2(1.5, 1.5)
+
+[node name="ClickableCollision" parent="ClickableArea" parent_id_path=PackedInt32Array(1380816360) index="0" unique_id=186964460]
+scale = Vector2(1.5, 1.5)

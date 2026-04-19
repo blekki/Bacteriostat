@@ -3,11 +3,9 @@
 [ext_resource type="Theme" uid="uid://2p8lo5yetkjn" path="res://assets/styles/hud_panels/text.tres" id="1_7hkyr"]
 [ext_resource type="Script" uid="uid://d22pe2btl3reo" path="res://src/hud/hud.gd" id="1_t0re6"]
 [ext_resource type="Script" uid="uid://b1pg4k3wc4xvx" path="res://src/hud/info_panel.gd" id="3_8ej7y"]
-[ext_resource type="Texture2D" uid="uid://dx5eawmxmsgpv" path="res://assets/Ellipse 1.svg" id="3_ony6l"]
 [ext_resource type="StyleBox" uid="uid://cb38ubdeevb32" path="res://assets/styles/hud_panels/panel.tres" id="4_cs14m"]
 [ext_resource type="StyleBox" uid="uid://stm7p1c6caiv" path="res://assets/styles/hud_panels/daughter_panel.tres" id="5_7hkyr"]
-
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_uwgws"]
+[ext_resource type="Texture2D" uid="uid://dg8m8hpg87ty4" path="res://assets/unknown-64x64.png" id="6_7hkyr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8ej7y"]
 size = Vector2(182, 39)
@@ -31,7 +29,6 @@ position = Vector2(-120, 8)
 rect = Rect2(-8, -8, 256, 48)
 
 [node name="PanelContainer" type="PanelContainer" parent="InfoPanel" unique_id=497167825]
-material = SubResource("CanvasItemMaterial_uwgws")
 clip_contents = true
 anchors_preset = 10
 anchor_right = 1.0
@@ -95,7 +92,7 @@ theme_override_styles/panel = ExtResource("5_7hkyr")
 [node name="SeasonInfo" type="Label" parent="InfoPanel/PanelContainer/VBoxContainer/TimeSeasonPanel" unique_id=251209976]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "time season"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -119,16 +116,19 @@ custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "object name"
+horizontal_alignment = 1
 autowrap_mode = 3
 clip_text = true
 text_overrun_behavior = 5
 uppercase = true
 
 [node name="ObjectTexture" type="TextureRect" parent="InfoPanel/PanelContainer/VBoxContainer/ObjectPanel/VBox" unique_id=1031743290]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
-size_flags_horizontal = 0
-texture = ExtResource("3_ony6l")
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("6_7hkyr")
+expand_mode = 1
 
 [node name="ObjectParameters" type="Label" parent="InfoPanel/PanelContainer/VBoxContainer/ObjectPanel/VBox" unique_id=1453492340]
 custom_minimum_size = Vector2(0, 160)

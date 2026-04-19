@@ -10,19 +10,21 @@ var _texture_rect: TextureRect = null
 var _info_label: Label = null
 
 # parameters
+var _default_picture: Texture2D = preload("res://assets/unknown-64x64.png")
 var _tracked_object: Entity = null
 var _is_hide_button_active: bool = false
 
 # <> methods <>
 func _ready():
+	Singlton.click_on_object.connect(_on_click_on_object)
+	Singlton.remove_object.connect(_on_remove_object)
+	
 	_time_season_label = $InfoPanel/PanelContainer/VBoxContainer/TimeSeasonPanel/SeasonInfo
 	var _object_vbox: VBoxContainer = $InfoPanel/PanelContainer/VBoxContainer/ObjectPanel/VBox
 	_name_label   = _object_vbox.get_node("ObjectName")
 	_texture_rect = _object_vbox.get_node("ObjectTexture")
 	_info_label   = _object_vbox.get_node("ObjectParameters")
-	
-	Singlton.click_on_object.connect(_on_click_on_object)
-	Singlton.remove_object.connect(_on_remove_object)
+	 
 	_info_panel.hide()
 
 func _process(_delta: float):
@@ -48,6 +50,7 @@ func _move_panel_on_screen():
 # <> text changing <>
 func _print_empty_page():
 	_name_label.text = "Undefined"
+	_texture_rect.texture = _default_picture
 	_info_label.text  = "energy: ?\n"
 	_info_label.text += "state: ?\n"
 	_info_label.text += "priming: ?\n"
