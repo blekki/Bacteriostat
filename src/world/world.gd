@@ -8,10 +8,16 @@ const orange_bacteria_instance = preload("res://src/bacterium/orange_bacterium.t
 const purple_bacteria_instance = preload("res://src/bacterium/purple_bacterium.tscn")
 const energy_cell_instance     = preload("res://src/energy_cell/energy_cell.tscn")
 
+@export var day_shader_color: Color = Color(1.0, 1.0, 1.0, 1.0);
+@export var night_shader_color: Color = Color(0.597, 0.702, 0.918, 1.0);
 var bacteria: Array[Bacterium] = []
 var energy_cells: Array[EnergyCell] = []
 
 # <> technical
+@onready var _season_shader: CanvasModulate = $SeasonShader
+@onready var _day_timer: Timer = $DayTimer
+@onready var _night_timer: Timer = $NightTimer
+var _season_animation: Tween = Tween.new()
 var _is_simulation_run: bool = true
 var _selected_object: CharacterBody2D = null
 
@@ -31,28 +37,28 @@ func _physics_process(_delta: float):
 	move_selected_object()
 
 func _process(_delta: float):
-	update_shaders()
+	rescale_shaders_rect()
 	if Singlton.is_day():
-		Singlton.season_continues = $Day.time_left
-		Singlton.season_duration = $Day.wait_time
+		Singlton.season_continues = _day_timer.time_left
+		Singlton.season_duration = _day_timer.wait_time
 	else:
-		Singlton.season_continues = $Night.time_left
-		Singlton.season_duration = $Night.wait_time
+		Singlton.season_continues = _night_timer.time_left
+		Singlton.season_duration = _night_timer.wait_time
 
-func update_shaders():
+func rescale_shaders_rect():
 	var cam = get_viewport().get_camera_2d()
 	var center = cam.get_screen_center_position()
 	var viewport_size = get_viewport_rect().size / cam.zoom
 	
 	## Stretch shaders on the all window
-	var water = $Background/BackgroundTexture
-	var blur = $Background/BlurTexture
-	var wales = $Wales/WalesTexture
+	var water = $Background/BackgroundShader
+	var blur  = $Background/BlurShader
+	var wales = $Wales/WalesShader
 	water.position = center
-	water.scale = viewport_size
-	blur.position = center
-	blur.scale = viewport_size
+	blur.position  = center
 	wales.position = center
+	water.scale = viewport_size
+	blur.scale  = viewport_size
 	wales.scale = viewport_size
 
 func _setup_navigation_field():
@@ -121,8 +127,12 @@ func _input(event: InputEvent):
 
 func set_simulation(enable: bool):
 	_is_simulation_run = enable
-	$Day.paused = not enable
-	$Night.paused = not enable
+	_day_timer.paused = not enable
+	_night_timer.paused = not enable
+	
+	if enable:
+		_season_animation.play()
+	else: _season_animation.stop()
 	
 	for b_unit in bacteria:
 		b_unit.set_physics_updating(enable)
@@ -134,6 +144,17 @@ func move_selected_object():
 		const LERP_WEIGH: float = 0.2
 		var new_position: Vector2 = lerp(_selected_object.position, get_local_mouse_position(), LERP_WEIGH)
 		_selected_object.position = new_position
+
+func update_season_filter(target_color: Color):
+	if _season_animation:	# does already work
+		_season_animation.kill()
+	
+	# create new animation
+	const DURATION: float = 2.0
+	_season_animation = create_tween()
+	_season_animation.tween_property(_season_shader, "color", target_color, DURATION)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_IN_OUT)
 
 # <> create object section <>
 func add_to_scene_bacterium(bacterium: Bacterium):
@@ -212,14 +233,16 @@ func _on_remove_object(object: Entity):
 
 # time season configuration
 func _start_day():
-	$Night.stop()
+	_night_timer.stop()
 	Singlton.time_season = Enums.TimeSeasons.DAY
-	$Day.start()
+	update_season_filter(day_shader_color)
+	_day_timer.start()
 
 func _start_night():
-	$Day.stop()
+	_day_timer.stop()
 	Singlton.time_season = Enums.TimeSeasons.NIGHT
-	$Night.start()
+	update_season_filter(night_shader_color)
+	_night_timer.start()
 
 func _on_day_timeout():
 	_start_night()

@@ -77,7 +77,7 @@ script = ExtResource("1_vfn15")
 z_index = -1
 position = Vector2(7.6293945e-06, 0)
 
-[node name="BackgroundTexture" type="Sprite2D" parent="Background" unique_id=772542168]
+[node name="BackgroundShader" type="Sprite2D" parent="Background" unique_id=772542168]
 z_index = -1
 material = SubResource("ShaderMaterial_l0av5")
 texture = ExtResource("3_43c6p")
@@ -174,7 +174,7 @@ z_index = -1
 scale = Vector2(1000, 1000)
 copy_mode = 2
 
-[node name="BlurTexture" type="Sprite2D" parent="Background" unique_id=896647230]
+[node name="BlurShader" type="Sprite2D" parent="Background" unique_id=896647230]
 z_index = -1
 material = SubResource("ShaderMaterial_5kmgb")
 scale = Vector2(1000, 1000)
@@ -185,7 +185,7 @@ texture = ExtResource("3_43c6p")
 [node name="ScreenBuffer" type="BackBufferCopy" parent="Wales" unique_id=521935515]
 copy_mode = 2
 
-[node name="WalesTexture" type="Sprite2D" parent="Wales" unique_id=948580909]
+[node name="WalesShader" type="Sprite2D" parent="Wales" unique_id=948580909]
 material = SubResource("ShaderMaterial_hg6dy")
 texture = ExtResource("3_43c6p")
 
@@ -218,13 +218,18 @@ shape = SubResource("RectangleShape2D_1a5qu")
 [node name="RightSide" type="CollisionShape2D" parent="Collision" unique_id=1742481543]
 shape = SubResource("RectangleShape2D_1a5qu")
 
-[node name="Day" type="Timer" parent="." unique_id=816259507]
-wait_time = 10.0
+[node name="SeasonShader" type="CanvasModulate" parent="." unique_id=359940514]
+show_behind_parent = true
+light_mask = 0
+visibility_layer = 0
+
+[node name="DayTimer" type="Timer" parent="." unique_id=816259507]
+wait_time = 15.0
 one_shot = true
 
-[node name="Night" type="Timer" parent="." unique_id=700263351]
-wait_time = 10.0
+[node name="NightTimer" type="Timer" parent="." unique_id=700263351]
+wait_time = 15.0
 one_shot = true
 
-[connection signal="timeout" from="Day" to="." method="_on_day_timeout"]
-[connection signal="timeout" from="Night" to="." method="_on_night_timeout"]
+[connection signal="timeout" from="DayTimer" to="." method="_on_day_timeout"]
+[connection signal="timeout" from="NightTimer" to="." method="_on_night_timeout"]

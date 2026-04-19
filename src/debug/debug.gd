@@ -18,7 +18,13 @@ var _selected_object: Entity = null
 func _ready() -> void:
 	Singlton.click_on_object.connect(_on_click_on_object)
 	Singlton.remove_object.connect(_on_remove_object)
+	
 	z_index = -1
+	
+	# ignore shadow
+	var unshaded_material = CanvasItemMaterial.new()
+	unshaded_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	material = unshaded_material
 
 func _process(_delta: float):
 	queue_redraw()
@@ -30,7 +36,6 @@ func _input(event: InputEvent):
 		debug_mode = DEBUG_MODES.SINGLE
 	elif event.is_action_pressed("debug_full_mode"):
 		debug_mode = DEBUG_MODES.FULL
-		
 
 func draw_record(layer: int):
 	for line in _layers.get(layer):
