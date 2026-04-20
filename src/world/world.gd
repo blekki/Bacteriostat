@@ -17,7 +17,7 @@ var energy_cells: Array[EnergyCell] = []
 @onready var _season_shader: CanvasModulate = $SeasonShader
 @onready var _day_timer: Timer = $DayTimer
 @onready var _night_timer: Timer = $NightTimer
-var _season_animation: Tween = Tween.new()
+var _season_animation: Tween = create_tween()
 var _is_simulation_run: bool = true
 var _selected_object: CharacterBody2D = null
 
@@ -132,7 +132,7 @@ func set_simulation(enable: bool):
 	
 	if enable:
 		_season_animation.play()
-	else: _season_animation.stop()
+	else: _season_animation.pause()
 	
 	for b_unit in bacteria:
 		b_unit.set_physics_updating(enable)
