@@ -30,7 +30,7 @@ func _process(_delta: float):
 	_update_season_info()
 	_update_object_info()
 
-func _move_panel_on_screen():
+func _return_panel_on_screen():
 	var camera = get_viewport().get_camera_2d()
 	var viewport_size = camera.get_viewport_rect().size / camera.zoom
 	var viewport_center = camera.get_screen_center_position()
@@ -89,7 +89,7 @@ func _on_click_on_object(object: Entity):
 	# replace panel on screen if it's not
 	var panel_notifier = _info_panel.get_node("VisibleOnScreenNotifier2D")
 	if not panel_notifier.is_on_screen():
-		_move_panel_on_screen()
+		_return_panel_on_screen()
 
 func _on_remove_object(object: Entity):
 	if _tracked_object == object:
