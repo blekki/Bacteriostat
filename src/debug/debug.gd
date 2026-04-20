@@ -72,9 +72,11 @@ func remove_layer(id: int):
 	if _layers.has(id):
 		_layers.erase(id)
 
-func _on_click_on_object(entity: Bacterium):
-	_selected_object = entity
+# <> signals <>
+func _on_click_on_object(object: CharacterBody2D):
+	if object is Entity:
+		_selected_object = object
 
-func _on_remove_object(entity: Bacterium):
+func _on_remove_object(entity: Entity):
 	if entity == _selected_object:
 		_selected_object = null

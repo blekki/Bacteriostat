@@ -130,7 +130,7 @@ func set_simulation(enable: bool):
 	_day_timer.paused = not enable
 	_night_timer.paused = not enable
 	
-	if enable:
+	if enable and _season_animation.is_valid():
 		_season_animation.play()
 	else: _season_animation.pause()
 	

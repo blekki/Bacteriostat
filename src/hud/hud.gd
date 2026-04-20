@@ -81,12 +81,15 @@ func _on_hide_button_pressed():
 func _on_close_button_pressed():
 	_info_panel.hide()
 
-func _on_click_on_object(object: Entity):
+func _on_click_on_object(object: CharacterBody2D):
+	if object is InfoPanel:
+		return
+	 
 	_tracked_object = object
 	_update_object_info()
 	_info_panel.show()
 	
-	# replace panel on screen if it's not
+	# replace panel on screen if it's outside
 	var panel_notifier = _info_panel.get_node("VisibleOnScreenNotifier2D")
 	if not panel_notifier.is_on_screen():
 		_return_panel_on_screen()
