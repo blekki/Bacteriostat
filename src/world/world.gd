@@ -30,8 +30,8 @@ func _ready():
 	_setup_navigation_field()
 	_setup_collision_walls()
 	_start_day()
-	create_bacteria(10)
-	create_energy_cells(20)
+	create_bacteria(80)
+	create_energy_cells(40)
 
 func _physics_process(_delta: float):
 	move_selected_object()

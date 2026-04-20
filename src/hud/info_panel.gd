@@ -9,7 +9,7 @@ var expected_position: Vector2 = position
 var _is_auto_replace_on: bool = false
 
 # <> methods section <>
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	_deceleration()
 	auto_replace()
 	move_and_slide()

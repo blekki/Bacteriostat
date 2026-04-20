@@ -27,7 +27,7 @@ func _ready():
 	debug_layer = Debug.get_new_layer()
 	position = _generate_smart_point()
 
-func _physics_process(delta: float):
+func _physics_process(_delta: float):
 	_deceleration()
 	_collision_fluence()
 	move_and_slide()
@@ -98,7 +98,7 @@ func can_spend_energy(delta_energy: int) -> int:
 	return value
 
 func death():
-	Debug.clean_layer(debug_layer)	# todo: change to "remove_layer"
+	Debug.remove_layer(debug_layer)	# todo: change to "remove_layer"
 	modulate = Color.DIM_GRAY	# todo: change texture
 	Singlton.remove_object.emit(self)
 

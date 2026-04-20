@@ -5,7 +5,7 @@ var start: Vector2
 var end: Vector2
 var color: Color
 
-func _init(start: Vector2, end: Vector2, color: Color):
-	self.start = start
-	self.end = end
-	self.color = color
+func _init(_start: Vector2, _end: Vector2, _color: Color):
+	self.start = _start
+	self.end = _end
+	self.color = _color
