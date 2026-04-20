@@ -98,8 +98,7 @@ func can_spend_energy(delta_energy: int) -> int:
 	return value
 
 func death():
-	Debug.remove_layer(debug_layer)	# todo: change to "remove_layer"
-	modulate = Color.DIM_GRAY	# todo: change texture
+	Debug.remove_layer(debug_layer)
 	Singlton.remove_object.emit(self)
 
 # <> reaction on signals section <>
