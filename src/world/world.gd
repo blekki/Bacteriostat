@@ -217,7 +217,7 @@ func _on_fission(parent: Bacterium):
 	child.velocity = new_velocity
 	
 	# add tiny offset to solve collision problems
-	const OFFSET: int = 30
+	const OFFSET: int = 55
 	child.position = parent.global_position + direction * OFFSET
 
 func _on_remove_object(object: Entity):

@@ -7,7 +7,6 @@ func _ready():
 	
 	# override var's
 	bacterium_name = "Purple Bacterium"
-	modulate = Color.PURPLE				# todo: change on texture
 	behavior_state = StateMachine.get_start_purple_bacterium_state();
 
 	# set personal action radii

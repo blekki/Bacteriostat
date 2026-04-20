@@ -19,15 +19,12 @@ attack_radius = 45
 luring_radius = 140
 view_distance = 160
 
-[node name="NavigationAgent" type="NavigationAgent2D" parent="." index="3" unique_id=2079435920]
-target_desired_distance = 20.0
+[node name="Lumi" parent="." index="1" unique_id=1960966770]
+light_mask = 2
+visibility_layer = 2
 
-[node name="ViewDirection" type="Line2D" parent="." index="4" unique_id=1076540450]
-points = PackedVector2Array(0, 0, 100, 0)
-width = 4.0
-default_color = Color(0, 1, 0, 1)
-begin_cap_mode = 2
-end_cap_mode = 2
+[node name="NavigationAgent" type="NavigationAgent2D" parent="." index="4" unique_id=2079435920]
+target_desired_distance = 20.0
 
 [node name="ActionPriming" type="Timer" parent="." index="5" unique_id=1915797556]
 process_callback = 0

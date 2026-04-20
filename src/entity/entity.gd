@@ -27,6 +27,9 @@ func _ready():
 	debug_layer = Debug.get_new_layer()
 	position = _generate_smart_point()
 
+func _process(_delta: float):
+	_update_lumi_texture()
+
 func _physics_process(_delta: float):
 	_deceleration()
 	_collision_fluence()
@@ -61,6 +64,16 @@ func _collision_fluence():
 		self.velocity += -dot * normal			# lose momentum
 		if collider is Entity:					# is moveble object
 			collider.velocity += dot * normal	# get momentum
+
+func _update_lumi_texture():
+	var lumi: Sprite2D = $Lumi
+	var alpha: float = lumi.self_modulate.a
+	const WEIGHT: float = 0.1
+	if Singlton.is_day():
+		alpha = lerp(alpha, 0.0, WEIGHT) # off lumi 
+	else: 
+		alpha = lerp(alpha, 1.0, WEIGHT) # on lumi
+	lumi.self_modulate.a = alpha
 
 func get_personal_name() -> String:
 	return entity_name

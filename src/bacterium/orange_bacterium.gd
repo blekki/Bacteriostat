@@ -13,7 +13,6 @@ func _ready():
 	
 	# set personal parameters
 	bacterium_name = "Orange Bacterium"
-	modulate = Color.ORANGE				# todo: change on texture
 	behavior_state = StateMachine.get_start_orange_bacterium_state();
 	dash_timer.timeout.connect(_on_dash_timer_timeout)
 	
@@ -124,7 +123,7 @@ func hunting():
 	
 	# rules how to identified object
 	var identification_rules = func(object: Entity) -> Enums.RelationshipTypes:
-		if (object is PurpleBacterium) or (object is EnergyCell):
+		if (object is Entity) and not (object is OrangeBacterium):
 			return Enums.RelationshipTypes.PREY
 		return Enums.RelationshipTypes.NONE # default
 	

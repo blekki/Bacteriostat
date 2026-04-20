@@ -11,7 +11,6 @@ func _ready():
 	
 	# set personal parameters
 	bacterium_name = "Green Bacterium"
-	modulate = Color.LAWN_GREEN			# todo: change on texture
 	behavior_state = StateMachine.get_start_green_bacterium_state();
 	
 	set_parameters_for_day()
@@ -76,7 +75,7 @@ func vampirism(prey: Bacterium):
 	# replace self closer to a prey
 	const LERP_WEIGHT: float = 0.5
 	var direction: Vector2 = prey.global_position - self.global_position
-	var lerp_to = global_position + direction - (direction.normalized() * 32)	# fix collision troubles
+	var lerp_to = global_position + direction - (direction.normalized() * 40)	# fix collision troubles
 	global_position = lerp(global_position, lerp_to, LERP_WEIGHT)
 	rotation = lerp_angle(rotation, direction.angle(), LERP_WEIGHT)
 	

@@ -48,7 +48,6 @@ func _return_panel_on_screen():
 
 # <> text changing <>
 func _print_empty_page():
-	_name_label.text = "Undefined"
 	_info_label.text  = "energy: 0 (DEAD)\n"
 
 func _update_season_info():

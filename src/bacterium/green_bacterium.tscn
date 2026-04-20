@@ -2,7 +2,21 @@
 
 [ext_resource type="PackedScene" uid="uid://m5iibvcvh23p" path="res://src/bacterium/bacterium.tscn" id="1_m1jx1"]
 [ext_resource type="Script" uid="uid://cnegtm2iijkt4" path="res://src/bacterium/green_bacterium.gd" id="2_wljwo"]
+[ext_resource type="Texture2D" uid="uid://bt41vvhw28177" path="res://assets/green_bacterium.png" id="3_7xdro"]
+[ext_resource type="Texture2D" uid="uid://bhty3tf2c1xuf" path="res://assets/green_lumi.png" id="4_7xdro"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_7xdro"]
+light_mode = 1
 
 [node name="GreenBacterium" unique_id=1553382449 instance=ExtResource("1_m1jx1")]
 script = ExtResource("2_wljwo")
 dash_attack_radius = 120
+metadata/_edit_group_ = true
+
+[node name="Texture" parent="." index="0" unique_id=314057492]
+texture = ExtResource("3_7xdro")
+
+[node name="Lumi" parent="." index="1" unique_id=1960966770]
+self_modulate = Color(1, 1, 1, 0)
+material = SubResource("CanvasItemMaterial_7xdro")
+texture = ExtResource("4_7xdro")
