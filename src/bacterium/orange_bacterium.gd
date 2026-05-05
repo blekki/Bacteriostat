@@ -70,7 +70,7 @@ func stealth_mode_off():
 func try_activate_power_dash():
 	if cooldown_timer.is_stopped():	# activate power-dash if cooldown timeout
 		dash_timer.start()
-	
+
 # <> behavior methods section <>
 ## Analyse environment for predators and check are they so close.
 func should_swim_away() -> bool:
@@ -96,8 +96,10 @@ func hiding():
 	
 	# rules how to identified object
 	var identification_rules = func(object: Entity) -> Enums.RelationshipTypes:
-		if (object is PurpleBacterium) or (object is GreenBacterium):
+		if (object is PurpleBacterium):
 			return Enums.RelationshipTypes.PREDATOR
+		elif (object is EnergyCell):
+			return Enums.RelationshipTypes.LURE
 		return Enums.RelationshipTypes.NONE # default
 	
 	# get the all nearby objects in the area
@@ -123,7 +125,7 @@ func hunting():
 	
 	# rules how to identified object
 	var identification_rules = func(object: Entity) -> Enums.RelationshipTypes:
-		if (object is Entity) and not (object is OrangeBacterium):
+		if (object is GreenBacterium) or (object is PurpleBacterium):
 			return Enums.RelationshipTypes.PREY
 		return Enums.RelationshipTypes.NONE # default
 	

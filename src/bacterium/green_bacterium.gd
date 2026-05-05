@@ -98,8 +98,7 @@ func vampirism(prey: Bacterium):
 func hunting():
 	# rules how to identified object
 	var identification_rules = func(object: Entity) -> Enums.RelationshipTypes:
-		if object is Bacterium:
-			if not object is GreenBacterium:
+		if (object is PurpleBacterium):
 				return Enums.RelationshipTypes.PREY
 		elif object is EnergyCell:
 			return Enums.RelationshipTypes.LURE	# green bacteria can't eat energy cells
