@@ -73,6 +73,7 @@ shape = SubResource("RectangleShape2D_8ej7y")
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_horizontal = 8
+focus_mode = 0
 mouse_filter = 1
 text = "—"
 
@@ -80,6 +81,7 @@ text = "—"
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_horizontal = 8
+focus_mode = 0
 mouse_filter = 1
 text = "X"
 
