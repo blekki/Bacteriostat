@@ -38,11 +38,13 @@ func _physics_process(delta: float) -> void:
 	Debug.clean_layer(debug_layer)
 	behavior_state.do_task(self)
 	
-	const STATE_UPDATE_INTERVAL = 2
+	const STATE_UPDATE_INTERVAL = 12
 	if _physics_frame >= STATE_UPDATE_INTERVAL:
 		behavior_state.try_update_behavior(self)
 		_physics_frame = 0
 	else: _physics_frame += 1
+	
+	Debug.add_target(debug_layer, get_nav_target(), Enums.DEBUG_TARGET_COLOR)
 	
 	_limit_speed()
 	super(delta)	# use also default physics parameters
@@ -105,7 +107,7 @@ func _dash(impulse: float):
 
 ## Rotate and get result [is_rotated_to].
 func try_rotate_to(target_pos: Vector2) -> bool:
-	const ROTATION_WEIGHT: float = 0.075
+	const ROTATION_WEIGHT: float = 0.04
 	var target_angle = (target_pos - position).angle()
 	rotation = lerp_angle(rotation, target_angle, ROTATION_WEIGHT)
 	
@@ -163,18 +165,20 @@ func scan_environment(area_radius: float) -> Array[Entity]:
 		query.collision_mask = 6 # 2 and 3
 		query.exclude = [get_rid()]
 		
+		var debug_ray_target: Vector2 = target
+		
 		var result = space_state.intersect_ray(query)
 		if result:
 			var collider = result.collider
 			if collider is Entity:
 				if collider.can_be_identified():
 					objects_in_area.push_back(collider)
+					
+					debug_ray_target = result.position
 		
 		# save line parameters to debug printing
 		Debug.add_line(
-			debug_layer,
-			global_position,
-			target,
+			debug_layer, global_position, debug_ray_target,
 			Enums.DEBUG_RELATIONSHIP_COLORS[Enums.RelationshipTypes.NONE]
 		)
 	

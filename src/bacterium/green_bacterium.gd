@@ -31,7 +31,7 @@ func set_parameters_for_night():
 	acceleration = 0
 	dash_acceleration = 20
 	
-	attack_radius = 45
+	attack_radius = 50
 	dash_attack_radius = 120
 	luring_radius = 140
 	view_distance = 160
@@ -75,7 +75,7 @@ func vampirism(prey: Bacterium):
 	# replace self closer to a prey
 	const LERP_WEIGHT: float = 0.5
 	var direction: Vector2 = prey.global_position - self.global_position
-	var lerp_to = global_position + direction - (direction.normalized() * 40)	# fix collision troubles
+	var lerp_to = global_position + direction - (direction.normalized() * 45)	# fix collision troubles
 	global_position = lerp(global_position, lerp_to, LERP_WEIGHT)
 	rotation = lerp_angle(rotation, direction.angle(), LERP_WEIGHT)
 	

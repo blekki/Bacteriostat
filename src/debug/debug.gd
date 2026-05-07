@@ -59,6 +59,24 @@ func add_line(layer_id: int, start: Vector2, end: Vector2, color: Color):
 		Line.new(start, end, color)
 	)
 
+func add_target(layer_id: int, target_position: Vector2, color: Color):
+	const TARGET_SIZE: int = 12
+	
+	var line1 = Line.new(
+		Vector2(target_position.x, target_position.y - TARGET_SIZE),
+		Vector2(target_position.x, target_position.y + TARGET_SIZE),
+		color
+	)
+	
+	var line2 = Line.new(
+		Vector2(target_position.x - TARGET_SIZE, target_position.y),
+		Vector2(target_position.x + TARGET_SIZE, target_position.y),
+		color
+	)
+	
+	_layers.get(layer_id).append(line1)
+	_layers.get(layer_id).append(line2)
+
 func get_new_layer() -> int:
 	_last_id += 1
 	var lines: Array[Line] = []

@@ -30,14 +30,14 @@ func set_parameters_for_day():
 	acceleration = 3
 	dash_acceleration = 40
 	
-	attack_radius  = 45
+	attack_radius  = 60
 	warning_radius = 0
 	luring_radius  = 0
 	view_distance  = 240
 
 func set_parameters_for_night():
-	acceleration = 3
-	dash_acceleration = 3
+	acceleration = 8
+	dash_acceleration = 8
 	
 	attack_radius  = 0
 	warning_radius = 70

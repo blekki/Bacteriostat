@@ -3,7 +3,7 @@ class_name Entity
 extends CharacterBody2D
 
 # > pixel/physic_frame
-const PASSIVE_DECELERATION: float = 1.0
+const PASSIVE_DECELERATION: float = 2.0
 
 @export var entity_name: String = "Raw Entity"
 @export var energy: int = 50	# equivalent to health
