@@ -5,11 +5,11 @@
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_jrrsu"]
 light_mode = 1
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_v5jjv"]
-radius = 34.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_gbh6w"]
+resource_local_to_scene = true
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_mqjxt"]
-radius = 34.058773
+[sub_resource type="CircleShape2D" id="CircleShape2D_jrrsu"]
+resource_local_to_scene = true
 
 [node name="Entity" type="CharacterBody2D" unique_id=1553382449]
 z_index = -1
@@ -23,13 +23,13 @@ script = ExtResource("1_jrrsu")
 material = SubResource("CanvasItemMaterial_jrrsu")
 
 [node name="Collision" type="CollisionShape2D" parent="." unique_id=299581857]
-shape = SubResource("CircleShape2D_v5jjv")
+shape = SubResource("CircleShape2D_gbh6w")
 
 [node name="ClickableArea" type="Area2D" parent="." unique_id=1380816360]
 collision_layer = 256
 collision_mask = 256
 
 [node name="ClickableCollision" type="CollisionShape2D" parent="ClickableArea" unique_id=186964460]
-shape = SubResource("CircleShape2D_mqjxt")
+shape = SubResource("CircleShape2D_jrrsu")
 
 [connection signal="input_event" from="ClickableArea" to="." method="_on_clickable_area_input_event"]

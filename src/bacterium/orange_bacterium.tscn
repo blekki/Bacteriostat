@@ -5,6 +5,14 @@
 [ext_resource type="Texture2D" uid="uid://c34pf0dvcglcr" path="res://assets/orange_bacterium.png" id="3_78ysb"]
 [ext_resource type="Texture2D" uid="uid://r21ynfssojby" path="res://assets/orange_lumi.png" id="4_162a5"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_78ysb"]
+resource_local_to_scene = true
+radius = 34.058773
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_162a5"]
+resource_local_to_scene = true
+radius = 34.0
+
 [node name="Bacterium" unique_id=1553382449 instance=ExtResource("1_t0hj7")]
 script = ExtResource("2_11rw8")
 warning_radius = 95
@@ -19,10 +27,12 @@ position = Vector2(-10, 2)
 texture = ExtResource("4_162a5")
 
 [node name="Collision" parent="." index="2" unique_id=299581857]
-position = Vector2(4, 0)
+position = Vector2(6, 0)
+shape = SubResource("CircleShape2D_78ysb")
 
 [node name="ClickableCollision" parent="ClickableArea" parent_id_path=PackedInt32Array(1380816360) index="0" unique_id=186964460]
-position = Vector2(4, 0)
+position = Vector2(6, 0)
+shape = SubResource("CircleShape2D_162a5")
 
 [node name="DashTimer" type="Timer" parent="." index="6" unique_id=632611988]
 wait_time = 2.5

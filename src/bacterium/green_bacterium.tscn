@@ -8,6 +8,14 @@
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_7xdro"]
 light_mode = 1
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_7xdro"]
+resource_local_to_scene = true
+radius = 46.389652
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mqjxt"]
+resource_local_to_scene = true
+radius = 46.0
+
 [node name="GreenBacterium" unique_id=1553382449 instance=ExtResource("1_m1jx1")]
 script = ExtResource("2_wljwo")
 dash_attack_radius = 120
@@ -20,3 +28,9 @@ texture = ExtResource("3_7xdro")
 self_modulate = Color(1, 1, 1, 0)
 material = SubResource("CanvasItemMaterial_7xdro")
 texture = ExtResource("4_7xdro")
+
+[node name="Collision" parent="." index="2" unique_id=299581857]
+shape = SubResource("CircleShape2D_7xdro")
+
+[node name="ClickableCollision" parent="ClickableArea" parent_id_path=PackedInt32Array(1380816360) index="0" unique_id=186964460]
+shape = SubResource("CircleShape2D_mqjxt")

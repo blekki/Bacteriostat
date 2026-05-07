@@ -6,10 +6,12 @@
 [ext_resource type="Texture2D" uid="uid://bosx6gotfo8bq" path="res://assets/purple_lumi.png" id="4_adisn"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_44e8l"]
+resource_local_to_scene = true
 radius = 34.0
 height = 92.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_adisn"]
+resource_local_to_scene = true
 radius = 34.0
 height = 92.0
 
