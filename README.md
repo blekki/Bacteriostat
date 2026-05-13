@@ -24,9 +24,11 @@ Time seasons:
 ## Controls
 | Key | Description |
 | --- | ----------- |
-| Space | - Pause/play simulation physics. |
+| WASD | Move user camera. |
+| Mouse Scroll | - Camera zoom |
 | Left Mouse Button | - Move object |
 | Right Mouse Button | - Select object to check its properties. |
+| Space | - Pause/play simulation physics. |
 | 1 | - Turn off `DEBUG` mode. |
 | 2 | - Turn on `DEBUG` mode (single mode). |
 | 3 | - Turn on `DEBUG` mode (full mode). |
