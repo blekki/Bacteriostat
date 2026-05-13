@@ -127,3 +127,5 @@ func _on_clickable_area_input_event(_viewport: Node, event: InputEvent, _shape_i
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 			WorldContext.click_on_object.emit(self)
+		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+			WorldContext.click_on_object_debug.emit(self)

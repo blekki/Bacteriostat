@@ -92,7 +92,7 @@ func remove_layer(id: int):
 		_layers.erase(id)
 
 # <> signals <>
-func _on_click_on_object(object: CharacterBody2D):
+func _on_click_on_object_debug(object: CharacterBody2D):
 	if object is Bacterium:
 		_selected_object = object
 

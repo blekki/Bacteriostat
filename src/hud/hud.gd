@@ -80,7 +80,7 @@ func _on_hide_button_pressed():
 func _on_close_button_pressed():
 	_info_panel.hide()
 
-func _on_click_on_object(object: CharacterBody2D):
+func _on_click_on_object_debug(object: CharacterBody2D):
 	if object is InfoPanel:
 		return
 	 
