@@ -11,7 +11,7 @@ static func try_update_behavior(bacterium: Bacterium):
 		if (bacterium is GreenBacterium) or (bacterium is OrangeBacterium):
 			bacterium.change_state_to(StateMachine.hunting_state)
 		elif bacterium is PurpleBacterium:
-			if Singlton.is_day():
+			if WorldContext.is_day():
 				bacterium.set_parameters_for_day()
 				bacterium.change_state_to(StateMachine.cell_finding_state)
 			else:

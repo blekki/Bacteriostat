@@ -7,7 +7,7 @@ static func do_task(bacterium: OrangeBacterium):
 	bacterium.hiding()
 
 static func try_update_behavior(bacterium: OrangeBacterium):
-	if Singlton.is_day():
+	if WorldContext.is_day():
 		bacterium.set_parameters_for_day()
 		bacterium.stealth_mode_off()
 		bacterium.change_state_to(StateMachine.hunting_state)

@@ -15,8 +15,8 @@ var _is_hide_button_active: bool = false
 
 # <> methods <>
 func _ready():
-	Singlton.click_on_object.connect(_on_click_on_object)
-	Singlton.remove_object.connect(_on_remove_object)
+	WorldContext.click_on_object_debug.connect(_on_click_on_object_debug)
+	WorldContext.remove_object.connect(_on_remove_object)
 	
 	_time_season_label = $InfoPanel/PanelContainer/VBoxContainer/TimeSeasonPanel/SeasonInfo
 	var _object_vbox: VBoxContainer = $InfoPanel/PanelContainer/VBoxContainer/ObjectPanel/VBox
@@ -51,7 +51,7 @@ func _print_empty_page():
 	_info_label.text  = "energy: 0 (DEAD)\n"
 
 func _update_season_info():
-	_time_season_label.text = Singlton.get_season_info()
+	_time_season_label.text = WorldContext.get_season_info()
 
 func _update_object_info():
 	if _tracked_object == null:

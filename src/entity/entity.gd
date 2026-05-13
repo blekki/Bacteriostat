@@ -69,7 +69,7 @@ func _update_lumi_texture():
 	var lumi: Sprite2D = $Lumi
 	var alpha: float = lumi.self_modulate.a
 	const WEIGHT: float = 0.1
-	if Singlton.is_day():
+	if WorldContext.is_day():
 		alpha = lerp(alpha, 0.0, WEIGHT) # off lumi 
 	else: 
 		alpha = lerp(alpha, 1.0, WEIGHT) # on lumi
@@ -112,10 +112,10 @@ func can_spend_energy(delta_energy: int) -> int:
 
 func death():
 	Debug.remove_layer(debug_layer)
-	Singlton.remove_object.emit(self)
+	WorldContext.remove_object.emit(self)
 
 # <> reaction on signals section <>
 func _on_clickable_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int):
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-			Singlton.click_on_object.emit(self)
+			WorldContext.click_on_object.emit(self)

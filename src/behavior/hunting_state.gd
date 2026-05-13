@@ -16,7 +16,7 @@ static func try_update_behavior(bacterium: Bacterium):
 		_orange_bacterium_conditions(bacterium)
 
 static func _green_bacterium_conditions(bacterium: GreenBacterium):
-	if Singlton.is_day():
+	if WorldContext.is_day():
 		bacterium.set_parameters_for_day()
 		bacterium.change_state_to(StateMachine.photosynthesizing_state)
 	
@@ -32,7 +32,7 @@ static func _purple_bacterium_conditions(bacterium: PurpleBacterium):
 	if bacterium.is_ready_to_fission() == true:
 		bacterium.change_state_to(StateMachine.fission_state)
 	
-	if Singlton.is_day():
+	if WorldContext.is_day():
 		bacterium.set_parameters_for_day()
 		bacterium.change_state_to(StateMachine.cell_finding_state)
 	
@@ -45,6 +45,6 @@ static func _orange_bacterium_conditions(bacterium: OrangeBacterium):
 	if bacterium.is_ready_to_fission() == true:
 		bacterium.change_state_to(StateMachine.fission_state)
 	
-	if Singlton.is_night():
+	if WorldContext.is_night():
 		bacterium.set_parameters_for_night()
 		bacterium.change_state_to(StateMachine.hiding_state)

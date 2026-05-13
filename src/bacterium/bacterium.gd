@@ -219,7 +219,7 @@ func fission():
 	
 	var child_energy: int = roundi(energy / 2.0)
 	spend_energy(child_energy)
-	Singlton.fission.emit(self)
+	WorldContext.fission.emit(self)
 
 func bite_target(prey: Entity):
 	var distance_to_target = (prey.position - self.position).length()
@@ -272,4 +272,4 @@ func throw_lure_to(direction: Vector2, throw_power: float):
 	spend_energy(cell_energy)
 	
 	# create lure
-	Singlton.energy_shed.emit(self.global_position, impulse, cell_energy)
+	WorldContext.energy_shed.emit(self.global_position, impulse, cell_energy)

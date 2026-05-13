@@ -22,10 +22,10 @@ var _is_simulation_run: bool = true
 var _selected_object: CharacterBody2D = null
 
 func _ready():
-	Singlton.click_on_object.connect(_on_click_on_object)
-	Singlton.energy_shed.connect(_on_energy_shed)
-	Singlton.fission.connect(_on_fission)
-	Singlton.remove_object.connect(_on_remove_object)
+	WorldContext.click_on_object.connect(_on_click_on_object)
+	WorldContext.energy_shed.connect(_on_energy_shed)
+	WorldContext.fission.connect(_on_fission)
+	WorldContext.remove_object.connect(_on_remove_object)
 	
 	_setup_navigation_field()
 	_setup_collision_walls()
@@ -38,12 +38,12 @@ func _physics_process(_delta: float):
 
 func _process(_delta: float):
 	rescale_shaders_rect()
-	if Singlton.is_day():
-		Singlton.season_continues = _day_timer.time_left
-		Singlton.season_duration = _day_timer.wait_time
+	if WorldContext.is_day():
+		WorldContext.season_continues = _day_timer.time_left
+		WorldContext.season_duration = _day_timer.wait_time
 	else:
-		Singlton.season_continues = _night_timer.time_left
-		Singlton.season_duration = _night_timer.wait_time
+		WorldContext.season_continues = _night_timer.time_left
+		WorldContext.season_duration = _night_timer.wait_time
 
 func rescale_shaders_rect():
 	var cam = get_viewport().get_camera_2d()
@@ -234,13 +234,13 @@ func _on_remove_object(object: Entity):
 # time season configuration
 func _start_day():
 	_night_timer.stop()
-	Singlton.time_season = Enums.TimeSeasons.DAY
+	WorldContext.time_season = Enums.TimeSeasons.DAY
 	update_season_filter(day_shader_color)
 	_day_timer.start()
 
 func _start_night():
 	_day_timer.stop()
-	Singlton.time_season = Enums.TimeSeasons.NIGHT
+	WorldContext.time_season = Enums.TimeSeasons.NIGHT
 	update_season_filter(night_shader_color)
 	_night_timer.start()
 

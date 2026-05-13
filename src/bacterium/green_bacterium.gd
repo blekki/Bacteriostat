@@ -65,7 +65,7 @@ func shedding():
 	spend_energy(cell_energy)
 	
 	# apply parameters and create new energy_cell
-	Singlton.energy_shed.emit(self.global_position, rotated_impulse, cell_energy)
+	WorldContext.energy_shed.emit(self.global_position, rotated_impulse, cell_energy)
 
 func vampirism(prey: Bacterium):
 	if not is_instance_valid(chained_to):

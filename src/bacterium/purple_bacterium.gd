@@ -37,7 +37,7 @@ func set_parameters_for_night():
 func swim_away(enemy_detection_radius: float):
 	# scan environment on predators
 	var identification_rules = func(object: Entity) -> Enums.RelationshipTypes:
-		if Singlton.is_day():
+		if WorldContext.is_day():
 			if object is OrangeBacterium:
 				return Enums.RelationshipTypes.PREDATOR
 		else: # if night is comming

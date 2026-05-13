@@ -11,7 +11,7 @@ static func try_update_behavior(bacterium: PurpleBacterium):
 	if bacterium.is_ready_to_fission() == true:
 		bacterium.change_state_to(StateMachine.fission_state)
 	
-	if Singlton.is_night():
+	if WorldContext.is_night():
 		bacterium.set_parameters_for_night()
 		bacterium.change_state_to(StateMachine.hunting_state)
 	

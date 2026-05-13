@@ -16,8 +16,8 @@ var _selected_object: Entity = null
 
 # <> methods <>
 func _ready() -> void:
-	Singlton.click_on_object.connect(_on_click_on_object)
-	Singlton.remove_object.connect(_on_remove_object)
+	WorldContext.click_on_object_debug.connect(_on_click_on_object_debug)
+	WorldContext.remove_object.connect(_on_remove_object)
 	
 	z_index = -1
 	

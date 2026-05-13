@@ -5,6 +5,7 @@ var time_season = Enums.TimeSeasons.DAY
 var season_continues: float = 0.0
 var season_duration: float = 0.0
 
+signal click_on_object_debug(entity: CharacterBody2D)
 signal click_on_object(entity: CharacterBody2D)
 signal energy_shed(position: Vector2, impulse: Vector2, energy: int)
 signal fission(parent: Bacterium)
