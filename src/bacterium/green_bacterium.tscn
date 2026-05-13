@@ -12,7 +12,7 @@ light_mode = 1
 resource_local_to_scene = true
 radius = 46.389652
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_mqjxt"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_lhpex"]
 resource_local_to_scene = true
 radius = 46.0
 
@@ -33,4 +33,4 @@ texture = ExtResource("4_7xdro")
 shape = SubResource("CircleShape2D_7xdro")
 
 [node name="ClickableCollision" parent="ClickableArea" parent_id_path=PackedInt32Array(1380816360) index="0" unique_id=186964460]
-shape = SubResource("CircleShape2D_mqjxt")
+shape = SubResource("CircleShape2D_lhpex")
