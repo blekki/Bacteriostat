@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cl7opurg2wh8v"
-path="res://.godot/imported/m3.png-c6dd6508c23942e1653ca456ff0c2c3f.ctex"
+uid="uid://bhty3tf2c1xuf"
+path="res://.godot/imported/green_lumi.png-f4d747c22855e599ba61399f88c1072e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/m3.png"
-dest_files=["res://.godot/imported/m3.png-c6dd6508c23942e1653ca456ff0c2c3f.ctex"]
+source_file="res://assets/textures/entity/green_lumi.png"
+dest_files=["res://.godot/imported/green_lumi.png-f4d747c22855e599ba61399f88c1072e.ctex"]
 
 [params]
 

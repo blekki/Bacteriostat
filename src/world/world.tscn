@@ -5,12 +5,12 @@
 [ext_resource type="Shader" uid="uid://u1flxrq2taeh" path="res://src/world/water.gdshader" id="2_bsf3i"]
 [ext_resource type="Texture2D" uid="uid://cnmn8wgwnesyv" path="res://assets/shader_base.png" id="3_43c6p"]
 [ext_resource type="Shader" uid="uid://beypr302yb6ch" path="res://src/world/blur.gdshader" id="4_43c6p"]
-[ext_resource type="Texture2D" uid="uid://lyv64qugfb7f" path="res://assets/m1.png" id="4_wg6dd"]
-[ext_resource type="Texture2D" uid="uid://c347jcgun4ewg" path="res://assets/m2.png" id="5_hg6dy"]
+[ext_resource type="Texture2D" uid="uid://lyv64qugfb7f" path="res://assets/textures/background/m1.png" id="4_wg6dd"]
+[ext_resource type="Texture2D" uid="uid://c347jcgun4ewg" path="res://assets/textures/background/m2.png" id="5_hg6dy"]
 [ext_resource type="Shader" uid="uid://py5x6iwkql4g" path="res://src/world/wales.gdshader" id="5_l0av5"]
-[ext_resource type="Texture2D" uid="uid://crnq47nyh4a5g" path="res://assets/m0.png" id="6_hg6dy"]
-[ext_resource type="Texture2D" uid="uid://5a07tvfiwbuc" path="res://assets/m4.png" id="7_ocs7n"]
-[ext_resource type="Texture2D" uid="uid://cl7opurg2wh8v" path="res://assets/m3.png" id="8_jsigt"]
+[ext_resource type="Texture2D" uid="uid://crnq47nyh4a5g" path="res://assets/textures/background/m0.png" id="6_hg6dy"]
+[ext_resource type="Texture2D" uid="uid://5a07tvfiwbuc" path="res://assets/textures/background/m4.png" id="7_ocs7n"]
+[ext_resource type="Texture2D" uid="uid://cl7opurg2wh8v" path="res://assets/textures/background/m3.png" id="8_jsigt"]
 
 [sub_resource type="Gradient" id="Gradient_jsigt"]
 offsets = PackedFloat32Array(0, 0.99358976)

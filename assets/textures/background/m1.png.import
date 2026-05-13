@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://r21ynfssojby"
-path="res://.godot/imported/orange_lumi.png-387955bc9508ece4e41c61d1cbba0f3d.ctex"
+uid="uid://lyv64qugfb7f"
+path="res://.godot/imported/m1.png-db95a61d9c3681cfe66d61a80daefc4e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/orange_lumi.png"
-dest_files=["res://.godot/imported/orange_lumi.png-387955bc9508ece4e41c61d1cbba0f3d.ctex"]
+source_file="res://assets/textures/background/m1.png"
+dest_files=["res://.godot/imported/m1.png-db95a61d9c3681cfe66d61a80daefc4e.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://crnq47nyh4a5g"
-path="res://.godot/imported/m0.png-6939aa86cc690d532ec8eabd14982fd4.ctex"
+uid="uid://c34pf0dvcglcr"
+path="res://.godot/imported/orange_bacterium.png-ca935cee9cd909bdccd477fbe338de88.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/m0.png"
-dest_files=["res://.godot/imported/m0.png-6939aa86cc690d532ec8eabd14982fd4.ctex"]
+source_file="res://assets/textures/entity/orange_bacterium.png"
+dest_files=["res://.godot/imported/orange_bacterium.png-ca935cee9cd909bdccd477fbe338de88.ctex"]
 
 [params]
 

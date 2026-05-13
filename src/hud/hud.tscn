@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://b1pg4k3wc4xvx" path="res://src/hud/info_panel.gd" id="3_8ej7y"]
 [ext_resource type="StyleBox" uid="uid://cb38ubdeevb32" path="res://assets/styles/hud_panels/panel.tres" id="4_cs14m"]
 [ext_resource type="StyleBox" uid="uid://stm7p1c6caiv" path="res://assets/styles/hud_panels/daughter_panel.tres" id="5_7hkyr"]
-[ext_resource type="Texture2D" uid="uid://dg8m8hpg87ty4" path="res://assets/unknown-64x64.png" id="6_7hkyr"]
+[ext_resource type="Texture2D" uid="uid://dg8m8hpg87ty4" path="res://assets/textures/entity/unknown-64x64.png" id="6_7hkyr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8ej7y"]
 size = Vector2(182, 39)

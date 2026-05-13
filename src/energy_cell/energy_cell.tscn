@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://bo1y1apxgdai4" path="res://src/entity/entity.tscn" id="1_3a1qc"]
 [ext_resource type="Script" uid="uid://bs6qv8dqtkfbu" path="res://src/energy_cell/energy_cell.gd" id="2_bjre1"]
-[ext_resource type="Texture2D" uid="uid://dtusbqm3pryvq" path="res://assets/grass_energy_cell.png" id="3_v5jjv"]
-[ext_resource type="Texture2D" uid="uid://dt1mso5cjdfmr" path="res://assets/grass_lumi.png" id="4_ibrwm"]
+[ext_resource type="Texture2D" uid="uid://dtusbqm3pryvq" path="res://assets/textures/entity/grass_energy_cell.png" id="3_v5jjv"]
+[ext_resource type="Texture2D" uid="uid://dt1mso5cjdfmr" path="res://assets/textures/entity/grass_lumi.png" id="4_ibrwm"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ibrwm"]
 resource_local_to_scene = true

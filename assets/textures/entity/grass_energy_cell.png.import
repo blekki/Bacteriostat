@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bt41vvhw28177"
-path="res://.godot/imported/green_bacterium.png-9df734de42f7aeb15644df6f6d3fea20.ctex"
+uid="uid://dtusbqm3pryvq"
+path="res://.godot/imported/grass_energy_cell.png-d9aa43d1d2ab4247c8464b122602dd1c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/green_bacterium.png"
-dest_files=["res://.godot/imported/green_bacterium.png-9df734de42f7aeb15644df6f6d3fea20.ctex"]
+source_file="res://assets/textures/entity/grass_energy_cell.png"
+dest_files=["res://.godot/imported/grass_energy_cell.png-d9aa43d1d2ab4247c8464b122602dd1c.ctex"]
 
 [params]
 

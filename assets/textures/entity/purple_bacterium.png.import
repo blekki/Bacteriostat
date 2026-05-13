@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://lyv64qugfb7f"
-path="res://.godot/imported/m1.png-dc8d5d5add7048dd6d908f956b2c0b88.ctex"
+uid="uid://ddqpttluhwlc4"
+path="res://.godot/imported/purple_bacterium.png-1b945a46b2346da7f3cf17dbb11fe9c7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/m1.png"
-dest_files=["res://.godot/imported/m1.png-dc8d5d5add7048dd6d908f956b2c0b88.ctex"]
+source_file="res://assets/textures/entity/purple_bacterium.png"
+dest_files=["res://.godot/imported/purple_bacterium.png-1b945a46b2346da7f3cf17dbb11fe9c7.ctex"]
 
 [params]
 

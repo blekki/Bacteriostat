@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dt1mso5cjdfmr"
-path="res://.godot/imported/grass_lumi.png-ef3aa900fd5b6a8251d12b3a5be01a60.ctex"
+uid="uid://r21ynfssojby"
+path="res://.godot/imported/orange_lumi.png-2e7493ad4175de64fd58e60b5c21dd83.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/grass_lumi.png"
-dest_files=["res://.godot/imported/grass_lumi.png-ef3aa900fd5b6a8251d12b3a5be01a60.ctex"]
+source_file="res://assets/textures/entity/orange_lumi.png"
+dest_files=["res://.godot/imported/orange_lumi.png-2e7493ad4175de64fd58e60b5c21dd83.ctex"]
 
 [params]
 
