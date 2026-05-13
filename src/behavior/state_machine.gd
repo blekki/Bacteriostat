@@ -10,11 +10,11 @@ static var fission_state = FissionState.new()
 static var swim_away_state = SwimAwayState.new()
 static var hiding_state = HidingState.new()
 
-static func get_start_green_bacterium_state() -> RefCounted:	# todo: set normal returning type
+static func get_start_green_bacterium_state() -> RefCounted:
 	return photosynthesizing_state
 
-static func get_start_orange_bacterium_state() -> RefCounted:	# todo: set normal returning type
+static func get_start_orange_bacterium_state() -> RefCounted:
 	return hunting_state
 
-static func get_start_purple_bacterium_state() -> RefCounted:	# todo: set normal returning type
+static func get_start_purple_bacterium_state() -> RefCounted:
 	return cell_finding_state

@@ -5,11 +5,9 @@ extends Entity
 # > movement - pixel/physic_frame
 @export var acceleration: float = 10.0
 @export var dash_acceleration: float = 15.0
-@export var max_speed: float = 600.0
 @export var field_of_dash: float = PI / 12
 
 # energy levels
-@export var energy_level_death: int = min_energy
 @export var energy_level_luring: int = 35
 @export var energy_level_shedding: int = 85
 @export var energy_level_fission: int = 95
@@ -23,7 +21,8 @@ extends Entity
 var bacterium_name: String = "Bacterium"
 var behavior_state: RefCounted = StateMachine.waiting_state	# default
 var nearby_objects: Array[InfoPack] = []	# save identified nearby objects [object, relationship]
-@onready var priming: ActionPriming = $ActionPriming	# todo: make the same to nav_agent
+@onready var _priming: ActionPriming = $ActionPriming
+@onready var _navigation_agent: NavigationAgent2D = $NavigationAgent
 
 # technical
 var _physics_frame: int = 0
@@ -46,16 +45,11 @@ func _physics_process(delta: float) -> void:
 	
 	Debug.add_target(debug_layer, get_nav_target(), Enums.DEBUG_TARGET_COLOR)
 	
-	_limit_speed()
 	super(delta)	# use also default physics parameters
 
 func set_physics_updating(enable: bool):
-	priming.paused = not enable
+	_priming.paused = not enable
 	super(enable)
-
-func _limit_speed():
-	if velocity.length() > max_speed:
-		velocity = velocity.normalized() * max_speed
 
 func set_parameters_for_day():
 	pass
@@ -69,8 +63,8 @@ func get_personal_name() -> String:
 func get_info() -> String:
 	var information: String = super()
 	information += "state: %s\n" % behavior_state.name
-	information += "action: %s\n" % priming.get_action()
-	information += "priming: %.1f\n" % priming.get_remaining_time()
+	information += "action: %s\n" % _priming.get_action()
+	information += "priming: %.1f\n" % _priming.get_remaining_time()
 	return information
 
 ## safe behavior changing
@@ -90,13 +84,13 @@ func is_ready_to_fission() -> bool:
 
 # <> for movement <>
 func is_target_reached() -> bool:
-	return $NavigationAgent.is_navigation_finished()
+	return _navigation_agent.is_navigation_finished()
 
 func set_nav_target(target_pos: Vector2):
-	$NavigationAgent.target_position = target_pos
+	_navigation_agent.target_position = target_pos
 
 func get_nav_target() -> Vector2:
-	return $NavigationAgent.target_position
+	return _navigation_agent.target_position
 
 func generate_new_nav_target():
 	var target = _generate_smart_point()
@@ -173,8 +167,9 @@ func scan_environment(area_radius: float) -> Array[Entity]:
 			if collider is Entity:
 				if collider.can_be_identified():
 					objects_in_area.push_back(collider)
-					
 					debug_ray_target = result.position
+			else:
+				debug_ray_target = result.position
 		
 		# save line parameters to debug printing
 		Debug.add_line(
@@ -211,7 +206,7 @@ func fission():
 	if not is_ready_to_fission():
 		return
 	
-	if priming.try_process(3, "FISSION") == false:
+	if _priming.try_process(3, "FISSION") == false:
 		return
 	
 	const FISSION_COSTS: int = 30
@@ -226,7 +221,7 @@ func bite_target(prey: Entity):
 	if distance_to_target >= attack_radius:
 		return	# prey is to far away
 	
-	if priming.try_process(0.5, "BITE") == false:
+	if _priming.try_process(0.5, "BITE") == false:
 		return
 	
 	const BITE_POWER: int = 4
@@ -257,7 +252,7 @@ func throw_lure_to(direction: Vector2, throw_power: float):
 	if not is_ready_to_luring():
 		return	# not enough energy
 	
-	if priming.try_process(1.4, "THROW LURE") == false:
+	if _priming.try_process(1.0, "THROW LURE") == false:
 		return
 	
 	# impulse

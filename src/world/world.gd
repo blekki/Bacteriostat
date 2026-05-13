@@ -1,8 +1,11 @@
 class_name World
 extends Node2D
 
-const MAP_WIDTH = 1920
-const MAP_HEIGHT = 1080
+const MAP_WIDTH: int = 1920
+const MAP_HEIGHT: int = 1080
+const INIT_BACTERIA_COUNT: int = 80
+const INIT_CELL_COUNT: int = 40
+
 const green_bacteria_instance  = preload("res://src/bacterium/green_bacterium.tscn")
 const orange_bacteria_instance = preload("res://src/bacterium/orange_bacterium.tscn")
 const purple_bacteria_instance = preload("res://src/bacterium/purple_bacterium.tscn")
@@ -29,9 +32,9 @@ func _ready():
 	
 	_setup_navigation_field()
 	_setup_collision_walls()
+	create_bacteria(INIT_BACTERIA_COUNT)
+	create_energy_cells(INIT_CELL_COUNT)
 	_start_day()
-	create_bacteria(80)
-	create_energy_cells(40)
 
 func _physics_process(_delta: float):
 	move_selected_object()
@@ -164,6 +167,7 @@ func add_to_scene_bacterium(bacterium: Bacterium):
 	)
 	bacteria.push_back(bacterium)
 	add_child(bacterium)
+	bacterium.set_random_pos()
 
 func add_to_scene_cell(cell: EnergyCell):
 	cell.setup_nav_field(
@@ -172,6 +176,7 @@ func add_to_scene_cell(cell: EnergyCell):
 	)
 	energy_cells.push_back(cell)
 	add_child(cell)
+	cell.set_random_pos()
 
 func create_bacteria(count: int):
 	for i in range(0, count):

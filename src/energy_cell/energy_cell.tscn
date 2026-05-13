@@ -5,11 +5,11 @@
 [ext_resource type="Texture2D" uid="uid://dtusbqm3pryvq" path="res://assets/grass_energy_cell.png" id="3_v5jjv"]
 [ext_resource type="Texture2D" uid="uid://dt1mso5cjdfmr" path="res://assets/grass_lumi.png" id="4_ibrwm"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_v5jjv"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_ibrwm"]
 resource_local_to_scene = true
 radius = 40.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ibrwm"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_62p4g"]
 resource_local_to_scene = true
 radius = 40.0
 
@@ -31,10 +31,10 @@ texture = ExtResource("4_ibrwm")
 visible = false
 position = Vector2(0, -5)
 scale = Vector2(1.5, 1.5)
-shape = SubResource("CircleShape2D_v5jjv")
+shape = SubResource("CircleShape2D_ibrwm")
 
 [node name="ClickableCollision" parent="ClickableArea" parent_id_path=PackedInt32Array(1380816360) index="0" unique_id=186964460]
 visible = false
 position = Vector2(0, -5)
 scale = Vector2(1.5, 1.5)
-shape = SubResource("CircleShape2D_ibrwm")
+shape = SubResource("CircleShape2D_62p4g")

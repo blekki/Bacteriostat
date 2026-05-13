@@ -9,6 +9,7 @@ const PASSIVE_DECELERATION: float = 2.0
 @export var energy: int = 50	# equivalent to health
 @export var min_energy: int = 0
 @export var max_energy: int = 100
+@export var max_speed: float = 600.0
 
 # technical var's
 var debug_layer: int = -1	# [-1] is as "nothing" code
@@ -25,10 +26,10 @@ func setup_nav_field(from: Vector2, to: Vector2):
 func _ready():
 	_random.randomize()
 	debug_layer = Debug.get_new_layer()
-	position = _generate_smart_point()
 
 func _process(_delta: float):
 	_update_lumi_texture()
+	_limit_speed()
 
 func _physics_process(_delta: float):
 	_deceleration()
@@ -37,6 +38,9 @@ func _physics_process(_delta: float):
 
 func set_physics_updating(enable: bool):
 	set_physics_process(enable)
+
+func set_random_pos():
+	position = _generate_smart_point()
 
 func _generate_smart_point() -> Vector2:
 	var point = Vector2(
@@ -50,6 +54,10 @@ func _deceleration():
 		velocity -= velocity.normalized() * PASSIVE_DECELERATION
 	else:
 		velocity = Vector2.ZERO
+
+func _limit_speed():
+	if velocity.length() > max_speed:
+		velocity = velocity.normalized() * max_speed
 
 func _collision_fluence():
 	if get_slide_collision_count() > 0:

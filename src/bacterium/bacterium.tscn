@@ -4,10 +4,10 @@
 [ext_resource type="Script" uid="uid://ccwjhxdl3dfin" path="res://src/bacterium/bacterium.gd" id="2_wpy8d"]
 [ext_resource type="Script" uid="uid://d0q81esm3nag4" path="res://src/bacterium/action_priming.gd" id="3_0p2cm"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_wsg2m"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_12tcg"]
 resource_local_to_scene = true
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_12tcg"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_wsg2m"]
 resource_local_to_scene = true
 
 [node name="Bacterium" unique_id=1553382449 instance=ExtResource("1_do35s")]
@@ -15,9 +15,7 @@ scale = Vector2(0.5, 0.5)
 script = ExtResource("2_wpy8d")
 acceleration = 10.0
 dash_acceleration = 15.0
-max_speed = 600.0
 field_of_dash = 0.2617993877991494
-energy_level_death = null
 energy_level_luring = 35
 energy_level_shedding = 85
 energy_level_fission = 95
@@ -30,10 +28,10 @@ light_mask = 2
 visibility_layer = 2
 
 [node name="Collision" parent="." index="2" unique_id=299581857]
-shape = SubResource("CircleShape2D_wsg2m")
+shape = SubResource("CircleShape2D_12tcg")
 
 [node name="ClickableCollision" parent="ClickableArea" parent_id_path=PackedInt32Array(1380816360) index="0" unique_id=186964460]
-shape = SubResource("CircleShape2D_12tcg")
+shape = SubResource("CircleShape2D_wsg2m")
 
 [node name="NavigationAgent" type="NavigationAgent2D" parent="." index="4" unique_id=2079435920]
 target_desired_distance = 20.0

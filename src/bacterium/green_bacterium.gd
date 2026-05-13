@@ -38,7 +38,7 @@ func set_parameters_for_night():
 
 # <> states algorithms <>
 func photosynthesizing():
-	if priming.try_process(0.5, "PHOTOSYNTHESIZING") == false:
+	if _priming.try_process(0.5, "PHOTOSYNTHESIZING") == false:
 		return
 	
 	const PHOTOSYNTHES_ENERGY: int = 1
@@ -50,7 +50,7 @@ func shedding():
 	if not is_ready_to_shedding():
 		return
 	
-	if priming.try_process(2, "SHEDDING") == false:
+	if _priming.try_process(2, "SHEDDING") == false:
 		return
 	
 	# impulse
@@ -74,13 +74,14 @@ func vampirism(prey: Bacterium):
 	
 	# replace self closer to a prey
 	const LERP_WEIGHT: float = 0.5
-	var direction: Vector2 = prey.global_position - self.global_position
-	var lerp_to = global_position + direction - (direction.normalized() * 45)	# fix collision troubles
-	global_position = lerp(global_position, lerp_to, LERP_WEIGHT)
+	set_nav_target(prey.position)
+	var direction: Vector2 = get_nav_target() - self.position
+	var lerp_to = get_nav_target() - (direction.normalized() * 45)	# fix collision troubles
+	position = lerp(position, lerp_to, LERP_WEIGHT)
 	rotation = lerp_angle(rotation, direction.angle(), LERP_WEIGHT)
 	
-	# priming to vampirism
-	if priming.try_process(0.1, "VAMPIRISM") == false:
+	# _priming to vampirism
+	if _priming.try_process(0.1, "VAMPIRISM") == false:
 		return
 	
 	const VAMPIRISM_POWER: int = 1 	# per action tick

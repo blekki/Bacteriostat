@@ -41,8 +41,8 @@ func set_parameters_for_night():
 	
 	attack_radius  = 0
 	warning_radius = 70
-	luring_radius  = 85
-	view_distance  = 95
+	luring_radius  = 120
+	view_distance  = 120
 
 func get_info() -> String:
 	var information: String = super()
@@ -111,7 +111,7 @@ func hiding():
 
 func _choice_hiding_action(predator_record: InfoPack):
 	if predator_record.is_not_empty():
-		var predator: Entity = predator_record.object
+		var predator: Bacterium = predator_record.object
 		
 		var direction = predator.position - self.position
 		var distance = direction.length()
@@ -144,7 +144,7 @@ func _choice_hunting_action(prey_record: InfoPack):
 		var distance: float = (prey_record.object.position - self.position).length()
 		if distance < attack_radius:
 			bite_target(prey_record.object)
-		elif distance < view_distance:
+		if distance < view_distance:
 			try_activate_power_dash()
 			intercept_target(get_nav_target(), prey_record.object.velocity)
 	else:
