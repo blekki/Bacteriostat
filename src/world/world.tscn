@@ -224,11 +224,11 @@ light_mask = 0
 visibility_layer = 0
 
 [node name="DayTimer" type="Timer" parent="." unique_id=816259507]
-wait_time = 15.0
+wait_time = 10.0
 one_shot = true
 
 [node name="NightTimer" type="Timer" parent="." unique_id=700263351]
-wait_time = 15.0
+wait_time = 16.0
 one_shot = true
 
 [connection signal="timeout" from="DayTimer" to="." method="_on_day_timeout"]

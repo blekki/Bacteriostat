@@ -31,7 +31,7 @@ var _physics_frame: int = 0
 func _ready():
 	super()
 	max_energy = 100
-	energy = _random.randi_range(15, 25)
+	energy = _random.randi_range(45, 65)
 
 func _physics_process(delta: float) -> void:
 	Debug.clean_layer(debug_layer)
