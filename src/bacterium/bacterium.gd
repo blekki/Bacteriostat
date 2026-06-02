@@ -63,8 +63,8 @@ func get_personal_name() -> String:
 func get_info() -> String:
 	var information: String = super()
 	information += "state: %s\n" % behavior_state.name
-	information += "action: %s\n" % _priming.get_action()
-	information += "priming: %.1f\n" % _priming.get_remaining_time()
+	information += "priming action: %s\n" % _priming.get_action()
+	information += "priming duration: %s\n" % _priming.get_time_str()
 	return information
 
 ## safe behavior changing
@@ -206,7 +206,7 @@ func fission():
 	if not is_ready_to_fission():
 		return
 	
-	if _priming.try_process(3, "FISSION") == false:
+	if _priming.try_process(3, "fission") == false:
 		return
 	
 	const FISSION_COSTS: int = 30
@@ -221,7 +221,7 @@ func bite_target(prey: Entity):
 	if distance_to_target >= attack_radius:
 		return	# prey is to far away
 	
-	if _priming.try_process(0.5, "BITE") == false:
+	if _priming.try_process(0.5, "bite") == false:
 		return
 	
 	const BITE_POWER: int = 4
@@ -252,7 +252,7 @@ func throw_lure_to(direction: Vector2, throw_power: float):
 	if not is_ready_to_luring():
 		return	# not enough energy
 	
-	if _priming.try_process(1.0, "THROW LURE") == false:
+	if _priming.try_process(1.0, "throw lure") == false:
 		return
 	
 	# impulse

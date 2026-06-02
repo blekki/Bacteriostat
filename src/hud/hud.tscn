@@ -17,12 +17,12 @@ size_flags_horizontal = 4
 mouse_filter = 2
 theme = ExtResource("1_7hkyr")
 script = ExtResource("1_t0re6")
+metadata/_edit_group_ = true
 
 [node name="InfoPanel" type="CharacterBody2D" parent="." unique_id=1840319785]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("3_8ej7y")
-metadata/_edit_group_ = true
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="InfoPanel" unique_id=1704227267]
 position = Vector2(-120, 8)
@@ -135,6 +135,7 @@ expand_mode = 1
 [node name="ObjectParameters" type="Label" parent="InfoPanel/PanelContainer/VBoxContainer/ObjectPanel/VBox" unique_id=1453492340]
 custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
+theme_override_font_sizes/font_size = 20
 text = "energy = 0/max
 state = state"
 autowrap_mode = 3
