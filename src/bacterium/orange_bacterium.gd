@@ -46,9 +46,10 @@ func set_parameters_for_night():
 
 func get_info() -> String:
 	var information: String = super()
-	information += "dash active: %.1f\n" % dash_timer.time_left
-	information += "dash cooldown: %.1f\n" % cooldown_timer.time_left
+	information += "dash active: %.1f/%.1f\n" % [dash_timer.time_left, dash_timer.wait_time]
+	information += "dash cooldown: %.1f/%.1f\n" % [cooldown_timer.time_left, cooldown_timer.wait_time]
 	return information
+
 ## Override method to realize stealth mode.
 func can_be_identified() -> bool:
 	return not is_stealth_mode_on
@@ -68,8 +69,10 @@ func stealth_mode_off():
 	modulate.a = 1.0
 
 func try_activate_power_dash():
-	if cooldown_timer.is_stopped():	# activate power-dash if cooldown timeout
-		dash_timer.start()
+	# activate power-dash if cooldown finished
+	if cooldown_timer.is_stopped():
+		if dash_timer.is_stopped():
+			dash_timer.start()
 
 # <> behavior methods section <>
 ## Analyse environment for predators and check are they so close.

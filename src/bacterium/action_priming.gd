@@ -5,7 +5,7 @@ extends Timer
 const FINISHED: bool = true
 const IN_PROCESS: bool = false
 # other
-const _NO_ACTION = "WAITING"
+const _NO_ACTION = ""
 
 var _action: String = _NO_ACTION
 
@@ -13,8 +13,7 @@ var _action: String = _NO_ACTION
 func try_process(duration_sec: float, active_action: String) -> bool:
 	if not self.is_stopped():
 		return IN_PROCESS
-	
-	if _action == active_action:
+	elif _action == active_action:
 		_action = _NO_ACTION
 		return FINISHED
 	
@@ -28,7 +27,14 @@ func is_active():
 
 # <> need to quick getting information <>
 func get_remaining_time() -> float:
-	return self.time_left
+	return time_left
+
+func get_time_str() -> String:
+	var duration: float = 0.0
+	if is_active():
+		duration = self.wait_time
+		
+	return "%.1f/%.1f" % [time_left, duration]
 
 func get_action() -> String:
 	if is_stopped():
