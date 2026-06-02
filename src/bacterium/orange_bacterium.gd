@@ -69,8 +69,10 @@ func stealth_mode_off():
 	modulate.a = 1.0
 
 func try_activate_power_dash():
-	if cooldown_timer.is_stopped():	# activate power-dash if cooldown timeout
-		dash_timer.start()
+	# activate power-dash if cooldown finished
+	if cooldown_timer.is_stopped():
+		if dash_timer.is_stopped():
+			dash_timer.start()
 
 # <> behavior methods section <>
 ## Analyse environment for predators and check are they so close.
